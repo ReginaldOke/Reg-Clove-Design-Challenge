@@ -224,37 +224,37 @@ document.addEventListener("keydown", function (e) {
   if (window.self !== window.top) return; // never inside the demo iframes
   var KEYS = [
     { k: "T", name: "TikTok save", go: "reset:tiktok.html", pts: [
-      "Click Share, then More, then Clove",
+      "Tap Share, then More, then Clove",
       "Two memories appear while it saves"] },
     { k: "R", name: "Recipe", go: "reset:recipe.html?saved=1", pts: [
       "Change serving size, a memory appears",
-      "Click Edit on the memory to open it"] },
+      "Tap Edit on the memory to open it"] },
     { k: "V", name: "Voice note", go: "recipe.html", pts: [
       "Press V on the recipe page",
       "Clove swaps two ingredients, then adds a health goal"] },
     { k: "K", name: "Health tracker", go: "goals.html", pts: [
-      "Click Edit on the health goal",
+      "Tap Edit on the health goal",
       "The tracker opens",
-      "Scroll down and click the pink nudge to plan meals"] },
+      "Scroll down and tap the pink nudge to plan meals"] },
     { k: "P", name: "Plan the week", go: "plan.html?ask=1", pts: [
       "Answer the two questions",
       "Clove fills the week with dinners"] },
     { k: "G", name: "Groceries", go: "groceries.html", pts: [
-      "Click Start shopping",
+      "Tap Start shopping",
       "Answer the questions, then compare stores"] },
     { k: "S", name: "Shop", go: "checkout.html?view=compare", pts: [
-      "Click the Nearby stores tab",
+      "Tap the Nearby stores tab",
       "Choose a store to browse products and prices",
-      "Click Shop this list at Woolies"] },
+      "Tap Shop this list at Woolies"] },
     { k: "L", name: "List", go: "groceries.html?view=store", pts: [
       "Check off a grocery item",
-      "Then click the pink nudge at the bottom of the page"] },
+      "Then tap the pink nudge at the bottom of the page"] },
     { k: "C", name: "Cook", go: "recipe.html?leftover=1", pts: [
       "Tap the clove AI icon",
       "Update the recipe",
       "Update the meal plan"] },
     { k: "H", name: "Home", go: "index.html", pts: [
-      "Click the health tracker card"] },
+      "Tap the health tracker card"] },
     { k: "←|→", name: "Step the flow", go: null, pts: [
       "Move through every screen in order"] },
   ];
@@ -277,14 +277,14 @@ document.addEventListener("keydown", function (e) {
         if (!cl || !cl.classList.contains("on")) return 0;
         return cl.classList.contains("saved") ? 2 : 1;
       }, pts: [
-      "Click Share, then More, then Clove",
+      "Tap Share, then More, then Clove",
       "Two memories appear while it saves",
-      "Click Open recipe in Clove"] },
+      "Tap Open recipe in Clove"] },
     { key: "R", match: function (p, q) { return p === "recipe.html" && /saved=1/.test(q) && !sessionStorage.getItem("cloveSawMemories"); }, cur: function () {
         return document.querySelector(".mem-toast") ? 1 : 0;
       }, pts: [
       "Change serving size, a memory appears",
-      "Click Edit on the memory to open it"] },
+      "Tap Edit on the memory to open it"] },
     { key: "R", match: function (p, q) { return p === "profile.html"; }, pts: [
       "Edit a memory, then go back to the recipe"] },
     { key: "C", match: function (p, q) {
@@ -305,12 +305,12 @@ document.addEventListener("keydown", function (e) {
       }, pts: [
       "Press the V key to add more iron to the recipe",
       "Clove swaps two ingredients, then adds a health goal",
-      "Click Edit on the health goal to see the tracker"] },
+      "Tap Edit on the health goal to see the tracker"] },
     { key: "K", match: function (p, q) { return p === "goals.html"; }, cur: function () {
         return document.querySelector(".ai-card--reveal") ? 1 : 0;
       }, pts: [
       "Track your iron across the week",
-      "Scroll down and click the pink nudge to plan meals"] },
+      "Scroll down and tap the pink nudge to plan meals"] },
     { key: "P", match: function (p, q) { return p === "plan.html" && /ask=1/.test(q); }, cur: function () {
         var rows = document.querySelectorAll(".meal-row"), built = false;
         for (var i = 0; i < rows.length; i++) { if (rows[i].offsetParent) { built = true; break; } }
@@ -318,10 +318,10 @@ document.addEventListener("keydown", function (e) {
         if (document.querySelector(".cask .skip")) return 1;
         return 0;
       }, pts: [
-      "Pick days, then click the arrow",
-      "Set health targets, then click the arrow",
+      "Pick days, then tap the arrow",
+      "Set health targets, then tap the arrow",
       "Clove fills the week with iron-rich dinners",
-      "Click Grocery List"] },
+      "Tap Grocery List"] },
     { key: "P", match: function (p, q) { return p === "plan.html" && /leftover=spinach/.test(q); }, cur: function () {
         var chat = document.querySelector(".plan-chat");
         if (chat && chat.textContent.replace(/\s+/g, " ").length > 100) return 2;
@@ -334,35 +334,44 @@ document.addEventListener("keydown", function (e) {
     { key: "P", match: function (p, q) { return p === "plan.html"; }, cur: function () {
         return document.querySelector("#mealSheet.open") ? 1 : 0;
       }, pts: [
-      "Click Grocery List to shop the plan",
+      "Tap Grocery List to shop the plan",
       "⋮ on a meal shows its options"] },
     { key: "L", match: function (p, q) { return p === "groceries.html" && /view=(store|aisle)/.test(q); }, cur: function () {
         return document.querySelector("#cookNudge") ? 1 : 0;
       }, pts: [
       "Check off a grocery item",
-      "Then click the pink nudge at the bottom of the page"] },
+      "Then tap the pink nudge at the bottom of the page"] },
     { key: "G", match: function (p, q) { return p === "groceries.html"; }, cur: function () {
         return document.querySelector(".cask") ? 1 : 0;
       }, pts: [
-      "Click Start shopping",
+      "Tap Start shopping",
       "Pick a value, then set a budget"] },
     { key: "S", match: function (p, q) { return p === "checkout.html" && /detail/.test(q); }, cur: 1, pts: [
       "The swipe hint plays on the first card",
       "Swipe a card, tap for substitutes",
-      "Click Shop this list at Woolies"] },
+      "Tap Shop this list at Woolies"] },
     { key: "S", match: function (p, q) { return p === "checkout.html" && /tab=pickup/.test(q); }, cur: function () {
         return document.querySelector("#mapSheet.show") ? 2 : 1;
       }, pts: [
       "Stores near you, prices and stock",
-      "Click the small map to expand it",
-      "Then click Woolworths Surry Hills"] },
+      "Tap the small map to expand it",
+      "Then tap Woolworths Surry Hills"] },
     { key: "S", match: function (p, q) { return p === "checkout.html" && /compare/.test(q); }, cur: 1, pts: [
       "Delivery services and prices",
-      "Click the Nearby stores tab"] },
-    { key: "S", match: function (p, q) { return p === "checkout.html"; }, pts: [
-      "Clove scans every store and delivery service nearby"] },
+      "Tap the Nearby stores tab"] },
+    { key: "S", match: function (p, q) { return p === "checkout.html"; }, cur: function () {
+        if (document.querySelector("#viewDetail.active")) return 3;
+        if (document.querySelector("#viewCompare.active")) {
+          return document.querySelector('[data-modebtn="pickup"].on') ? 2 : 1;
+        }
+        return 0;
+      }, pts: [
+      "Clove scans every store and delivery service nearby",
+      "Tap the Nearby stores tab",
+      "Tap a store",
+      "Tap Shop this list"] },
     { key: "H", match: function (p, q) { return p === "index.html" || p === ""; }, pts: [
-      "Click the health tracker card"] },
+      "Tap the health tracker card"] },
   ];
 
   var cur = null;
