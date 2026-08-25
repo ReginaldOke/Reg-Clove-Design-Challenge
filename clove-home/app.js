@@ -88,6 +88,8 @@ function cloveResetState() {
   sessionStorage.clear();
   if (keep.open !== null) localStorage.setItem("clovePanelOpen", keep.open);
   if (keep.round !== null) localStorage.setItem("clovePanelRound", keep.round);
+  // a reset stays inside the app: never bounce the next Home visit to the front door
+  try { sessionStorage.setItem("cloveEntered", "1"); } catch (e) {}
 }
 
 // Recording helpers: "T" starts a CLEAN take from the TikTok entry point;
