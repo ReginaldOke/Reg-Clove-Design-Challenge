@@ -379,7 +379,7 @@
           // one Cooks-for memory only, re-added so it lands newest
           CloveMemory.replace("Cooks for ", "🍽️", "Cooks for " + serves, "Household · noticed from recipe scaling");
           // double the usual life: leaves time to talk over it and hit Edit
-          CloveMemory.toast("Cooks for " + serves, "Household · saved to Clove’s memory", { duration: 11200 });
+          CloveMemory.toast("Cooks for " + serves, "Household · saved to Clove’s memory", { pinned: true });
           sessionStorage.setItem("servesChanged", "1");
         }, 900);
       });
