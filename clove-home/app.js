@@ -273,8 +273,9 @@ document.addEventListener("keydown", function (e) {
   // cur = which point is the CURRENT step right now (index or a live probe)
   var SCREENS = [
     { key: "T", match: function (p, q) { return p === "tiktok.html"; }, cur: function () {
-        if (!/step=import/.test(location.search)) return 0;
-        return document.querySelector(".saved") ? 2 : 1;
+        var cl = document.querySelector(".clsheet");
+        if (!cl || !cl.classList.contains("on")) return 0;
+        return cl.classList.contains("saved") ? 2 : 1;
       }, pts: [
       "Click Share, then More, then Clove",
       "Two memories appear while it saves",
