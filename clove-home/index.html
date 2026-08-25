@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clove - Home</title>
+<link rel="stylesheet" href="base.css" />
+<script src="frame.js"></script>
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="goals.css" />
+<link rel="stylesheet" href="chat.css" />
+</head>
+<body>
+
+<div class="phone">
+  <div class="bg-wash"></div>
+
+  <!-- ============ PageHeader ============ -->
+  <header class="page-header">
+    <div class="page-header__bar">
+      <button class="icon-button" aria-label="Search">
+        <span class="ico ico-24"><img src="assets/icons/search.svg" alt="" /></span>
+      </button>
+
+      <a class="avatar-group" href="profile.html" aria-label="Profile">
+        <div class="user-stack">
+          <button class="user-stack__add" aria-label="Add person">
+            <span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span>
+          </button>
+          <div class="avatar-32"><img src="assets/img/avatar-user1.png" alt="" /></div>
+          <div class="avatar-32"><img src="assets/img/avatar-user2.png" alt="" /></div>
+        </div>
+        <span class="ico ico-20"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ============ Hero ============ -->
+  <section class="hero">
+    <h1 class="hero__title">What’s for dinner?</h1>
+
+    <div class="hero__composer">
+      <div class="chat-surface">
+        <img class="chat-surface__logo" src="assets/img/clove-logo.png" alt="Clove" />
+        <div class="chat-surface__field"><p>Ask Clove  </p></div>
+        <div class="chat-surface__action">
+          <button class="composer-button" aria-label="Voice">
+            <span class="ico ico-20"><img src="assets/icons/audio-lines.svg" alt="" /></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="prompt-rail">
+        <div class="prompt-rail__strip">
+          <button class="prompt" style="width:288px"><span>🍣</span><span>Write me a grocery list under $100</span></button>
+          <button class="prompt" style="width:191px"><span>😵‍💫</span><span>“I’m too tired” dinner</span></button>
+          <button class="prompt" style="width:167px"><span>👩‍🍳</span><span>“Chef-y” but easy</span></button>
+          <button class="prompt" style="width:204px"><span>🧈</span><span>Butter board (pls help)</span></button>
+          <button class="prompt" style="width:183px"><span>💪</span><span>Protein snack plate</span></button>
+          <button class="prompt" style="width:183px"><span>🍳</span><span>Crispy chili oil eggs</span></button>
+          <button class="prompt" style="width:216px"><span>💍</span><span>Marry me chicken (easy)</span></button>
+          <button class="prompt" style="width:188px"><span>🛒</span><span>Trader Joe’s copycat</span></button>
+          <button class="prompt" style="width:190px"><span>🍝</span><span>Spicy vodka rigatoni</span></button>
+          <button class="prompt" style="width:163px"><span>🍚</span><span>Kimchi fried rice</span></button>
+          <button class="prompt" style="width:189px"><span>🥜</span><span>PB&amp;J overnight oats</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- pinned health tracker: filled synchronously so the page never
+       paints without it and then jumps -->
+  <div id="goalPinSlot"></div>
+  <script src="goals.js"></script>
+  <script>CloveGoals.mountHome();</script>
+
+  <!-- ============ Content ============ -->
+  <main class="content">
+
+    <!-- Row · Recent -->
+    <section class="row">
+      <div class="carousel-header">
+        <div class="carousel-header__block">
+          <div class="carousel-header__heading"><h2>Recent</h2></div>
+        </div>
+      </div>
+      <div class="rail">
+        <div class="rail__strip">
+          <article class="card-xs">
+            <div class="card-xs__image"><img src="assets/img/recipes/kale-caesar.webp" alt="" /></div>
+            <p class="card-xs__title">Kale caesar salad</p>
+          </article>
+          <article class="card-xs">
+            <div class="card-xs__image"><img src="assets/img/recipes/creamy-pasta.webp" alt="" /></div>
+            <p class="card-xs__title">Creamy pasta</p>
+          </article>
+          <article class="card-xs">
+            <div class="card-xs__image"><img src="assets/img/recipes/beef-stew.webp" alt="" /></div>
+            <p class="card-xs__title">Beef stew</p>
+          </article>
+          <article class="card-xs">
+            <div class="card-xs__image"><img src="assets/img/recipes/grain-bowl.webp" alt="" /></div>
+            <p class="card-xs__title">Grain bowl</p>
+          </article>
+          <article class="card-xs">
+            <div class="card-xs__image"><img src="assets/img/recipes/roast-chicken.webp" alt="" /></div>
+            <p class="card-xs__title">Roast chicken</p>
+          </article>
+          <article class="card-xs">
+            <div class="card-xs__image"><img src="assets/img/recipes/greek-salad.webp" alt="" /></div>
+            <p class="card-xs__title">Greek salad</p>
+          </article>
+          <article class="card-xs">
+            <div class="card-xs__image"><img src="assets/img/recipes/brownies.webp" alt="" /></div>
+            <p class="card-xs__title">Brownies</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Row · Magic tag carousel -->
+    <section class="row">
+      <div class="carousel-header">
+        <div class="carousel-header__block">
+          <div class="carousel-header__heading"><h2>Magic tag carousel</h2></div>
+        </div>
+      </div>
+      <div class="rail">
+        <div class="rail__strip">
+          <article class="card">
+            <div class="card__image"><img class="photo" src="assets/img/recipes/baked-pasta.webp" alt="" /></div>
+            <div class="card__text">
+              <p class="card__title">Baked pasta</p>
+              <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card__image"><img class="photo" src="assets/img/recipes/stirfry.webp" alt="" /></div>
+            <div class="card__text">
+              <p class="card__title">Weeknight stir fry</p>
+              <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card__image"><img class="photo" src="assets/img/recipes/fish-tomato.webp" alt="" /></div>
+            <div class="card__text">
+              <p class="card__title">Fish in tomato</p>
+              <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card__image"><img class="photo" src="assets/img/recipes/rice-bowl.webp" alt="" /></div>
+            <div class="card__text">
+              <p class="card__title">Crispy rice bowl</p>
+              <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+            </div>
+          </article>
+          <div class="tile-community">
+            <p>Recipes saved by the Clove community</p>
+            <span class="ico ico-24 tile-community__arrow"><img src="assets/icons/arrow-up.svg" alt="" /></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Twists · Create a magic recipe -->
+    <section class="row">
+      <div class="carousel-header">
+        <div class="carousel-header__block">
+          <div class="carousel-header__heading">
+            <span class="ico ico-20"><img src="assets/icons/sparkles.svg" alt="" /></span>
+            <h2>Create a magic recipe</h2>
+          </div>
+        </div>
+      </div>
+      <div class="rail twists-rail">
+        <div class="rail__strip">
+          <button class="twist twist--protein">
+            <span class="twist__icon twist__icon--protein">
+              <img class="base" src="assets/icons/twist-protein.svg" alt="" />
+              <span class="twist__ring">
+                <span class="arc arc--track"><img src="assets/icons/twist-protein-e330.svg" alt="" /></span>
+                <span class="arc arc--fill"><img src="assets/icons/twist-protein-e339.svg" alt="" /></span>
+                <img class="glyph" src="assets/icons/twist-biceps.svg" alt="" />
+              </span>
+            </span>
+            <p>A quick and easy high-protein dinner</p>
+          </button>
+          <button class="twist twist--healthy">
+            <span class="twist__icon twist__icon--heart">
+              <img class="base" src="assets/icons/twist-healthy.svg" alt="" />
+              <img class="inner" src="assets/icons/twist-healthy-e2.svg" alt="" />
+              <span class="emoji">❤️</span>
+            </span>
+            <p>A healthy weeknight quick win dinner</p>
+          </button>
+          <button class="twist twist--salad">
+            <span class="twist__icon twist__icon--art"><img src="assets/icons/twist-salad.svg" alt="" /></span>
+            <p>Make this recipe with ingredients I have</p>
+          </button>
+          <button class="twist twist--simpler">
+            <span class="twist__icon twist__icon--art"><img src="assets/icons/twist-emulsification.svg" alt="" /></span>
+            <p>Make this recipe simpler</p>
+          </button>
+          <button class="twist twist--substitute">
+            <span class="twist__icon twist__icon--art"><img src="assets/icons/twist-refresh.svg" alt="" /></span>
+            <p>Substitute an ingredient I don’t have</p>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Row · Magic tag carousel (scrolled) -->
+    <section class="row">
+      <div class="carousel-header">
+        <div class="carousel-header__block">
+          <div class="carousel-header__heading"><h2>Magic tag carousel</h2></div>
+        </div>
+      </div>
+      <div class="rail" data-scroll="339">
+        <div class="rail__strip">
+          <article class="card">
+            <div class="card__image"><img class="photo" src="assets/img/recipes/charred-broccoli.webp" alt="" /></div>
+            <div class="card__text">
+              <p class="card__title">Charred broccoli</p>
+              <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card__image"><img class="photo" src="assets/img/recipes/porchetta.webp" alt="" /></div>
+            <div class="card__text">
+              <p class="card__title">Porchetta</p>
+              <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+            </div>
+          </article>
+          <div class="tile-community">
+            <p>Recipes saved by the Clove community</p>
+            <span class="ico ico-24 tile-community__arrow"><img src="assets/icons/arrow-up.svg" alt="" /></span>
+          </div>
+          <article class="card">
+            <div class="card__image">
+              <img class="photo" src="assets/img/recipes/skewers.webp" alt="" />
+              <span class="card__badge">25 min</span>
+              <button class="card__bookmark" aria-label="Save">
+                <span class="ico ico-20"><img src="assets/icons/bookmark-btn.svg" alt="" /></span>
+              </button>
+            </div>
+            <div class="card__text">
+              <p class="card__title">Public imported recipe</p>
+              <div class="card__desc">
+                <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span><span>Clove kitchen</span>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card__image">
+              <img class="photo" src="assets/img/recipes/cauliflower-bowl.webp" alt="" />
+              <span class="card__badge">25 min</span>
+              <button class="card__bookmark" aria-label="Save">
+                <span class="ico ico-20"><img src="assets/icons/bookmark-btn.svg" alt="" /></span>
+              </button>
+            </div>
+            <div class="card__text">
+              <p class="card__title">Public imported recipe</p>
+              <div class="card__desc">
+                <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span><span>Clove kitchen</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Row · Popular on Clove -->
+    <section class="row">
+      <div class="carousel-header">
+        <div class="carousel-header__block">
+          <div class="carousel-header__heading"><h2>Popular on Clove</h2></div>
+        </div>
+      </div>
+      <div class="rail rail--xl" data-scroll="378">
+        <div class="rail__strip">
+          <article class="card-xl">
+            <img class="card-xl__video" src="assets/img/video-poster.jpg" alt="" />
+            <div class="card-xl__scrim"></div>
+            <div class="list-cookbook">
+              <div class="list-cookbook__image"><img src="assets/img/steak.png" alt="" /></div>
+              <div class="list-cookbook__text">
+                <p class="list-cookbook__title">Filipino Pork BBQ (Inihaw na Baboy)</p>
+                <div class="list-cookbook__desc">
+                  <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span>
+                  <span>@chefzach</span>
+                  <span class="list-cookbook__dot">·</span>
+                  <span class="list-cookbook__plays">
+                    <span class="ico ico-12"><img src="assets/icons/play.svg" alt="" /></span>
+                    <span>64.4M</span>
+                  </span>
+                </div>
+              </div>
+              <button class="button-primary"><span>Import</span></button>
+            </div>
+          </article>
+
+          <article class="card-xl">
+            <img class="card-xl__video" src="assets/img/video-poster.jpg" alt="" />
+            <div class="card-xl__scrim"></div>
+            <div class="list-cookbook">
+              <div class="list-cookbook__image"><img src="assets/img/steak.png" alt="" /></div>
+              <div class="list-cookbook__text">
+                <p class="list-cookbook__title">Peppercorn crusted steak with a  long recipe titl</p>
+                <div class="list-cookbook__desc">
+                  <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span>
+                  <span>@chefzach</span>
+                  <span class="list-cookbook__dot">·</span>
+                  <span class="list-cookbook__plays">
+                    <span class="ico ico-12"><img src="assets/icons/play.svg" alt="" /></span>
+                    <span>64.4M</span>
+                  </span>
+                </div>
+              </div>
+              <button class="button-primary"><span>Import</span></button>
+            </div>
+          </article>
+
+          <article class="card-xl">
+            <img class="card-xl__video" src="assets/img/video-poster.jpg" alt="" />
+            <div class="card-xl__scrim"></div>
+            <div class="list-cookbook">
+              <div class="list-cookbook__image"><img src="assets/img/steak.png" alt="" /></div>
+              <div class="list-cookbook__text">
+                <p class="list-cookbook__title">Filipino Pork BBQ (Inihaw na Baboy)</p>
+                <div class="list-cookbook__desc">
+                  <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span>
+                  <span>@chefzach</span>
+                  <span class="list-cookbook__dot">·</span>
+                  <span class="list-cookbook__plays">
+                    <span class="ico ico-12"><img src="assets/icons/play.svg" alt="" /></span>
+                    <span>64.4M</span>
+                  </span>
+                </div>
+              </div>
+              <button class="button-primary"><span>Import</span></button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Row · Magic tag carousel -->
+    <section class="row">
+      <div class="carousel-header">
+        <div class="carousel-header__block">
+          <div class="carousel-header__heading"><h2>Magic tag carousel</h2></div>
+        </div>
+      </div>
+      <div class="rail">
+        <div class="rail__strip">
+          <article class="card">
+            <div class="card__image"><img class="photo" src="assets/img/recipes/short-ribs.webp" alt="" /></div>
+            <div class="card__text">
+              <p class="card__title">Short ribs</p>
+              <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card__image"><img class="photo" src="assets/img/recipes/lettuce-cups.webp" alt="" /></div>
+            <div class="card__text">
+              <p class="card__title">Lettuce cups</p>
+              <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+            </div>
+          </article>
+          <div class="tile-community">
+            <p>Recipes saved by the Clove community</p>
+            <span class="ico ico-24 tile-community__arrow"><img src="assets/icons/arrow-up.svg" alt="" /></span>
+          </div>
+          <article class="card">
+            <div class="card__image">
+              <img class="photo" src="assets/img/recipes/ragu-pot.webp" alt="" />
+              <span class="card__badge">25 min</span>
+              <button class="card__bookmark" aria-label="Save">
+                <span class="ico ico-20"><img src="assets/icons/bookmark-btn.svg" alt="" /></span>
+              </button>
+            </div>
+            <div class="card__text">
+              <p class="card__title">Public imported recipe</p>
+              <div class="card__desc">
+                <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span><span>Clove kitchen</span>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card__image">
+              <img class="photo" src="assets/img/recipes/whole-fish.webp" alt="" />
+              <span class="card__badge">25 min</span>
+              <button class="card__bookmark" aria-label="Save">
+                <span class="ico ico-20"><img src="assets/icons/bookmark-btn.svg" alt="" /></span>
+              </button>
+            </div>
+            <div class="card__text">
+              <p class="card__title">Public imported recipe</p>
+              <div class="card__desc">
+                <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span><span>Clove kitchen</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Row · Magic tag carousel -->
+    <section class="row">
+      <div class="carousel-header">
+        <div class="carousel-header__block">
+          <div class="carousel-header__heading"><h2>Magic tag carousel</h2></div>
+        </div>
+      </div>
+      <div class="rail">
+        <div class="rail__strip">
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/pea-stew.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Pea and mint stew</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/cucumber-salad.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Cucumber salad</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/drumsticks.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Drumsticks</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<div class="tile-community">
+  <p>Recipes saved by the Clove community</p>
+  <span class="ico ico-24 tile-community__arrow"><img src="assets/icons/arrow-up.svg" alt="" /></span>
+</div>
+<article class="card">
+  <div class="card__image">
+    <img class="photo" src="assets/img/recipes/bean-salad.webp" alt="" />
+    <span class="card__badge">25 min</span>
+    <button class="card__bookmark" aria-label="Save">
+      <span class="ico ico-20"><img src="assets/icons/bookmark-btn.svg" alt="" /></span>
+    </button>
+  </div>
+  <div class="card__text">
+    <p class="card__title">Public imported recipe</p>
+    <div class="card__desc">
+      <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span><span>Clove kitchen</span>
+    </div>
+  </div>
+</article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Row · Magic tag carousel -->
+    <section class="row">
+      <div class="carousel-header">
+        <div class="carousel-header__block">
+          <div class="carousel-header__heading"><h2>Magic tag carousel</h2></div>
+        </div>
+      </div>
+      <div class="rail">
+        <div class="rail__strip">
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/crispy-chickpeas.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Crispy chickpeas</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/fennel-salad.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Fennel salad</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/chicken-bake.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">One tray chicken bake</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/beet-salad.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Beet salad</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<div class="tile-community">
+  <p>Recipes saved by the Clove community</p>
+  <span class="ico ico-24 tile-community__arrow"><img src="assets/icons/arrow-up.svg" alt="" /></span>
+</div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Row · Magic tag carousel -->
+    <section class="row">
+      <div class="carousel-header">
+        <div class="carousel-header__block">
+          <div class="carousel-header__heading"><h2>Magic tag carousel</h2></div>
+        </div>
+      </div>
+      <div class="rail">
+        <div class="rail__strip">
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/wings.jpeg" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Sticky wings</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/salad-slaw.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Crunchy slaw</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<div class="tile-community">
+  <p>Recipes saved by the Clove community</p>
+  <span class="ico ico-24 tile-community__arrow"><img src="assets/icons/arrow-up.svg" alt="" /></span>
+</div>
+<article class="card">
+  <div class="card__image">
+    <img class="photo" src="assets/img/recipes/creamy-soup.webp" alt="" />
+    <span class="card__badge">25 min</span>
+    <button class="card__bookmark" aria-label="Save">
+      <span class="ico ico-20"><img src="assets/icons/bookmark-btn.svg" alt="" /></span>
+    </button>
+  </div>
+  <div class="card__text">
+    <p class="card__title">Public imported recipe</p>
+    <div class="card__desc">
+      <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span><span>Clove kitchen</span>
+    </div>
+  </div>
+</article>
+<article class="card">
+  <div class="card__image">
+    <img class="photo" src="assets/img/recipes/white-beans.webp" alt="" />
+    <span class="card__badge">25 min</span>
+    <button class="card__bookmark" aria-label="Save">
+      <span class="ico ico-20"><img src="assets/icons/bookmark-btn.svg" alt="" /></span>
+    </button>
+  </div>
+  <div class="card__text">
+    <p class="card__title">Public imported recipe</p>
+    <div class="card__desc">
+      <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span><span>Clove kitchen</span>
+    </div>
+  </div>
+</article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Row · Magic tag carousel -->
+    <section class="row">
+      <div class="carousel-header">
+        <div class="carousel-header__block">
+          <div class="carousel-header__heading"><h2>Magic tag carousel</h2></div>
+        </div>
+      </div>
+      <div class="rail">
+        <div class="rail__strip">
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/greens.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Braised greens</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/basil-pork-rice.jpeg" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Basil pork rice bowl</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<div class="tile-community">
+  <p>Recipes saved by the Clove community</p>
+  <span class="ico ico-24 tile-community__arrow"><img src="assets/icons/arrow-up.svg" alt="" /></span>
+</div>
+<article class="card">
+  <div class="card__image">
+    <img class="photo" src="assets/img/recipes/charred-sprouts.webp" alt="" />
+    <span class="card__badge">25 min</span>
+    <button class="card__bookmark" aria-label="Save">
+      <span class="ico ico-20"><img src="assets/icons/bookmark-btn.svg" alt="" /></span>
+    </button>
+  </div>
+  <div class="card__text">
+    <p class="card__title">Public imported recipe</p>
+    <div class="card__desc">
+      <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span><span>Clove kitchen</span>
+    </div>
+  </div>
+</article>
+<article class="card">
+  <div class="card__image">
+    <img class="photo" src="assets/img/recipes/breakfast-jars.webp" alt="" />
+    <span class="card__badge">25 min</span>
+    <button class="card__bookmark" aria-label="Save">
+      <span class="ico ico-20"><img src="assets/icons/bookmark-btn.svg" alt="" /></span>
+    </button>
+  </div>
+  <div class="card__text">
+    <p class="card__title">Public imported recipe</p>
+    <div class="card__desc">
+      <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span><span>Clove kitchen</span>
+    </div>
+  </div>
+</article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Row · Magic tag carousel -->
+    <section class="row">
+      <div class="carousel-header">
+        <div class="carousel-header__block">
+          <div class="carousel-header__heading"><h2>Magic tag carousel</h2></div>
+        </div>
+      </div>
+      <div class="rail">
+        <div class="rail__strip">
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/pear-cake.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Pear cake</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/baked-pudding.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Baked pudding</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/bundt-cake.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Bundt cake</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<div class="tile-community">
+  <p>Recipes saved by the Clove community</p>
+  <span class="ico ico-24 tile-community__arrow"><img src="assets/icons/arrow-up.svg" alt="" /></span>
+</div>
+<article class="card">
+  <div class="card__image">
+    <img class="photo" src="assets/img/recipes/chocolate-cake.webp" alt="" />
+    <span class="card__badge">25 min</span>
+    <button class="card__bookmark" aria-label="Save">
+      <span class="ico ico-20"><img src="assets/icons/bookmark-btn.svg" alt="" /></span>
+    </button>
+  </div>
+  <div class="card__text">
+    <p class="card__title">Public imported recipe</p>
+    <div class="card__desc">
+      <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span><span>Clove kitchen</span>
+    </div>
+  </div>
+</article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Row · Magic tag carousel -->
+    <section class="row">
+      <div class="carousel-header">
+        <div class="carousel-header__block">
+          <div class="carousel-header__heading"><h2>Magic tag carousel</h2></div>
+        </div>
+      </div>
+      <div class="rail">
+        <div class="rail__strip">
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/flan.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Caramel flan</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/kale-caesar.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Kale caesar salad</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<div class="tile-community">
+  <p>Recipes saved by the Clove community</p>
+  <span class="ico ico-24 tile-community__arrow"><img src="assets/icons/arrow-up.svg" alt="" /></span>
+</div>
+<article class="card">
+  <div class="card__image">
+    <img class="photo" src="assets/img/recipes/stirfry.webp" alt="" />
+    <span class="card__badge">25 min</span>
+    <button class="card__bookmark" aria-label="Save">
+      <span class="ico ico-20"><img src="assets/icons/bookmark-btn.svg" alt="" /></span>
+    </button>
+  </div>
+  <div class="card__text">
+    <p class="card__title">Public imported recipe</p>
+    <div class="card__desc">
+      <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span><span>Clove kitchen</span>
+    </div>
+  </div>
+</article>
+<article class="card">
+  <div class="card__image">
+    <img class="photo" src="assets/img/recipes/roast-chicken.webp" alt="" />
+    <span class="card__badge">25 min</span>
+    <button class="card__bookmark" aria-label="Save">
+      <span class="ico ico-20"><img src="assets/icons/bookmark-btn.svg" alt="" /></span>
+    </button>
+  </div>
+  <div class="card__text">
+    <p class="card__title">Public imported recipe</p>
+    <div class="card__desc">
+      <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span><span>Clove kitchen</span>
+    </div>
+  </div>
+</article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Row · Magic tag carousel -->
+    <section class="row">
+      <div class="carousel-header">
+        <div class="carousel-header__block">
+          <div class="carousel-header__heading"><h2>Magic tag carousel</h2></div>
+        </div>
+      </div>
+      <div class="rail">
+        <div class="rail__strip">
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/baked-pasta.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Baked pasta</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<article class="card">
+  <div class="card__image"><img class="photo" src="assets/img/recipes/greek-salad.webp" alt="" /></div>
+  <div class="card__text">
+    <p class="card__title">Greek salad</p>
+    <div class="card__desc"><span class="avatar-16"></span><span>Tiktok</span></div>
+  </div>
+</article>
+<div class="tile-community">
+  <p>Recipes saved by the Clove community</p>
+  <span class="ico ico-24 tile-community__arrow"><img src="assets/icons/arrow-up.svg" alt="" /></span>
+</div>
+<article class="card">
+  <div class="card__image">
+    <img class="photo" src="assets/img/recipes/short-ribs.webp" alt="" />
+    <span class="card__badge">25 min</span>
+    <button class="card__bookmark" aria-label="Save">
+      <span class="ico ico-20"><img src="assets/icons/bookmark-btn.svg" alt="" /></span>
+    </button>
+  </div>
+  <div class="card__text">
+    <p class="card__title">Public imported recipe</p>
+    <div class="card__desc">
+      <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span><span>Clove kitchen</span>
+    </div>
+  </div>
+</article>
+<article class="card">
+  <div class="card__image">
+    <img class="photo" src="assets/img/recipes/grain-bowl.webp" alt="" />
+    <span class="card__badge">25 min</span>
+    <button class="card__bookmark" aria-label="Save">
+      <span class="ico ico-20"><img src="assets/icons/bookmark-btn.svg" alt="" /></span>
+    </button>
+  </div>
+  <div class="card__text">
+    <p class="card__title">Public imported recipe</p>
+    <div class="card__desc">
+      <span class="avatar-16"><img src="assets/img/avatar.png" alt="" /></span><span>Clove kitchen</span>
+    </div>
+  </div>
+</article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+<!-- ============ TabBar ============ -->
+<nav class="tabbar">
+  <div class="tab-group">
+    <a class="tab-button" href="index.html" aria-label="Home" aria-current="page">
+      <span class="ico ico-24"><img src="assets/icons/tab-house-active.svg" alt="" /></span>
+    </a>
+    <a class="tab-button" href="recipes.html" aria-label="Library">
+      <span class="ico ico-24"><img src="assets/icons/tab-bookmark.svg" alt="" /></span>
+    </a>
+    <a class="tab-button" href="groceries.html" aria-label="Groceries">
+      <span class="ico ico-24"><img src="assets/icons/tab-basket.svg" alt="" /></span>
+    </a>
+    <a class="tab-button" href="plan.html" aria-label="Plan">
+      <span class="ico ico-24"><img src="assets/icons/tab-calendar.svg" alt="" /></span>
+    </a>
+  </div>
+  <button class="chat-button" aria-label="Ask Clove">
+    <span class="mark">
+      <img class="logo" src="assets/icons/clove-white.svg" alt="" />
+      <img class="spark" src="assets/icons/clove-sparkle.svg" alt="" />
+    </span>
+  </button>
+</nav>
+</div>
+
+<script src="app.js"></script>
+<!-- goals.js loads inline at the tracker slot, before first paint -->
+<script src="chat.js"></script>
+
+</body>
+</html>

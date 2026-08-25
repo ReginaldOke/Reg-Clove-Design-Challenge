@@ -1,0 +1,627 @@
+/* ============================================================
+   Clove — My Kitchen (profile, re-imagined as Clove's AI memory)
+   Figma: 28042:23335
+   ============================================================ */
+
+:root {
+  /* Pro Gradient from Figma */
+  --pro-gradient: linear-gradient(-90deg, #e1c3ff 0%, #bd53ea 26.9%, #bd53ea 49%, #e9f7c8 100%);
+  --pro-gradient-text: linear-gradient(-90deg, #8f3ecb 0%, #9b2fd0 26.9%, #9b2fd0 49%, #66832f 100%);
+  /* card-title headers (Figma 28042:23390) */
+  --pro-gradient-title: linear-gradient(-90deg, #e1c3ff 0%, #bd53ea 26.9%, #bd53ea 49%, #d5ff73 100%);
+}
+
+.phone { background: var(--white); }
+
+.profile-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 49px 10px 0;
+}
+
+.profile-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-l);
+  padding: 12px 16px 40px;
+}
+
+.profile-body > h1 {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.32px;
+  color: var(--black-500);
+}
+
+/* Card shell shared by all profile cards */
+.pcard {
+  position: relative;
+  width: 100%;
+  background: var(--white);
+  border: 0.5px solid var(--black-200);
+  border-radius: 24px;
+  box-shadow: 0 8px 16px rgba(15, 18, 21, 0.15);
+}
+
+/* ------------------------------------------------------------
+   Identity card
+   ------------------------------------------------------------ */
+.id-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-m);
+  padding: 24px 16px;
+}
+
+.id-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.id-card__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 100px;
+  background: var(--black-100);
+  cursor: pointer;
+  flex: none;
+}
+
+.id-card__avatar {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-top: -12px;
+  border-radius: 100px;
+  padding: 3px;
+  background: var(--pro-gradient);
+  flex: none;
+}
+
+.id-card__avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 100px;
+  border: 3px solid var(--white);
+  object-fit: cover;
+  box-sizing: border-box;
+}
+
+.id-card__name {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 31px;
+  letter-spacing: -0.24px;
+  color: var(--black-500);
+}
+
+.pro-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 100px;
+  background: var(--pro-gradient);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 17px;
+  color: var(--white);
+}
+
+.id-card__stats {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+.id-card__stat {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.id-card__stat + .id-card__stat { border-left: 1px solid var(--black-200); }
+
+.id-card__stat .num {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 26px;
+  color: var(--black-500);
+}
+
+.id-card__stat .lbl {
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--black-400);
+}
+
+/* ------------------------------------------------------------
+   Option cards row (Preferences / My Household)
+   ------------------------------------------------------------ */
+.option-row {
+  display: flex;
+  gap: var(--sp-m);
+  width: 100%;
+}
+
+.option-card {
+  flex: 1 0 0;
+  min-width: 0;
+  aspect-ratio: 159 / 159;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.option-card__inner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.option-card__art { height: 96px; display: flex; align-items: center; justify-content: center; }
+.option-card__art img { height: 96px; width: auto; }
+
+.option-card__label {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  color: var(--black-500);
+  text-align: center;
+}
+
+/* ------------------------------------------------------------
+   Clove memory card (re-imagined "Recipe settings" pattern)
+   ------------------------------------------------------------ */
+.settings-card {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.settings-card__title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0;
+}
+
+.settings-card__title .grad-text,
+.memory-toggle .grad-text {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 25px;
+  letter-spacing: -0.09px;
+  background: var(--pro-gradient-title);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.settings-card__title .spark {
+  width: 12px;
+  height: 12px;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+.settings-card__sub {
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--black-400);
+  padding-bottom: 4px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  min-height: 56px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--black-100);
+  box-sizing: border-box;
+}
+
+.settings-row:last-child { border-bottom: none; }
+
+.settings-row .lbl {
+  flex: 1 0 0;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 26px;
+  color: var(--black-500);
+}
+
+.settings-row .val {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--black-400);
+  white-space: nowrap;
+}
+
+.settings-row .chev {
+  display: flex;
+  flex: none;
+}
+
+/* Memory rows */
+.memory-row {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--black-100);
+}
+
+.memory-row__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-s);
+  padding: 14px 0;
+  background: var(--white);
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  touch-action: pan-y;
+}
+
+/* swipe left to reveal Forget (trash-2), behind the row */
+.memory-del {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 72px;
+  border: none;
+  background: var(--tomato-500, #d1323d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.memory-del img {
+  width: 20px;
+  height: 22px;
+  filter: brightness(0) invert(1);
+}
+
+/* undo snackbar, reversible delete instead of a confirm dialog */
+.undo-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(16px);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px 12px 18px;
+  border-radius: 100px;
+  background: var(--black-500);
+  color: var(--white);
+  font-size: 14px;
+  line-height: 20px;
+  box-shadow: 0 12px 32px rgba(15, 18, 21, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 90;
+  transition: opacity 220ms ease, transform 360ms cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+
+.undo-bar.show { opacity: 1; transform: translateX(-50%); pointer-events: auto; }
+
+.undo-bar__btn {
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #d5ff73;
+  cursor: pointer;
+  padding: 0;
+}
+
+.memory-row:last-of-type { border-bottom: none; }
+
+.memory-row__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  background: var(--eggplant-100);
+  font-size: 18px;
+  line-height: 1;
+  flex: none;
+}
+
+.memory-row__text {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.memory-row__text .m {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: var(--black-500);
+}
+
+.memory-row__text .k {
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--black-400);
+}
+
+.memory-row .switch { margin-top: 8px; }
+
+.memory-uses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 14px;
+}
+
+.memory-uses .use-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 100px;
+  background: var(--black-100);
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--black-400);
+  white-space: nowrap;
+}
+
+/* the Ask Clove composer pattern (Figma 28075:92455 ComposerRecipe) */
+.memory-add {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  margin-top: 14px;
+  padding: 0;
+  border: none;
+  border-radius: 24px;
+  background: var(--black-100);
+  font-family: inherit;
+  cursor: text;
+  text-align: left;
+}
+.memory-add__ph {
+  flex: 1 0 0;
+  min-width: 0;
+  padding: 11px 0 11px 16px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--black-300);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.memory-add__micwrap { width: 48px; height: 48px; padding: 6px; display: flex; align-items: center; justify-content: center; flex: none; }
+.memory-add__mic { width: 32px; height: 32px; border-radius: 999px; background: var(--kale-500); display: flex; align-items: center; justify-content: center; }
+
+/* memory pop-in on load */
+/* rows are in the DOM (and hold their height) from first paint; they only
+   fade and rise a touch, so the card never flashes empty or grows */
+.memory-row.pop { opacity: 0; transform: translateY(6px); }
+.memory-row.pop.in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 320ms ease, transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (prefers-reduced-motion: reduce) { .memory-row.pop { opacity: 1; transform: none; } }
+
+/* ------------------------------------------------------------
+   Week streak card
+   ------------------------------------------------------------ */
+.streak-head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  width: 100%;
+}
+
+.streak-badge {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  flex: none;
+}
+
+.streak-badge .star {
+  position: absolute;
+  inset: 0.8% -2.8% -5.8% -2.8%;
+  width: 105.6%;
+  height: 105%;
+}
+
+.streak-badge .ring {
+  position: absolute;
+  inset: 17.4% 17.7% 17.4% 17.4%;
+  width: 64.9%;
+  height: 65.2%;
+  mix-blend-mode: multiply;
+}
+
+.streak-badge .n {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.24px;
+  color: var(--white);
+}
+
+.streak-head .t1 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 25px;
+  letter-spacing: -0.09px;
+  color: var(--black-500);
+}
+
+.streak-head .t2 {
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--black-400);
+}
+
+.cal {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px 0;
+  justify-items: center;
+  width: 100%;
+  padding-top: 12px;
+}
+
+.cal .dow {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  color: var(--black-500);
+  padding-bottom: 4px;
+}
+
+.day {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 100px;
+  background: var(--black-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--black-500);
+  overflow: hidden;
+}
+
+.day--cooked img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.72);
+}
+
+.day--cooked span {
+  position: relative;
+  color: var(--white);
+  font-weight: 500;
+}
+
+.day--today {
+  background: var(--kale-500);
+  color: var(--white);
+  font-weight: 500;
+}
+
+.day--highlight { background: var(--paprika-100); }
+
+.day--future {
+  background: none;
+  border: 1px solid var(--black-200);
+  color: var(--black-300);
+  box-sizing: border-box;
+}
+
+/* ------------------------------------------------------------
+   Links + footer
+   ------------------------------------------------------------ */
+.profile-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-link {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-s);
+  min-height: 60px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--black-100);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 25px;
+  letter-spacing: -0.09px;
+  color: var(--black-500);
+  cursor: pointer;
+}
+
+.profile-link:last-child { border-bottom: none; }
+.profile-link .txt { flex: 1 0 0; }
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  width: 100%;
+  border: none;
+  border-radius: 100px;
+  background: var(--black-100);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: #e02d2d;
+  cursor: pointer;
+}
+
+.profile-foot {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.profile-foot .info {
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--black-500);
+}
+
+.profile-foot .socials { display: flex; gap: 16px; padding-top: 2px; }
+
+.delete-link {
+  font-size: 14px;
+  line-height: 22px;
+  color: #e02d2d;
+  cursor: pointer;
+}

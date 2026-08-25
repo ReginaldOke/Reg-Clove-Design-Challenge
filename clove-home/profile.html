@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clove - My Kitchen</title>
+<link rel="stylesheet" href="base.css" />
+<script src="frame.js"></script>
+<link rel="stylesheet" href="recipe.css" />
+<link rel="stylesheet" href="profile.css" />
+<link rel="stylesheet" href="goals.css" />
+<link rel="stylesheet" href="picker.css" />
+<link rel="stylesheet" href="memory.css" />
+<script src="memory.js"></script>
+</head>
+<body>
+
+<div class="phone">
+  <div class="profile-nav">
+    <a class="icon-button" href="index.html" aria-label="Back" onclick="if(history.length>1){history.back();return false}">
+      <span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%) rotate(90deg)" /></span>
+    </a>
+  </div>
+
+  <main class="profile-body">
+    <h1>My Kitchen</h1>
+
+    <!-- Clove's memory (re-imagined) -->
+    <section class="pcard settings-card" id="memoryCard">
+<button class="memory-toggle" aria-expanded="true">
+  <p class="grad-text">Clove’s memory</p>
+  <img class="spark" src="assets/icons/spark-gradient.svg" alt="" style="width:16px;height:16px;align-self:flex-start" />
+  <span class="chev ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%)" /></span>
+</button>
+<div class="memory-body"><div>
+<p class="settings-card__sub">What Clove has learned about you, used to recommend recipes, build meal plans and shop for groceries.</p>
+
+<!-- only memories the user has actually gathered render here (from CloveMemory) -->
+
+      <!-- same composer as Ask Clove: pill field + kale voice button -->
+      <button class="memory-add">
+        <span class="memory-add__ph">Tell Clove something to remember</span>
+        <span class="memory-add__micwrap"><span class="memory-add__mic"><span class="ico ico-20"><img src="assets/icons/audio-lines.svg" alt="" /></span></span></span>
+      </button>
+
+      <div class="memory-uses">
+        <span class="use-chip">✓ Recommends recipes</span>
+        <span class="use-chip">✓ Builds meal plans</span>
+        <span class="use-chip">✓ Shops your groceries</span>
+      </div>
+      </div></div>
+    </section>
+
+<script>
+  // arriving from a health-goal toast: land at the top with the memory card
+  // collapsed, then glide down to the goals card and let it glow
+  if (location.hash === "#goals") {
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    var mc = document.getElementById("memoryCard");
+    mc.classList.add("collapsed");
+    var mt = mc.querySelector(".memory-toggle");
+    if (mt) mt.setAttribute("aria-expanded", "false");
+    window.scrollTo(0, 0);
+    window.addEventListener("load", function () {
+      window.scrollTo(0, 0); // stay at the top; the card is in view with the memory card collapsed
+      var c = document.getElementById("goalsCard");
+      setTimeout(function () { c.classList.add("flash"); }, 500);
+    });
+  }
+</script>
+
+<script>
+  // Flow-captured memories open the matching InputWidget pattern so any
+  // of them can be adjusted, e.g. "Cooks for 7" → stepper → "Cooks for 5".
+  function flowSheet(m, row) {
+    var t = m.text, n;
+    function done(newText, kindNote) {
+      row.querySelector(".m").textContent = newText;
+      if (kindNote) row.querySelector(".k").textContent = kindNote;
+      CloveMemory.update(t, newText, kindNote);
+      m.text = newText;
+      t = newText;
+    }
+    if ((n = t.match(/^Cooks for (\d+)/)))
+      return ["household", { value: Number(n[1]), apply: function (r, v) { done("Cooks for " + v, "Household · updated just now"); } }];
+    if ((n = t.match(/^Plans dinners (\d+)/)))
+      return ["household", { q: "How many nights a week do you plan dinners?", value: Number(n[1]), min: 1, max: 7, unit: ["night", "nights"], apply: function (r, v) { done("Plans dinners " + v + " nights a week", "Habit · updated just now"); } }];
+    if (/^Values .+ when shopping/.test(t))
+      return [null, { type: "options", q: "When you shop, what do you value most?", value: (/low prices/i.test(t) ? 0 : /quality/i.test(t) ? 1 : 2), options: [["Low prices", "Stretch the weekly budget"], ["Quality produce", "The good tomatoes, always"], ["Convenience", "Fastest path to dinner"]], apply: function (r, v) { done("Values " + v.toLowerCase() + " when shopping", "Shopping · updated just now"); } }];
+    if ((n = t.match(/^Budget: \$(\d+)/)))
+      return ["budget", { value: Number(n[1]), apply: function (r, v) { done("Budget: $" + v + " a week", "Shopping · updated just now"); } }];
+    if ((n = t.match(/^Aiming for (\d+)g protein/)))
+      return ["goal", { apply: function (r, v) { done("Aiming for " + v[1] + "g protein a day", "Goal · updated just now"); } }];
+    if (/^(Meal planner|Preps meals|Free spirit)/.test(t))
+      return ["habit", { value: (/planner/i.test(t) ? 0 : /prep/i.test(t) ? 1 : 2), apply: function (r, v) {
+        done(v === "Meal planner" ? "Meal planner, plans the week and sticks to it" : v === "Meal prepper" ? "Preps meals ahead for the week" : "Free spirit, decides meals on the day", "Habit · updated just now");
+      } }];
+    // anything else: a light "keep / weigh up / forget" adjust
+    return [null, { type: "options", q: "How should Clove remember this?", value: 0, options: [[t, "Keep as is"], ["Weigh it higher", "Lean into this more when suggesting"], ["Forget this", "Remove it from memory"]], apply: function (r, v) {
+      if (v === "Forget this") {
+        CloveMemory.remove(t);
+        row.style.overflow = "hidden";
+        row.animate([{ opacity: 1, height: row.offsetHeight + "px" }, { opacity: 0, height: "0px" }], { duration: 300, easing: "ease-in" }).onfinish = function () { row.remove(); };
+      } else if (v === "Weigh it higher") {
+        done(t, row.querySelector(".k").textContent.split("·")[0].trim() + " · weighted up just now");
+      }
+    } }];
+  }
+
+  // Swipe a memory row left to reveal Forget; deleting is reversible via Undo
+  function enableSwipeDelete(row, m) {
+    var inner = row.querySelector(".memory-row__inner");
+    var REVEAL = 72, sx = null, sy = null, dx = 0, axis = null;
+    inner.addEventListener("pointerdown", function (e) {
+      if (e.target.closest("button")) return;
+      sx = e.clientX; sy = e.clientY; dx = 0; axis = null;
+      inner.style.transition = "none";
+    });
+    inner.addEventListener("pointermove", function (e) {
+      if (sx === null) return;
+      var mx = e.clientX - sx, my = e.clientY - sy;
+      if (!axis) {
+        if (Math.abs(mx) < 6 && Math.abs(my) < 6) return;
+        axis = Math.abs(mx) > Math.abs(my) ? "x" : "y";
+        if (axis === "x") { inner.setPointerCapture && inner.setPointerCapture(e.pointerId); e.stopPropagation(); }
+      }
+      if (axis !== "x") return;
+      dx = Math.max(-REVEAL, Math.min(0, mx + (row.classList.contains("swiped") ? -REVEAL : 0)));
+      inner.style.transform = "translateX(" + dx + "px)";
+    });
+    function end() {
+      if (sx === null) return;
+      sx = null;
+      inner.style.transition = "";
+      if (axis !== "x") return;
+      var open = dx < -REVEAL / 2;
+      row.classList.toggle("swiped", open);
+      inner.style.transform = open ? "translateX(-" + REVEAL + "px)" : "";
+    }
+    inner.addEventListener("pointerup", end);
+    inner.addEventListener("pointercancel", end);
+
+    row.querySelector(".memory-del").addEventListener("click", function () {
+      var entry = { icon: m.icon, text: m.text, kind: m.kind, t: m.t };
+      var next = row.nextElementSibling;
+      var h = row.offsetHeight;
+      row.style.overflow = "hidden";
+      row.animate([{ height: h + "px", opacity: 1 }, { height: "0px", opacity: 0 }], { duration: 280, easing: "ease-in" }).onfinish = function () {
+        row.remove();
+      };
+      CloveMemory.remove(m.text);
+      showUndo("Memory forgotten", function () {
+        CloveMemory.restore(entry);
+        row.style.overflow = "";
+        row.style.transform = "";
+        inner.style.transform = "";
+        row.classList.remove("swiped");
+        next && next.parentNode ? next.parentNode.insertBefore(row, next) : document.querySelector(".memory-add").parentNode.insertBefore(row, document.querySelector(".memory-add"));
+        row.animate([{ height: "0px", opacity: 0 }, { height: h + "px", opacity: 1 }], { duration: 280, easing: "ease-out" });
+      });
+    });
+  }
+
+  var undoT;
+  function showUndo(text, onUndo) {
+    var bar = document.querySelector(".undo-bar");
+    if (!bar) {
+      bar = document.createElement("div");
+      bar.className = "undo-bar";
+      bar.innerHTML = '<span class="undo-bar__t"></span><button class="undo-bar__btn">Undo</button>';
+      document.body.appendChild(bar);
+    }
+    bar.querySelector(".undo-bar__t").textContent = text;
+    var btn = bar.querySelector(".undo-bar__btn");
+    var fresh = btn.cloneNode(true);
+    btn.replaceWith(fresh);
+    fresh.addEventListener("click", function () { onUndo(); bar.classList.remove("show"); });
+    bar.classList.remove("show");
+    void bar.offsetWidth;
+    bar.classList.add("show");
+    clearTimeout(undoT);
+    undoT = setTimeout(function () { bar.classList.remove("show"); }, 5000);
+  }
+
+  // memories captured along the first mile land at the TOP of the card,
+  // newest first, so fresh ones are right there to edit. Rendered inline,
+  // right after the card parses, so the card never paints empty and
+  // grows later; rows hold their space and settle in with a soft stagger.
+  (function () {
+    var addBtn = document.querySelector(".memory-add");
+    if (!addBtn || !window.CloveMemory) return;
+    CloveMemory.newestFirst().forEach(function (m, i) {
+      var d = document.createElement("div");
+      d.className = "memory-row pop";
+      if (CloveMemory.fresh().indexOf(m.text) > -1) d.classList.add("is-new");
+      d.innerHTML =
+        '<button class="memory-del" aria-label="Forget this memory"><img src="assets/icons/trash-2.svg" alt="" /></button>' +
+        '<div class="memory-row__inner">' +
+        '<span class="memory-row__icon">' + m.icon + "</span>" +
+        '<div class="memory-row__text"><p class="m">' + m.text + '</p><p class="k">' + m.kind + "</p></div>" +
+        '<button class="memory-edit" aria-label="Edit memory"><span class="ico ico-16"><img src="assets/icons/pencil.svg" alt="" style="width:15px;height:15px" /></span></button>' +
+        "</div>";
+      enableSwipeDelete(d, m);
+      d.querySelector(".memory-edit").addEventListener("click", function () {
+        d.classList.remove("is-new");
+        CloveMemory.markSeen(m.text);
+        var s = flowSheet(m, d);
+        if (window.ClovePicker) ClovePicker.open(s[0], d, s[1]);
+      });
+      addBtn.parentNode.insertBefore(d, addBtn);
+      setTimeout(function () { d.classList.add("in"); }, 120 + i * 70);
+    });
+  })();
+</script>
+
+
+    <!-- Identity -->
+    <section class="pcard id-card">
+      <div class="id-card__top">
+        <button class="id-card__btn" aria-label="Share">
+          <span class="ico ico-24"><img src="assets/icons/share.svg" alt="" style="width:18px;height:22px" /></span>
+        </button>
+        <span class="id-card__avatar"><img src="assets/img/avatar-sylvia.png" alt="" /></span>
+        <button class="id-card__btn" aria-label="Edit">
+          <span class="ico ico-24"><img src="assets/icons/pencil.svg" alt="" style="width:22px;height:22px" /></span>
+        </button>
+      </div>
+      <div class="id-card__name">
+        <span>Sylvia Moreno</span>
+        <span class="pro-badge">Pro</span>
+      </div>
+      <div class="id-card__stats">
+        <div class="id-card__stat"><span class="num">19</span><span class="lbl">Cooked</span></div>
+        <div class="id-card__stat"><span class="num">137</span><span class="lbl">Recipes</span></div>
+        <div class="id-card__stat"><span class="num">21</span><span class="lbl">Followers</span></div>
+      </div>
+    </section>
+
+    <!-- Preferences / Household -->
+    <div class="option-row">
+      <!-- Health goals (replaces Preferences, Figma 28042:23365): rings art + tracker link -->
+      <a class="pcard option-card option-card--goals" id="goalsCard" href="goals.html">
+        <span class="option-card__inner">
+          <span class="option-card__art goal-art" id="goalsArt"></span>
+          <span class="option-card__label">Health goals</span>
+          <span class="option-card__sub" id="goalsSub">Cook toward a goal</span>
+        </span>
+      </a>
+      <button class="pcard option-card">
+        <span class="option-card__inner">
+          <span class="option-card__art"><img src="assets/img/household-art.png" alt="" /></span>
+          <span class="option-card__label">My Household</span>
+        </span>
+      </button>
+    </div>
+
+
+    <!-- Recipe settings -->
+    <section class="pcard settings-card">
+      <div class="settings-card__title">
+        <p class="grad-text">Recipe settings</p>
+        <img class="spark" src="assets/icons/spark-gradient.svg" alt="" style="width:16px;height:16px" />
+      </div>
+<div class="settings-row">
+  <p class="lbl">Calculate nutrition</p>
+  <p class="val">On</p>
+  <span class="chev ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%) rotate(-90deg)" /></span>
+</div>
+<div class="settings-row">
+  <p class="lbl">Recipe translation</p>
+  <p class="val">English</p>
+  <span class="chev ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%) rotate(-90deg)" /></span>
+</div>
+<div class="settings-row">
+  <p class="lbl">Unit system</p>
+  <p class="val">Metric</p>
+  <span class="chev ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%) rotate(-90deg)" /></span>
+</div>
+<div class="settings-row">
+  <p class="lbl">Measurements</p>
+  <p class="val">Weight</p>
+  <span class="chev ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%) rotate(-90deg)" /></span>
+</div>
+<div class="settings-row">
+  <p class="lbl">Servings</p>
+  <p class="val">2, scale</p>
+  <span class="chev ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%) rotate(-90deg)" /></span>
+</div>
+    </section>
+
+    <!-- Week streak -->
+    <section class="pcard settings-card">
+      <div class="streak-head">
+        <span class="streak-badge">
+          <img class="star" src="assets/icons/streak-star.svg" alt="" />
+          <img class="ring" src="assets/icons/streak-ring.svg" alt="" />
+          <span class="n">3</span>
+        </span>
+        <div>
+          <p class="t1">week streak</p>
+          <p class="t2">Way to cook!</p>
+        </div>
+      </div>
+      <div class="cal">
+        <span class="dow">M</span>
+        <span class="dow">T</span>
+        <span class="dow">W</span>
+        <span class="dow">T</span>
+        <span class="dow">F</span>
+        <span class="dow">S</span>
+        <span class="dow">S</span>
+        <span class="day">1</span>
+        <span class="day day--cooked"><img src="assets/img/day-cooked.png" alt="" /><span>2</span></span>
+        <span class="day">3</span>
+        <span class="day">4</span>
+        <span class="day">5</span>
+        <span class="day day--cooked"><img src="assets/img/day-cooked.png" alt="" /><span>6</span></span>
+        <span class="day">7</span>
+        <span class="day day--cooked"><img src="assets/img/day-cooked.png" alt="" /><span>8</span></span>
+        <span class="day">9</span>
+        <span class="day day--cooked"><img src="assets/img/day-cooked.png" alt="" /><span>10</span></span>
+        <span class="day day--highlight">11</span>
+        <span class="day day--cooked"><img src="assets/img/day-cooked.png" alt="" /><span>12</span></span>
+        <span class="day day--cooked"><img src="assets/img/day-cooked.png" alt="" /><span>13</span></span>
+        <span class="day">14</span>
+        <span class="day">15</span>
+        <span class="day day--cooked"><img src="assets/img/day-cooked.png" alt="" /><span>16</span></span>
+        <span class="day">17</span>
+        <span class="day day--today">18</span>
+        <span class="day day--future">19</span>
+        <span class="day day--future">20</span>
+        <span class="day day--future">21</span>
+        <span class="day day--future">22</span>
+        <span class="day day--future">23</span>
+        <span class="day day--future">24</span>
+        <span class="day day--future">25</span>
+        <span class="day day--future">26</span>
+        <span class="day day--future">27</span>
+        <span class="day day--future">28</span>
+      </div>
+    </section>
+
+    <!-- Links -->
+    <div class="profile-links">
+<div class="profile-link">
+  <span class="ico ico-24"><img src="assets/icons/bell-24.svg" alt="" style="width:20px;height:22px" /></span>
+  <span class="txt">Notifications</span>
+  <span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%) rotate(-90deg)" /></span>
+</div>
+<div class="profile-link">
+  <span class="ico ico-24"><img src="assets/icons/help.svg" alt="" style="width:22px;height:22px" /></span>
+  <span class="txt">Help &amp; feedback</span>
+  
+</div>
+<div class="profile-link">
+  <span class="ico ico-24"><img src="assets/icons/arrow-out.svg" alt="" style="width:16px;height:18px;transform:translate(-50%,-50%) rotate(45deg)" /></span>
+  <span class="txt">About Clove</span>
+  
+</div>
+<div class="profile-link">
+  <span class="ico ico-24"><img src="assets/icons/arrow-out.svg" alt="" style="width:16px;height:18px;transform:translate(-50%,-50%) rotate(45deg)" /></span>
+  <span class="txt">Rate us on the App store</span>
+  
+</div>
+<div class="profile-link">
+  <span class="ico ico-24"><img src="assets/icons/arrow-out.svg" alt="" style="width:16px;height:18px;transform:translate(-50%,-50%) rotate(45deg)" /></span>
+  <span class="txt">Privacy &amp; terms</span>
+  
+</div>
+<div class="profile-link">
+  <span class="ico ico-24"><img src="assets/icons/mail.svg" alt="" style="width:22px;height:18px" /></span>
+  <span class="txt">Contact us</span>
+  
+</div>
+    </div>
+
+    <button class="logout-btn">Log out</button>
+
+    <div class="profile-foot">
+      <div class="info">
+        <p>© 2025 Clove Kitchen Pty Ltd</p>
+        <p>Version 0.0.0 (00)</p>
+      </div>
+      <div class="socials">
+        <span class="ico ico-20"><img src="assets/icons/linkedin.svg" alt="LinkedIn" style="width:19px;height:19px" /></span>
+        <span class="ico ico-20"><img src="assets/icons/instagram.svg" alt="Instagram" style="width:20px;height:20px" /></span>
+      </div>
+    </div>
+
+    <p class="delete-link">Delete my account</p>
+  </main>
+</div>
+
+<script src="app.js"></script>
+<script src="goals.js"></script>
+
+<script src="picker.js"></script>
+</body>
+</html>

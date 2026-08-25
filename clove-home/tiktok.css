@@ -1,0 +1,727 @@
+/* ============================================================
+   Clove — TikTok save flow (first-mile entry, recording surface)
+   Recreates the TikTok search-result player, its share sheet,
+   the iOS share sheet, and Clove's import sheet.
+   ============================================================ */
+
+body { background: #111; }
+
+/* the TikTok flow is a fixed player: the page itself never scrolls */
+html, body { height: 100vh; overflow: hidden; }
+
+.phone {
+  background: #000;
+  padding-bottom: 0;
+  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+}
+
+/* rounded presenter frame: the player shrinks into the inset window */
+html.frame-rounded .phone { height: calc(100vh - 32px); min-height: 0; }
+
+/* ------------------------------------------------------------
+   Player
+   ------------------------------------------------------------ */
+.tk { position: absolute; inset: 0; }
+
+.tk__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tk__scrim {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 320px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.3) 55%, transparent 100%);
+}
+
+.tk__status {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 26px 0 30px;
+  color: #fff;
+  z-index: 2;
+}
+
+.tk__status .tm { font-size: 15px; font-weight: 600; }
+.tk__status .ic { font-size: 12px; letter-spacing: 1px; }
+
+.tk__top {
+  position: absolute;
+  top: 38px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 17px;
+  z-index: 2;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+.tk__top .dim { color: rgba(255, 255, 255, 0.62); }
+.tk__top .on { color: #fff; font-weight: 700; }
+.tk__top .bar { width: 1px; height: 12px; background: rgba(255, 255, 255, 0.4); }
+
+/* right rail */
+.tk__rail {
+  position: absolute;
+  right: 8px;
+  bottom: 116px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 17px;
+  z-index: 2;
+}
+
+.tk__creator {
+  position: relative;
+  width: 47px;
+  height: 47px;
+  margin-bottom: 10px;
+}
+
+.tk__creator > img:first-child {
+  width: 47px;
+  height: 47px;
+  border-radius: 100px;
+  border: 1.5px solid #fff;
+  object-fit: cover;
+}
+
+.tk__creator .plus {
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  transform: translateX(-50%);
+  width: 21px;
+  height: 21px;
+  border: none;
+}
+
+.tk__act {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.tk__act img { filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.35)); }
+
+.tk__record {
+  width: 51px;
+  height: 51px;
+  border-radius: 100px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.tk__record img { width: 100%; height: 100%; }
+
+/* caption */
+.tk__caption {
+  position: absolute;
+  left: 12px;
+  right: 84px;
+  bottom: 100px;
+  color: #fff;
+  z-index: 2;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+}
+
+.tk__caption .who { font-size: 17px; font-weight: 700; }
+
+.tk__caption .c {
+  margin-top: 7px;
+  font-size: 14.5px;
+  line-height: 20px;
+}
+
+.tk__caption .c b { font-weight: 700; }
+
+.tk__caption .snd {
+  margin-top: 9px;
+  font-size: 14.5px;
+}
+
+/* pixel-exact TikTok bottom nav from the kit */
+.tk__nav {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 3;
+}
+
+/* ------------------------------------------------------------
+   Sheets (shared)
+   ------------------------------------------------------------ */
+.sheet-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms ease;
+  z-index: 5;
+}
+
+.sheet-scrim.on { opacity: 1; pointer-events: auto; }
+
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translateY(103%);
+  transition: transform 420ms cubic-bezier(0.32, 0.72, 0, 1);
+  z-index: 6;
+}
+
+.sheet.on { transform: none; }
+
+/* --- TikTok share sheet (kit: 28056:49161) ------------------ */
+.tksheet {
+  background: #fff;
+  border-radius: 12px 12px 0 0;
+  padding: 14px 0 6px;
+  color: #161823;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+}
+
+.tksheet__title {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #161823;
+  padding-bottom: 12px;
+}
+
+.tksheet__row {
+  display: flex;
+  gap: 13px;
+  padding: 8px 16px 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tksheet__row::-webkit-scrollbar { display: none; }
+
+.tka {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  min-width: 49px;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 11px;
+  color: #161823;
+  cursor: pointer;
+  flex: none;
+}
+
+.tka img { width: 49px; height: 49px; border-radius: 100px; }
+
+/* fixed circular crop; the source glyph is baked ~1.5px up-right of
+   center, so the content is scaled and nudged to optically center it */
+.tka__c {
+  width: 49px;
+  height: 49px;
+  border-radius: 100px;
+  overflow: hidden;
+  flex: none;
+}
+
+.tka__c img {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  transform: scale(1.08) translate(-1.5px, 1.5px);
+}
+
+.tka span:last-child {
+  max-width: 62px;
+  text-align: center;
+  line-height: 13px;
+}
+
+.tka .more-c {
+  width: 47px;
+  height: 47px;
+  border-radius: 100px;
+  background: #f1f1f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  letter-spacing: 1px;
+  color: #161823;
+}
+
+.tksheet__cancel {
+  display: block;
+  width: 100%;
+  border: none;
+  border-top: 0.33px solid rgba(0, 0, 0, 0.14);
+  background: none;
+  margin-top: 10px;
+  padding: 15px 0 13px;
+  font-family: inherit;
+  font-size: 15px;
+  color: #161823;
+  cursor: pointer;
+}
+
+.tksheet__home {
+  width: 134px;
+  height: 5px;
+  border-radius: 5px;
+  background: #060606;
+  margin: 6px auto 8px;
+}
+
+/* --- iOS share sheet --------------------------------------- */
+.iosheet {
+  padding: 8px;
+  color: #000;
+}
+
+/* modern iOS liquid glass */
+.iosheet__card {
+  background: rgba(248, 248, 250, 0.72);
+  -webkit-backdrop-filter: blur(34px) saturate(1.8);
+  backdrop-filter: blur(34px) saturate(1.8);
+  border-radius: 28px;
+  padding: 14px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 18px 44px rgba(15, 18, 21, 0.28);
+}
+
+.iosheet__site {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 4px 14px;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.12);
+}
+
+.iosheet__site .fav {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+
+.iosheet__site .url { flex: 1 0 0; font-size: 17px; color: #8a6d3b; }
+
+.iosheet__site .shareplay {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 100px;
+  background: #2fca55;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.iosheet__apps {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 6px 14px;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.12);
+}
+.iosheet__apps::-webkit-scrollbar { display: none; }
+
+.iapp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  width: 66px;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 12.5px;
+  color: #000;
+  cursor: pointer;
+}
+
+.iapp .tile {
+  width: 62px;
+  height: 62px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  overflow: hidden;
+}
+
+/* real app icons carry their own rounded square + shadow */
+.iapp .tile.ios { background: none; overflow: visible; }
+.iapp .tile.ios img { width: 100%; height: 100%; }
+/* message/mail SVGs bleed 16.67% each side for their drop shadow */
+.iapp .tile.ios img.bleed { width: 133.34%; height: 133.34%; max-width: none; flex: none; }
+
+/* Figma 12918:47990 Logo/Light: kale-500 tile, the flower in kale-100 at ~58% of the tile */
+.iapp .tile.clove { background: #03331b; }
+/* the petal ring converges right of the glyph's bbox center; nudge left to optically center */
+.iapp .tile.clove img { width: 32px; height: 36px; transform: translateX(-1px); }
+
+.iosheet__acts {
+  display: flex;
+  gap: 24px;
+  padding: 16px 6px 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.iosheet__acts::-webkit-scrollbar { display: none; }
+
+.iact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  width: 66px;
+  font-size: 12.5px;
+  color: #000;
+  text-align: center;
+}
+
+.iact .c {
+  width: 62px;
+  height: 62px;
+  border-radius: 100px;
+  background: rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+
+/* --- Clove import sheet ------------------------------------ */
+.clsheet {
+  height: 92vh;
+  background: var(--white);
+  border-radius: 18px 18px 0 0;
+  font-family: "Acaraje", -apple-system, sans-serif;
+  color: var(--black-500);
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px 30px;
+}
+
+.clsheet__grab {
+  width: 44px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--black-200);
+  margin: 0 auto 10px;
+}
+
+.clsheet__head {
+  display: flex;
+  align-items: center;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--black-100);
+}
+
+.clsheet__head .t {
+  flex: 1 0 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+  /* balance the check button */
+  padding-left: 44px;
+}
+
+.clsheet__head .ok {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 100px;
+  background: var(--black-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.clsheet__status {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 4px 4px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.clsheet__status img {
+  width: 34px;
+  height: 34px;
+  animation: logo-spin 3.2s linear infinite;
+}
+
+/* saved: the logo comes to rest, the bar quietly leaves */
+.clsheet.saved .clsheet__status img { animation: none; }
+
+@keyframes logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* save progress bar, full bleed under the header */
+.clsheet__bar {
+  height: 3px;
+  margin: 0 -16px;
+  background: var(--black-100);
+  overflow: hidden;
+  flex: none;
+}
+
+.clsheet__bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--kale-500);
+  border-radius: 0 3px 3px 0;
+}
+
+.clsheet.saved .clsheet__bar {
+  opacity: 0;
+  transition: opacity 500ms ease 600ms;
+}
+
+.clsheet__tip {
+  margin-top: 16px;
+  padding: 18px;
+  border-radius: 16px;
+  background: var(--kale-100);
+}
+
+.clsheet__tip .t1 { font-size: 17px; font-weight: 600; }
+.clsheet__tip .t2 { font-size: 16px; line-height: 24px; margin-top: 6px; }
+
+.clsheet__skeleton {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 22px;
+}
+
+.sk {
+  border-radius: 12px;
+  background: var(--black-100);
+  animation: sk-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes sk-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+.sk--1 { height: 44px; width: 100%; }
+.sk--2 { height: 44px; width: 75%; }
+.sk--row { display: flex; gap: 12px; }
+.sk--chip { height: 30px; width: 90px; }
+.sk--block { height: 120px; width: 100%; }
+.sk--half { height: 40px; width: 46%; }
+
+/* middle region absorbs growth so the CTA stack never moves;
+   bleed + repad so pill shadows aren't clipped at the edges */
+.clsheet__body {
+  flex: 1 0 0;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: 0 -16px;
+  padding: 0 16px;
+}
+
+/* recipe reveal: pinned above the CTAs, fades in when saved */
+.clsheet__found {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  padding: 22px 0 14px;
+  visibility: hidden;
+}
+
+.clsheet__found.show { visibility: visible; }
+
+.clsheet__found img {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.clsheet__found .t1 { font-size: 17px; font-weight: 600; line-height: 23px; }
+.clsheet__found .t2 { font-size: 14px; color: var(--black-400); margin-top: 2px; }
+
+.clsheet__cta {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  padding-top: 12px;
+}
+
+.clsheet__cta .primary {
+  width: 100%;
+  height: 56px;
+  border: none;
+  border-radius: 100px;
+  background: var(--kale-500);
+  color: var(--white);
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.clsheet__cta .link {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--kale-500);
+  cursor: pointer;
+}
+
+/* white glyphs in colored circles; dark stroked glyphs in gray circles */
+.tka .c svg { width: 26px; height: 26px; fill: #fff; }
+.tka .c.gray svg.dark {
+  fill: none;
+  stroke: #161823;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+/* ------------------------------------------------------------
+   Import sheet — matched to the app's design language
+   ------------------------------------------------------------ */
+.clsheet { padding: 10px 16px 28px; }
+
+.clsheet__head .t {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.09px;
+  line-height: 25px;
+  padding-left: 40px;
+}
+
+.clsheet__head .ok { width: 40px; height: 40px; }
+
+.clsheet__status {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.09px;
+  padding: 20px 0 4px;
+  gap: 12px;
+}
+
+.clsheet__status img { width: 28px; height: 28px; }
+
+.clsheet__tip {
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: 16px;
+}
+
+.clsheet__tip .t1 { font-size: 16px; font-weight: 500; line-height: 24px; }
+.clsheet__tip .t2 { font-size: 14px; line-height: 22px; margin-top: 2px; color: var(--black-500); }
+
+/* memories land as toast-style pills, in the page instead of floating */
+.clsheet__mems {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.clsheet__mems .label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #bd53ea; /* eggplant-300, plain pink */
+  padding-bottom: 2px;
+}
+
+.clsheet__mems .memory-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px 10px 10px;
+  border-radius: 999px;
+  background: var(--white);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+    0 6px 20px rgba(15, 18, 21, 0.14);
+}
+
+.clsheet__mems .mem-toast__text { flex: 1 0 0; min-width: 0; }
+
+.clsheet__skeleton { padding-top: 18px; gap: 12px; }
+
+.clsheet__found .t1 { font-size: 16px; font-weight: 500; line-height: 24px; }
+.clsheet__found .t2 { font-size: 12px; line-height: 17px; }
+.clsheet__found img { border-radius: 12px; }
+
+.clsheet__cta {
+  gap: 12px;
+  padding: 8px 0 0;
+}
+
+.clsheet__cta .btn-plain {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 100px;
+  background: none;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--black-500);
+  cursor: pointer;
+}

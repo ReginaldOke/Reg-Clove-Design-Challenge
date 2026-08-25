@@ -1,0 +1,545 @@
+/* ============================================================
+   Clove — Recipe detail
+   Figma: 28050:45299
+   ============================================================ */
+
+.phone { padding-bottom: 48px; }
+
+/* ------------------------------------------------------------
+   Video player header
+   ------------------------------------------------------------ */
+.video-hero {
+  position: relative;
+  width: 402px;
+  height: 551px;
+  background: #000;
+  overflow: hidden;
+}
+
+.video-hero > img.poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-hero__scrim-top {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 114px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.video-hero__play {
+  position: absolute;
+  left: 50%;
+  top: 245px;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.video-hero__play::after {
+  content: "";
+  display: block;
+  margin-left: 3px;
+  border-style: solid;
+  border-width: 8px 0 8px 13px;
+  border-color: transparent transparent transparent var(--black-400);
+}
+
+.video-hero__dots {
+  position: absolute;
+  left: 50%;
+  bottom: 48px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.video-hero__dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.video-hero__dots i.on {
+  width: 18px;
+  background: var(--white);
+}
+
+/* Floating nav over the video */
+.float-nav {
+  position: absolute;
+  left: 0;
+  top: 48px;
+  width: 402px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  z-index: 5;
+}
+
+.float-nav__group { display: flex; gap: 4px; }
+
+.float-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 100px;
+  background: var(--white);
+  box-shadow: 0 8px 16px rgba(15, 18, 21, 0.15);
+  cursor: pointer;
+  flex: none;
+}
+
+/* ------------------------------------------------------------
+   Recipe summary
+   ------------------------------------------------------------ */
+.recipe-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-l);
+  padding: var(--sp-l) var(--sp-m);
+}
+
+.recipe-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-s);
+}
+
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+}
+
+.user-chip .src {
+  width: 26px;
+  height: 26px;
+  position: relative;
+  overflow: hidden;
+}
+.user-chip .src img {
+  position: absolute;
+  inset: 8.33%;
+  width: 83.34%;
+  height: 83.34%;
+}
+
+.user-chip p {
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--black-500);
+}
+
+.recipe-head h1 {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.32px;
+  color: var(--black-500);
+}
+
+.recipe-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 22px;
+  white-space: nowrap;
+}
+
+.recipe-meta span { display: flex; gap: 4px; }
+.recipe-meta .v { color: var(--black-500); }
+.recipe-meta .k { color: var(--black-400); }
+
+.recipe-actions {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+
+.pill-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-xs);
+  height: 48px;
+  flex: 1 0 0;
+  min-width: 0;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 100px;
+  background: var(--black-100);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--black-500);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Nutrition — exported block (blurred dials + Pro mesh CTA baked in) */
+.nutrition {
+  padding: 10px 0;
+}
+.nutrition button {
+  display: block;
+  width: 100%;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+.nutrition img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.recipe-desc {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--black-500);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------
+   Sections
+   ------------------------------------------------------------ */
+.recipe-section {
+  padding: var(--sp-xl) 0 0;
+}
+
+.recipe-section__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  padding: 0 16px;
+}
+
+.recipe-section__head .ttl {
+  flex: 1 0 0;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 31px;
+  letter-spacing: -0.24px;
+  color: var(--black-500);
+}
+
+.recipe-section__head .ttl .count { color: var(--black-300); }
+
+.recipe-section__head .collapse {
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  padding: 4px;
+}
+
+/* Ingredients */
+.serves-row {
+  display: flex;
+  gap: 12px;
+  padding: 24px 16px 0;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  flex: 1 0 0;
+  padding: 0 16px;
+  border-radius: 100px;
+  background: var(--black-100);
+}
+
+.stepper button {
+  border: none;
+  background: none;
+  display: flex;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.stepper .val {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--black-500);
+}
+
+.convert-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-xs);
+  height: 48px;
+  flex: 1 0 0;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--kale-500);
+  cursor: pointer;
+}
+
+.pro-banner {
+  display: block;
+  /* the export already carries the 16px side gutters */
+  padding: 12px 0 0;
+}
+.pro-banner img { width: 100%; height: auto; display: block; }
+
+.ing-list {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px 0;
+}
+
+.ing-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-xs);
+  min-height: 48px;
+  width: 100%;
+}
+
+.ing-row__check {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  flex: none;
+}
+
+.checkcircle--done {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 100px;
+  background: var(--kale-500);
+  cursor: pointer;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ing-row__text {
+  flex: 1 0 0;
+  min-width: 0;
+  padding-top: 11px;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--black-500);
+}
+
+.ing-row__text .qty { font-weight: 400; }
+.ing-row__text .nm { font-weight: 500; }
+.ing-row__text .note { font-weight: 400; }
+
+.ing-row--done .ing-row__text {
+  color: var(--black-300);
+  text-decoration: line-through;
+}
+
+.ing-row__acts {
+  display: flex;
+  align-items: center;
+  flex: none;
+}
+
+.ing-row__acts .icon-button { padding: 12px; }
+
+.addcirc {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.addcirc .c {
+  width: 24px;
+  height: 24px;
+  border-radius: 100px;
+  background: var(--black-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addcirc.added .c { background: var(--kale-100); }
+
+.add-all-btn {
+  margin: 24px 16px 0;
+  width: calc(100% - 32px);
+}
+
+.btn-tonal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-xs);
+  height: 48px;
+  border: none;
+  border-radius: 100px;
+  background: var(--black-100);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--black-500);
+  cursor: pointer;
+}
+
+/* Method */
+.sleep-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  padding: 24px 16px 0;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--black-500);
+}
+
+.switch {
+  position: relative;
+  width: 40px;
+  height: 24px;
+  border: none;
+  border-radius: 100px;
+  background: var(--kale-500);
+  cursor: pointer;
+  flex: none;
+  transition: background 200ms ease;
+}
+
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 19px;
+  width: 18px;
+  height: 18px;
+  border-radius: 100px;
+  background: var(--white);
+  transition: left 200ms cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+
+.switch[aria-checked="false"] { background: var(--black-200); }
+.switch[aria-checked="false"]::after { left: 3px; }
+
+.start-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-xs);
+  height: 48px;
+  margin: 26px 16px 0;
+  width: calc(100% - 32px);
+  border: none;
+  border-radius: 100px;
+  background: var(--kale-500);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.start-btn::before {
+  content: "";
+  display: block;
+  border-style: solid;
+  border-width: 7px 0 7px 11px;
+  border-color: transparent transparent transparent var(--white);
+}
+
+.method-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-m);
+  padding: 24px 16px 0;
+}
+
+.step__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 26px;
+  color: var(--black-500);
+}
+
+.step__body {
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--black-500);
+}
+
+.step--done .step__head span,
+.step--done .step__body {
+  color: var(--black-300);
+}
+
+.step .checkcircle { width: 24px; height: 24px; }
+
+.method-subhead {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 25px;
+  letter-spacing: -0.09px;
+  color: var(--black-500);
+}
+
+.checkcircle {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid var(--kale-500);
+  border-radius: 100px;
+  background: none;
+  cursor: pointer;
+  flex: none;
+  display: inline-block;
+}
+
+/* in-UI meal-plan card (Figma 28063:51946): column gap is 24, Figma wants 16 */
+.recipe-summary .ai-card { margin-top: -8px; }

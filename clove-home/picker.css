@@ -1,0 +1,541 @@
+/* ============================================================
+   Clove — InputWidget pickers (edit a memory)
+   Figma: 28005:45696 (stepper) · 45687 (ruler) · 45675 (options) ·
+          45669 (rank) · 45681 (macro steppers)
+   ============================================================ */
+
+.picker-overlay {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  width: 402px;
+  height: 100vh;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  /* kept renderable while closed (inert + aria-hidden in JS) so the card and
+     its input are already rasterised the moment it opens */
+}
+
+.picker-overlay.open { pointer-events: auto; }
+
+.picker-overlay__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(12, 16, 18, 0.25);
+  opacity: 0;
+  transition: opacity 280ms ease;
+}
+
+.picker-overlay.open .picker-overlay__scrim { opacity: 1; }
+
+/* InputWidget card */
+.iw {
+  position: relative;
+  width: 386px;
+  border: 0.5px solid var(--black-200);
+  border-radius: 32px;
+  background: var(--white);
+  box-shadow: 0 24px 48px rgba(15, 18, 21, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(26px) scale(0.9);
+  /* one composited layer for the whole sheet: on iOS WebKit the native
+     input in the footer otherwise paints a few frames after the card */
+  will-change: transform, opacity;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  isolation: isolate;
+}
+
+.picker-overlay.open .iw {
+  opacity: 1;
+  transform: none;
+  transition: opacity 340ms cubic-bezier(0.22, 1.2, 0.36, 1),
+    transform 380ms cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+
+.iw__content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 16px 0;
+  background: var(--white);
+  box-shadow: 0 4px 30px rgba(15, 18, 21, 0.15);
+  position: relative;
+  z-index: 1;
+}
+
+.iw__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.iw__header .hgroup {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.iw__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  height: 24px;
+  min-width: 24px;
+  padding: 0 8px;
+  border-radius: 100px;
+  background: var(--black-100);
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--black-500);
+}
+
+.iw__q {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 25px;
+  letter-spacing: -0.09px;
+  color: #0c1012;
+}
+
+.iw__sub {
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--black-400);
+}
+
+.iw__close {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  flex: none;
+}
+
+.iw__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  padding: 12px 0 16px;
+}
+
+/* Footer: the same composer pill as the other Clove inputs */
+.iw__footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px 16px;
+  background: var(--white);
+  /* rasterised with the card so it lands in the same frame as the question */
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.iw__footer input {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1 0 0;
+  min-width: 0;
+  height: 48px;
+  border: none;
+  border-radius: 24px;
+  background: var(--black-100);
+  outline: none;
+  padding: 0 64px 0 16px; /* room for the round submit inside the pill */
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--black-500);
+}
+
+.iw__footer input::placeholder { color: var(--black-300); }
+
+/* the submit sits inside the pill, on the right, like the voice button;
+   when a Skip is shown it moves out beside the pill instead */
+/* the submit sits 8px inside the pill's right end; the pill itself spans the
+   full footer width (16px side padding, same as the Save button below) */
+.iw__footer { position: relative; }
+.iw__footer .iw__submit { position: absolute; right: 24px; top: 20px; margin: 0; z-index: 1; flex: none; }
+.iw__footer .iw__skip:not([hidden]) + .iw__submit { position: static; margin-left: 0; }
+
+.iw__skip {
+  border: none;
+  background: var(--white);
+  height: 48px;
+  padding: 12px 16px;
+  border-radius: 100px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--black-500);
+  cursor: pointer;
+  flex: none;
+}
+
+.iw__submit {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 999px;
+  background: var(--kale-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: none;
+}
+
+/* --- Stepper (people) --------------------------------------- */
+.iw-plates { height: 132px; display: flex; align-items: center; justify-content: center; --size: 88px; }
+.iw-plates .plate {
+  width: var(--size);
+  height: var(--size);
+  margin-left: calc(var(--size) * -0.34);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: inset 0 0 0 calc(var(--size) * 0.09) #f3f3f3, 0 6px 14px rgba(15, 18, 21, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(var(--size) * 0.52);
+  line-height: 1;
+  flex: none;
+  transition: width 220ms cubic-bezier(0.22, 1, 0.36, 1), height 220ms cubic-bezier(0.22, 1, 0.36, 1), margin 220ms cubic-bezier(0.22, 1, 0.36, 1), font-size 220ms ease;
+  animation: plate-pop 360ms cubic-bezier(0.22, 1.4, 0.36, 1) both;
+}
+.iw-plates .plate:first-child { margin-left: 0; }
+@keyframes plate-pop { from { transform: scale(0.4) translateY(10px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* a removed plate shrinks, dips and fades while its space collapses, so
+   the remaining plates glide back to centre in one motion */
+.iw-plates .plate.leaving {
+  animation: none; /* release plate-pop's fill so the transform below wins */
+  width: 0;
+  margin-left: 0;
+  font-size: 0;
+  opacity: 0;
+  transform: scale(0.5) translateY(10px);
+  box-shadow: none;
+  transition:
+    width 340ms cubic-bezier(0.22, 1, 0.36, 1),
+    margin 340ms cubic-bezier(0.22, 1, 0.36, 1),
+    font-size 340ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 220ms ease,
+    transform 340ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 220ms ease;
+}
+
+.iw-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+}
+
+.iw-stepper .step-btn {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 100px;
+  background: var(--black-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: none;
+}
+
+.iw-stepper .val {
+  min-width: 150px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.28px;
+  color: var(--black-500);
+}
+
+/* --- Ruler slider ------------------------------------------- */
+.iw-ruler-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.iw-ruler-wrap .pointer {
+  width: 16px;
+  height: 14px;
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+  background: var(--eggplant-300);
+}
+
+.iw-ruler-wrap .big-val {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.32px;
+  color: #0c1012;
+  text-align: center;
+}
+
+.iw-ruler {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 17px;
+  width: 100%;
+  padding-top: 12px;
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.iw-ruler i {
+  width: 6px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--black-200);
+  flex: none;
+  transition: height 160ms ease, background 160ms ease;
+}
+
+.iw-ruler i.major { height: 48px; }
+.iw-ruler i.on {
+  height: 64px;
+  background: var(--eggplant-300);
+}
+
+/* --- Option list -------------------------------------------- */
+.iw-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.iw-option {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  background: var(--black-100);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.iw-option .t {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 21px;
+  color: var(--black-500);
+}
+
+.iw-option .s {
+  font-size: 13px;
+  line-height: 19px;
+  color: var(--black-400);
+}
+
+.iw-option.on {
+  border-color: var(--kale-300);
+  background: var(--kale-100);
+}
+
+/* --- Rank list ---------------------------------------------- */
+.iw-rank {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.iw-rank__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 14px;
+  border-radius: 12px;
+  background: var(--black-100);
+  cursor: grab;
+  user-select: none;
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.iw-rank__row.lifting {
+  cursor: grabbing;
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(15, 18, 21, 0.18);
+  position: relative;
+  z-index: 2;
+  transition: none;
+}
+
+.iw-rank__row .n {
+  font-size: 13px;
+  color: var(--black-400);
+  min-width: 12px;
+}
+
+.iw-rank__row .t {
+  flex: 1 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--black-500);
+}
+
+.iw-rank__row .grip {
+  display: grid;
+  grid-template-columns: repeat(2, 3px);
+  gap: 2.5px;
+  flex: none;
+}
+
+.iw-rank__row .grip i {
+  width: 3px;
+  height: 3px;
+  border-radius: 100px;
+  background: var(--black-500);
+}
+
+/* --- Macro steppers ----------------------------------------- */
+.iw-macros {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.iw-macro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--black-100);
+}
+
+.iw-macro:last-child { border-bottom: none; }
+
+.iw-macro .lbl {
+  font-size: 15px;
+  color: var(--black-500);
+}
+
+.iw-macro .pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+  padding: 0 6px;
+  border-radius: 100px;
+  background: var(--black-100);
+}
+
+.iw-macro .pill button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.iw-macro .pill .v {
+  min-width: 62px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--black-500);
+}
+
+/* ------------------------------------------------------------
+   Memory card adjustments (profile)
+   ------------------------------------------------------------ */
+.memory-edit {
+  width: 32px;
+  height: 32px;
+  margin-top: 4px;
+  border: none;
+  border-radius: 100px;
+  background: var(--black-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: none;
+}
+
+.memory-toggle {
+  border: none;
+  background: none;
+  padding: 8px 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.memory-toggle .chev {
+  display: flex;
+  margin-left: auto;
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.settings-card.collapsed .memory-toggle .chev { transform: rotate(-180deg); }
+
+/* explicit Save CTA below the Something else row, appears on change */
+/* primary CTA: always present */
+.iw__save {
+  width: calc(100% - 32px);
+  height: 48px;
+  margin: 0 16px 16px;
+  border: none;
+  border-radius: 100px;
+  background: var(--kale-500);
+  color: var(--white);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  cursor: pointer;
+  flex: none;
+}
+
+.iw__save[hidden] { display: none; }
+
+.memory-body {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* padding gives the fresh-dot room inside the clip; margin keeps alignment */
+.memory-body > div { overflow: hidden; min-height: 0; padding: 0 6px; margin: 0 -6px; }
+
+.settings-card.collapsed .memory-body { grid-template-rows: 0fr; }
+
+.iw__count[hidden] { display: none; }

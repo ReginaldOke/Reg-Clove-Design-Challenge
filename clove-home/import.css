@@ -1,0 +1,277 @@
+/* ============================================================
+   Clove — TikTok save moment (first-mile entry)
+   ============================================================ */
+
+body { background: #111; }
+
+.phone {
+  background: #000;
+  padding-bottom: 0;
+  min-height: 100vh;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ------------------------------------------------------------
+   Short-video screen
+   ------------------------------------------------------------ */
+.tt {
+  position: absolute;
+  inset: 0;
+}
+
+.tt__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tt__scrim-top {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 120px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.5), transparent);
+}
+
+.tt__scrim-bot {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 260px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.65), transparent);
+}
+
+.tt__top {
+  position: absolute;
+  top: 58px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.tt__top .on {
+  color: #fff;
+  font-weight: 600;
+  position: relative;
+}
+
+.tt__top .on::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -6px;
+  width: 24px;
+  height: 3px;
+  border-radius: 3px;
+  background: #fff;
+}
+
+/* right action rail */
+.tt__rail {
+  position: absolute;
+  right: 10px;
+  bottom: 190px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.tt__act {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.tt__act .g { font-size: 30px; line-height: 1; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4)); }
+
+.tt__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 100px;
+  border: 2px solid #fff;
+  overflow: hidden;
+}
+.tt__avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+/* caption */
+.tt__caption {
+  position: absolute;
+  left: 14px;
+  right: 80px;
+  bottom: 118px;
+  color: #fff;
+}
+
+.tt__caption .h {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.tt__caption .c {
+  font-size: 14px;
+  line-height: 20px;
+  opacity: 0.95;
+}
+
+.tt__caption .m {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+/* the Clove save CTA */
+.tt__save {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 22px 0 14px;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--black-500);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  white-space: nowrap;
+  animation: save-breathe 2.4s ease-in-out infinite;
+}
+
+@keyframes save-breathe {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.04); }
+}
+
+.tt__save img { width: 24px; height: 24px; }
+
+/* ------------------------------------------------------------
+   Saving screen
+   ------------------------------------------------------------ */
+.saving {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--kale-100) 0%, var(--white) 55%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 96px 16px 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 380ms ease;
+}
+
+.saving.show { opacity: 1; visibility: visible; }
+
+.saving__logo {
+  width: 64px;
+  height: 64px;
+  mix-blend-mode: multiply;
+  animation: logo-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes logo-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+.saving__title {
+  margin-top: 16px;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 31px;
+  letter-spacing: -0.24px;
+  color: var(--kale-500);
+}
+
+.saving__sub {
+  margin-top: 2px;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--black-400);
+}
+
+.saving__bar {
+  width: 220px;
+  height: 6px;
+  margin-top: 18px;
+  border-radius: 999px;
+  background: var(--black-200);
+  overflow: hidden;
+}
+
+.saving__bar i {
+  display: block;
+  width: 0%;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--kale-300);
+  transition: width 800ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* the in-save question card reuses the InputWidget look */
+.saving .iw {
+  margin-top: 36px;
+  opacity: 0;
+  transform: translateY(26px) scale(0.94);
+}
+
+.saving .iw.show {
+  opacity: 1;
+  transform: none;
+  transition: opacity 340ms cubic-bezier(0.22, 1.2, 0.36, 1),
+    transform 400ms cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+
+.saving__eyebrow {
+  margin-top: 34px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  background: var(--pro-gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.saving__eyebrow.show { opacity: 1; }
+
+/* saved! state */
+.saved-check {
+  margin-top: 24px;
+  width: 62px;
+  height: 62px;
+  border-radius: 100px;
+  background: var(--kale-500);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.saved-check.show {
+  display: flex;
+  animation: check-pop 500ms cubic-bezier(0.2, 1.4, 0.35, 1) both;
+}

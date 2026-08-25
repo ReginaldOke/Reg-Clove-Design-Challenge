@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clove - Health goals</title>
+<link rel="stylesheet" href="base.css" />
+<script src="frame.js"></script>
+<link rel="stylesheet" href="memory.css" />
+<link rel="stylesheet" href="goals.css" />
+</head>
+<body class="goals">
+<div class="phone">
+
+  <!-- same page chrome as My Kitchen: back chevron + big title -->
+  <nav class="gl-nav">
+    <button class="gl-nav__back" id="glBack" aria-label="Back"><span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%) rotate(90deg)" /></span></button>
+  </nav>
+
+  <main class="gl-body" id="glBody">
+    <div class="gl-title-row">
+      <h1 class="gl-title">Health goals</h1>
+      <button class="gl-edit" id="glEdit" aria-label="Edit health goals">
+        <span class="ico ico-20"><img src="assets/icons/pencil.svg" alt="" style="width:16px;height:16px" /></span>
+      </button>
+    </div>
+
+    <section class="pcard gl-hero" id="glHero">
+      <p class="gl-hero__eyebrow"><img src="assets/icons/clove-kale.svg" alt="" />Health tracker</p>
+      <div class="gl-hero__rings">
+        <div class="gl-hero__wrap">
+          <div id="glHeroRings"></div>
+          <div class="gl-hero__center"><span class="gl-hero__pct" id="glPct">0%</span><span class="gl-hero__lbl" id="glLbl">iron goal</span></div>
+        </div>
+      </div>
+    </section>
+    <!-- empty state -->
+    <section class="pcard gl-promo" id="glPromo" hidden>
+      <div class="gl-promo__top">
+        <span class="gl-promo__rings" id="glPromoRings"></span>
+        <div>
+          <span class="goal-card__eyebrow"><img src="assets/icons/clove-kale.svg" alt="" />Health tracker</span>
+          <p class="gl-promo__title">Cook toward a goal.</p>
+        </div>
+      </div>
+      <p class="gl-promo__body">Tell Clove what you are working on, and every dinner it suggests is picked to close the gap.</p>
+      <div class="gl-promo__chips"><span class="gl-chip">🩸 Iron</span><span class="gl-chip">💪 Protein</span><span class="gl-chip">+5 more</span></div>
+      <button class="gl-promo__cta" id="glStart">Set a health goal →</button>
+    </section>
+
+    <div class="gl-rings" id="glRings"></div>
+
+    <section class="gl-week" id="glWeek">
+      <div class="gl-week__head"><span class="gl-eyebrow">This week</span><span class="gl-week__tot"><b id="glWeekTot">0</b> of <span id="glWeekGoal">0</span></span></div>
+      <svg viewBox="0 0 320 108" preserveAspectRatio="none" id="glChart"></svg>
+      <div class="gl-week__days"><span>M</span><span>T</span><span>W</span><span class="today">T</span><span>F</span><span>S</span><span>S</span></div>
+    </section>
+
+    <button class="btn-tonal gl-browse" id="glInsCta">Browse iron-rich dinners</button>
+
+    <!-- the same pink nudge as the recipe page: plan the week around the goal -->
+    <div class="gl-plan" id="glPlanWrap">
+      <button class="ai-card" id="glPlan">
+        <span class="ai-card__clove"><span class="mark"><img class="logo" src="assets/icons/clove-white.svg" alt="" /><img class="spark" src="assets/icons/clove-sparkle.svg" alt="" /></span></span>
+        <span class="ai-card__text">
+          <span class="t" id="glPlanT">Plan meals to hit your iron goal</span>
+          <span class="s" id="glPlanS">Health goal: Iron</span>
+        </span>
+      </button>
+    </div>
+
+    <section class="gl-boost" id="glBoost" hidden>
+      <p class="gl-boost__title" id="glBoostT"></p>
+      <p class="gl-boost__sub">Ranked by how much of your daily target they cover</p>
+      <div class="gl-boost__list" id="glBoostList"></div>
+    </section>
+
+  </main>
+
+  <!-- "What are you working on?" -->
+  <div class="gl-sheet" id="glSheet" hidden>
+    <div class="gl-sheet__scrim" id="glScrim"></div>
+    <div class="gl-sheet__card">
+      <div class="gl-sheet__grab"></div>
+      <h2 class="gl-sheet__h">What are you working on?</h2>
+      <p class="gl-sheet__s">Clove shapes every suggestion around this.</p>
+      <div class="gl-opts" id="glOpts"></div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script src="memory.js"></script>
+<script src="goals.js"></script>
+<script>
+  (function () {
+    var G = CloveGoals;
+    var body = document.getElementById("glBody");
+    var promo = document.getElementById("glPromo");
+    var sheet = document.getElementById("glSheet");
+    var ids = ["glRings", "glWeek", "glPlanWrap", "glInsCta", "glBoost", "glEdit"];
+
+    // the tracker is pinned to Home by default (goals.js), quietly: no toast
+    function setPinUI() {}
+
+    function drawWeek(r) {
+      var svg = document.getElementById("glChart");
+      var goalN = r.goalN || parseFloat(String(r.goal).replace(/[^\d.]/g, "")) || 1;
+      var nowN = r.nowN || parseFloat(String(r.now).replace(/[^\d.]/g, "")) || 0;
+      var unit = r.unit || String(r.goal).replace(/[\d.,\s]/g, "");
+      var weekPct = [0.31, 0.35, 0.28, 0, 0, 0, 0];
+      // draw in the svg's real pixel box so nothing is stretched (round dot)
+      var W = Math.round(svg.clientWidth) || 320, H = Math.round(svg.clientHeight) || 84, PAD = 8, run = 0, cum = [];
+      svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+      svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+      weekPct.forEach(function (p, i) { run += i === 3 ? nowN : p * goalN; cum.push(run); });
+      var weekGoal = goalN * 7;
+      var x = function (i) { return (i / 6) * W; };
+      var y = function (v) { return H - PAD - Math.min(1, v / weekGoal) * (H - PAD * 2); };
+      var pts = [{ x: 0, y: H - PAD }].concat(cum.slice(0, 4).map(function (v, i) { return { x: x(i), y: y(v) }; }));
+      var d = pts.map(function (p, i) {
+        if (!i) return "M" + p.x.toFixed(1) + " " + p.y.toFixed(1);
+        var q = pts[i - 1], cx = (q.x + p.x) / 2;
+        return "C" + cx.toFixed(1) + " " + q.y.toFixed(1) + " " + cx.toFixed(1) + " " + p.y.toFixed(1) + " " + p.x.toFixed(1) + " " + p.y.toFixed(1);
+      }).join(" ");
+      var last = pts[pts.length - 1];
+      var lg = (G.GRADS[r.color] || [r.color, r.color]);
+      lg = [lg[0], lg[1]];
+      svg.innerHTML =
+        '<defs><linearGradient id="cum" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + lg[1] + '" stop-opacity="0.26"/><stop offset="100%" stop-color="' + lg[1] + '" stop-opacity="0"/></linearGradient>' +
+        '<linearGradient id="lineG" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="' + lg[0] + '"/><stop offset="100%" stop-color="' + lg[1] + '"/></linearGradient></defs>' +
+        '<line x1="0" y1="8" x2="' + W + '" y2="8" stroke="#e6e2d6" stroke-width="1.5" stroke-dasharray="3 5"/>' +
+        '<path d="M0 ' + (H - PAD) + " L" + W + " " + PAD + '" fill="none" stroke="#ddd9cb" stroke-width="1.5" stroke-dasharray="4 5" stroke-linecap="round"/>' +
+        '<path d="' + d + " L" + last.x.toFixed(1) + " " + (H - PAD) + ' L0 ' + (H - PAD) + ' Z" fill="url(#cum)"/>' +
+        '<path class="gl-line" d="' + d + '" fill="none" stroke="url(#lineG)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<circle cx="' + last.x.toFixed(1) + '" cy="' + last.y.toFixed(1) + '" r="9" fill="' + lg[1] + '" opacity="0.16"/>' +
+        '<circle cx="' + last.x.toFixed(1) + '" cy="' + last.y.toFixed(1) + '" r="4.5" fill="' + lg[1] + '" stroke="#fff" stroke-width="2.5"/>';
+      var fmt = function (n) { return (Math.round(n * 10) / 10).toLocaleString(); };
+      document.getElementById("glWeekTot").textContent = fmt(cum[3]) + unit;
+      document.getElementById("glWeekGoal").textContent = fmt(weekGoal) + unit;
+      // draw the line in
+      var line = svg.querySelector(".gl-line");
+      var len = line.getTotalLength();
+      line.style.strokeDasharray = len; line.style.strokeDashoffset = len;
+      line.getBoundingClientRect();
+      line.style.transition = "stroke-dashoffset 1.1s cubic-bezier(.35,.9,.35,1) .15s";
+      line.style.strokeDashoffset = 0;
+    }
+
+    function render(animate) {
+      var g = G.primary();
+      ids.forEach(function (id) { document.getElementById(id).hidden = !g; });
+      document.getElementById("glHero").hidden = !g;
+      promo.hidden = !!g;
+      setPinUI();
+      if (!g) {
+        document.getElementById("glPromoRings").innerHTML = G.ringsSVG([{ pct: 0.38, color: "#4285f4" }, { pct: 0.69, color: "#a855f7" }, { pct: 0.71, color: "#34a853" }], 88, 9, "#f0eee6", true);
+        setTimeout(function () { G.playRings(promo); }, 150);
+        return;
+      }
+      var rings = G.rings();
+      // hero
+      document.getElementById("glHeroRings").innerHTML = G.ringsSVG(rings, 152, 12, null, animate);
+      document.getElementById("glLbl").textContent = g.heroShort;
+      var pctEl = document.getElementById("glPct");
+      var target = Math.round(rings[0].pct * 100);
+      if (animate) {
+        // timer-driven (not rAF) so it also runs while the tab is backgrounded
+        var t0 = Date.now();
+        clearInterval(pctEl._iv);
+        pctEl._iv = setInterval(function () {
+          var k = Math.min(1, (Date.now() - t0) / 1100); k = 1 - Math.pow(1 - k, 3);
+          pctEl.textContent = Math.round(target * k) + "%";
+          if (k >= 1) clearInterval(pctEl._iv);
+        }, 16);
+      } else pctEl.textContent = target + "%";
+      // small ring cards
+      document.getElementById("glRings").innerHTML = rings.map(function (r) {
+        return '<div class="gl-ringcard"><div class="gl-ringcard__wrap">' + G.ringsSVG([r], 62, 7, r.track, animate) +
+          '<span class="gl-ringcard__pct">' + Math.round(r.pct * 100) + "%</span></div>" +
+          '<div><p class="gl-ringcard__lbl">' + r.label + '</p><p class="gl-ringcard__sub">' + r.now + " / " + r.goal + "</p></div></div>";
+      }).join("");
+      setTimeout(function () { G.playRings(document); }, 90);
+      drawWeek(rings[0]);
+      // the pink nudge holds back until the chart line has finished drawing,
+      // then springs in (gl-plan--reveal: rise + wand pop + one sheen)
+      var planCard = document.querySelector("#glPlanWrap .ai-card");
+      planCard.classList.remove("ai-card--reveal");
+      clearTimeout(planCard._t);
+      if (animate) {
+        planCard.classList.add("ai-card--wait");
+        planCard._t = setTimeout(function () {
+          planCard.classList.remove("ai-card--wait");
+          planCard.classList.add("ai-card--reveal");
+        }, 1500);
+      } else planCard.classList.remove("ai-card--wait");
+      // plan nudge (same as the recipe page) + browse CTA
+      var lbl = rings[0].label;
+      document.getElementById("glPlanT").textContent = "Plan meals to hit your " + lbl.toLowerCase() + " goal";
+      document.getElementById("glPlanS").textContent = "Health goal: " + lbl;
+      document.getElementById("glInsCta").textContent = g.insight.cta.replace(/^Show me /, "Browse ").replace(/\s*→\s*$/, "");
+      document.getElementById("glBoostT").textContent = g.boostTitle;
+      var doneIdx = G.boostedItem();
+      document.getElementById("glBoostList").innerHTML = g.items.map(function (it, i) {
+        var isDone = i === doneIdx;
+        return '<div class="gl-item" style="--d:' + (i * 70) + 'ms"><img src="assets/img/goals/' + it.img + '" alt="" />' +
+          '<div class="gl-item__body"><div class="gl-item__top"><span class="gl-item__t">' + it.title + '</span><span class="gl-item__time">' + it.time + "</span></div>" +
+          '<span class="gl-item__gain">' + it.gain + ' <span class="gl-item__bar"><i style="width:' + Math.round(it.pct * 100) + '%"></i></span></span>' +
+          '<p class="gl-item__why">✦ ' + it.why + "</p>" +
+          '<button class="gl-item__add' + (isDone ? " done" : "") + '" data-i="' + i + '">' + (isDone ? "In your plan ✓" : "Add to plan") + "</button></div></div>";
+      }).join("") || '<p class="gl-boost__sub">Clove is still learning which dinners fit this goal.</p>';
+      var listOpen = doneIdx >= 0 || document.getElementById("glBoost").dataset.open === "1";
+      document.getElementById("glBoost").hidden = !listOpen; // once you have cooked one, the list stays
+      document.getElementById("glInsCta").hidden = listOpen;
+    }
+
+    /* ---- sheet: add a goal ---- */
+    function openSheet() {
+      var opts = document.getElementById("glOpts");
+      opts.innerHTML = G.OPTIONS.map(function (o) {
+        var have = G.has(o.id);
+        return '<button class="gl-opt' + (have ? " have" : "") + '" data-id="' + o.id + '"' + (have ? " disabled" : "") + '><span class="e">' + o.emoji + '</span><span class="l">' + o.label + "</span>" +
+          (have ? '<span class="have-tag">Already tracking</span>' : '<span class="s">' + o.sub + "</span>") + "</button>";
+      }).join("");
+      sheet.hidden = false;
+      void sheet.offsetWidth;
+      sheet.classList.add("show");
+      opts.querySelectorAll(".gl-opt:not(.have)").forEach(function (b) {
+        b.addEventListener("click", function () {
+          b.classList.add("on");
+          var id = b.dataset.id;
+          setTimeout(function () {
+            closeSheet();
+            G.add(id);
+            var g = G.LIB[id];
+            setTimeout(function () {
+              render(true);
+              CloveMemory.toast(g.toast, "Added to your health goals · Clove will cook toward it", { goal: true, href: "goals.html" });
+            }, 380);
+          }, 260);
+        });
+      });
+    }
+    function closeSheet() {
+      sheet.classList.remove("show");
+      setTimeout(function () { sheet.hidden = true; }, 480);
+    }
+    document.getElementById("glScrim").addEventListener("click", closeSheet);
+    document.getElementById("glStart").addEventListener("click", openSheet);
+    document.getElementById("glEdit").addEventListener("click", openSheet);
+
+    /* ---- plan nudge → meal plan ---- */
+    document.getElementById("glPlan").addEventListener("click", function () {
+      location.href = localStorage.getItem("clovePlanned") ? "plan.html" : "plan.html?ask=1";
+    });
+
+    /* ---- browse → boosters, cook one → ring climbs ---- */
+    document.getElementById("glInsCta").addEventListener("click", function () {
+      var cta = this, b = document.getElementById("glBoost");
+      b.dataset.open = "1";
+      cta.hidden = true;
+      b.hidden = false;
+      b.classList.add("reveal");
+      setTimeout(function () { b.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
+    });
+    document.getElementById("glBoostList").addEventListener("click", function (e) {
+      var btn = e.target.closest(".gl-item__add");
+      if (!btn || btn.classList.contains("done")) return;
+      btn.classList.add("done");
+      btn.textContent = "In your plan ✓";
+      var g = G.primary();
+      var it = g.items[Number(btn.dataset.i)];
+      G.boost(Number(btn.dataset.i));
+      localStorage.setItem("clovePlanned", "1");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setTimeout(function () {
+        render(true);
+        var r = G.rings()[0];
+        CloveMemory.toast(it.gain.replace("+", "") + ", " + (r.pct >= 0.95 ? "ring closed" : r.pct >= 0.78 ? "ring nearly closed" : "ring on its way"), "Added to this week’s plan", { goal: true, href: "plan.html" });
+      }, 420);
+    });
+
+    document.getElementById("glBack").addEventListener("click", function () {
+      if (document.referrer && /profile|index/.test(document.referrer)) history.back();
+      else location.href = "profile.html";
+    });
+
+    // this page always shows the real tracker (same UI whether you arrive
+    // from the profile card or the homepage): default to the iron goal,
+    // quietly, if none is set yet
+    if (!G.primary()) G.add("iron");
+    render(true);
+    if (location.hash === "#add") setTimeout(openSheet, 400);
+  })();
+</script>
+</body>
+</html>

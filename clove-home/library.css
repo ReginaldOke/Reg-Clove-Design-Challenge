@@ -1,0 +1,189 @@
+/* ============================================================
+   Clove — Library (saved recipes)
+   Figma: 26024:11817
+   ============================================================ */
+
+/* Magic tag chips */
+.tags-rail {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  padding: 8px 0;
+}
+.tags-rail::-webkit-scrollbar { display: none; }
+
+.tags-rail__strip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 16px;
+  width: max-content;
+}
+
+.magic-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2xs);
+  height: 32px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 100px;
+  background: var(--eggplant-100);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: nowrap;
+  cursor: pointer;
+  flex: none;
+}
+
+.magic-tag .name { color: #5b0a60; }
+.magic-tag .count { color: var(--eggplant-300); }
+
+/* Sort bar */
+.sort-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.sort-bar__left {
+  display: flex;
+  align-items: center;
+}
+
+.sort-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 100px;
+  background: none;
+  cursor: pointer;
+}
+
+.sort-all {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2xs);
+  height: 32px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 100px;
+  background: none;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--black-500);
+  cursor: pointer;
+}
+
+/* Recipe grid */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 12px;
+  row-gap: 16px;
+  padding: 12px 16px;
+}
+
+.grid-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-xs);
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.grid-card__image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--black-100);
+}
+
+.grid-card__image > img.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.grid-card__badge {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  display: flex;
+  align-items: center;
+  height: 24px;
+  min-width: 24px;
+  padding: 0 8px;
+  border-radius: 100px;
+  background: var(--white);
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--black-500);
+}
+
+.grid-card__select {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 100px;
+  background: var(--white);
+  cursor: pointer;
+}
+
+.grid-card__select .ring {
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--kale-500);
+  border-radius: 100px;
+  box-sizing: border-box;
+  display: block;
+}
+
+.grid-card__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.grid-card__title {
+  width: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 17px;
+  color: var(--black-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.grid-card__creator {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3xs);
+  width: 100%;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--black-400);
+}

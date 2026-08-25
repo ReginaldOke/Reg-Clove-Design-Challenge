@@ -1,0 +1,854 @@
+/* ============================================================
+   Clove — Groceries
+   Figma: 28052:48530 (By category) · 28052:48476 (Lists) ·
+          28052:48342 (My Pantry)
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Segmented tab strip
+   ------------------------------------------------------------ */
+.seg-tabs {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 12px;
+  height: 49px;
+  padding: 0 16px;
+  background: var(--white);
+}
+
+.seg-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 48px;
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--black-500);
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+}
+
+.seg-tab { transition: border-color 220ms ease, color 220ms ease; }
+
+.seg-tab[aria-current="page"] {
+  font-weight: 500;
+  border-bottom-color: var(--black-400);
+}
+
+.seg-tab[hidden] { display: none; }
+
+.seg-tab--aisle { gap: 6px; }
+
+.seg-tab__logo {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex: none;
+}
+
+/* By aisle view: the aisle is the headline */
+.aisle-heading { gap: 10px; height: auto; min-height: 48px; padding: 6px 0 2px; }
+.aisle-heading h2 { font-size: 18px; }
+.aisle-section + .aisle-section { margin-top: 6px; padding-top: 10px; border-top: 1px solid var(--black-100); }
+.aisle-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: var(--kale-500);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+  flex: none;
+}
+.aisle-badge.area { background: var(--eggplant-100); color: #5b0a60; }
+
+.aisle-tag {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 100px;
+  background: var(--black-100);
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--black-400);
+  white-space: nowrap;
+}
+
+/* "Shopping at" bar: check · store · pencil (store details on/off) */
+.store-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin: 14px 0 12px;
+  padding: 10px 22px 10px 10px;
+  border-radius: 16px;
+  background: var(--white);
+  border: 0.5px solid var(--black-200);
+}
+.store-bar[hidden] { display: none; }
+.store-bar__logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex: none;
+  border: 1px solid var(--black-100);
+  transition: opacity 240ms ease, filter 240ms ease;
+}
+.store-bar__logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.store-bar__text { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; transition: opacity 240ms ease; }
+.store-bar__l { font-size: 12px; line-height: 17px; color: var(--black-400); }
+.store-bar__n { font-size: 15px; font-weight: 500; line-height: 22px; color: var(--black-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* the anchor needs real dimensions (icon-button-32 alone left it 0x0 and
+   unclickable); a 32px disc, clear of the bar's right edge */
+.store-bar__edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  flex: none;
+  background: var(--black-100);
+  transition: opacity 240ms ease, transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.store-bar__edit:active { transform: scale(0.94); }
+/* details off: the selector reads as disabled, only the check is live */
+.store-bar.off .store-bar__logo { opacity: 0.45; filter: grayscale(1); }
+.store-bar.off .store-bar__text { opacity: 0.45; }
+.store-bar.off .store-bar__edit { opacity: 0.35; pointer-events: none; }
+.store-bar__check { flex: none; }
+.seg-tab--store { gap: 6px; }
+.seg-tab--store .seg-tab__logo[hidden] { display: none; }
+
+/* where to find each item in the store: a line under its name */
+.aisle-badge--sm { height: 22px; padding: 0 8px; border-radius: 7px; font-size: 12.5px; font-weight: 700; line-height: 1; letter-spacing: 0.1px; }
+.ingredient__aisle {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  font-size: 12.5px;
+  line-height: 18px;
+  color: var(--black-400);
+  transition: height 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
+}
+body.store .ingredient__aisle { height: 0; opacity: 0; } /* grouped by aisle: the heading carries it */
+body.store .ingredient { min-height: 64px; }
+.ingredient.done .ingredient__aisle { opacity: 0.5; }
+
+.ingredient { transition: min-height 260ms cubic-bezier(0.22, 1, 0.36, 1); }
+body.store .ingredient { min-height: 64px; }
+body.store-instant * { transition: none !important; }
+/* label wraps so the aisle line sits under the name */
+.ingredient__label { flex-wrap: wrap; row-gap: 0; }
+body.store .ingredient__label { padding-top: 11px; }
+/* already shopping in store: no Start shopping CTA */
+body.store-set .shop-cta { display: none !important; }
+
+.seg-tab .dot {
+  position: absolute;
+  right: -8px;
+  top: calc(50% - 9px);
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 100px;
+  background: var(--eggplant-300);
+}
+
+/* ------------------------------------------------------------
+   Add item input
+   ------------------------------------------------------------ */
+.add-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-xs);
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: var(--black-100);
+  font-family: inherit;
+  cursor: text;
+}
+
+.add-item p {
+  flex: 1 0 0;
+  min-width: 0;
+  height: 24px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--black-300);
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* entry: rows pop into position, the nudge springs in last */
+.gpop { opacity: 0; transform: translateY(14px) scale(0.96); }
+.gpop.in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 360ms cubic-bezier(0.22, 1.2, 0.36, 1), transform 360ms cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+.gpop.spring.in { transition-duration: 560ms; transition-timing-function: cubic-bezier(0.22, 1.4, 0.36, 1); }
+
+/* Start shopping CTA (Figma 26011:6733 Chat Wrapper): gradient well above the tab bar */
+.shop-cta {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 96px; /* clear of the clove button (top of the tab bar is 88px) */
+  width: 402px;
+  padding: 24px 16px 12px; /* same side margins as the list */
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  z-index: 41;
+  pointer-events: none;
+}
+.shop-cta[hidden] { display: none; }
+.shop-cta.gpop { opacity: 0; transform: translateX(-50%) translateY(14px); }
+.shop-cta.gpop.in { opacity: 1; transform: translateX(-50%); }
+/* tapped: it hands over to the question sheet and slips away */
+.shop-cta.out, .shop-cta.gpop.in.out { opacity: 0; transform: translateX(-50%) translateY(10px) scale(0.98); transition: opacity 220ms ease, transform 260ms cubic-bezier(0.4, 0, 1, 1); }
+.shop-cta.back { opacity: 1; transform: translateX(-50%); transition: opacity 260ms ease, transform 420ms cubic-bezier(0.22, 1.2, 0.36, 1); }
+.shop-cta__btn { pointer-events: auto; }
+/* a compact centred pill, not a full-width bar (outranks checkout.css's
+   .btn-primary width: 100%, which loads later) */
+.shop-cta .shop-cta__btn { width: auto; margin: 0 auto; }
+.shop-cta__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 28px;
+  height: 48px;
+  border: none;
+  border-radius: 100px;
+  background: var(--kale-500);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--white);
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(15, 18, 21, 0.15);
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.shop-cta__btn:active { transform: scale(0.97); }
+/* keep the last rows clear of the CTA */
+body:not(.store-set) .groc-content { padding-bottom: 164px; }
+
+/* ------------------------------------------------------------
+   Pink AI card + My lists row (Figma 28074:91868)
+   ------------------------------------------------------------ */
+.groc-ai {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 8px 0;
+}
+
+.my-lists {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  height: 56px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--black-200);
+  text-decoration: none;
+  color: var(--black-500);
+}
+
+.my-lists__t {
+  flex: 1 0 0;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.badge-kale {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 100px;
+  background: var(--kale-100);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--kale-500);
+}
+
+/* ------------------------------------------------------------
+   Sections + ingredient rows
+   ------------------------------------------------------------ */
+.groc-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xs);
+  padding: var(--sp-m);
+}
+
+.shoplist-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-xs);
+  width: 100%;
+}
+
+.shoplist-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-s);
+  height: 48px;
+  width: 100%;
+}
+
+.shoplist-heading h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: -0.1px;
+  color: var(--black-500);
+  white-space: nowrap;
+}
+
+.shoplist-heading h2 .count { color: var(--black-300); }
+
+.list-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.ingredient {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  min-height: 48px;
+  width: 100%;
+}
+
+/* product shot beside each item: what it looks like at your store.
+   Collapsed (width 0) unless store details are on, so the toggle animates. */
+.ingredient__thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 0;
+  height: 0;
+  margin-left: calc(-1 * var(--sp-xs));
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px var(--black-100);
+  background: var(--white);
+  overflow: hidden;
+  flex: none;
+  opacity: 0;
+  transition: width 280ms cubic-bezier(0.22, 1, 0.36, 1), height 280ms cubic-bezier(0.22, 1, 0.36, 1), margin 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
+}
+body.store .ingredient__thumb {
+  width: 56px;
+  height: 56px;
+  margin-left: 0;
+  opacity: 1;
+}
+
+.ingredient__thumb img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  display: block;
+}
+
+/* per-item menu with the matched Woolies product */
+.ing-menu {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ing-menu.open { grid-template-rows: 1fr; }
+
+.ing-menu > div { overflow: hidden; min-height: 0; }
+
+.ing-menu__card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 2px 0 10px 32px;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--black-100);
+}
+
+.ing-menu__card .pimg {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: var(--white);
+  object-fit: contain;
+  padding: 4px;
+  flex: none;
+}
+
+.ing-menu__card .ptext { flex: 1 0 0; min-width: 0; }
+
+.ing-menu__card .pn {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19px;
+  color: var(--black-500);
+}
+
+.ing-menu__card .pp {
+  font-size: 12.5px;
+  line-height: 17px;
+  color: var(--black-400);
+  margin-top: 1px;
+}
+
+.ing-menu__card .chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+/* on-special price, same green as the checkout specials */
+.ing-menu__card .pp.sale { color: var(--kale-300); font-weight: 600; }
+
+.ing-chip {
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 16px;
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+
+.ing-chip.ok { background: var(--kale-100, #e9f7c8); color: var(--kale-500); }
+.ing-chip.bad { background: #fdeaea; color: #c0392b; }
+
+/* chevron flips while its menu is open */
+.ing-toggle .ico { transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1); }
+.ing-toggle.open .ico { transform: rotate(180deg); }
+
+.ingredient__check {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  flex: none;
+}
+
+.checkbox-24 {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  flex: none;
+}
+
+.checkbox-24::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1.5px solid var(--kale-500);
+  border-radius: 100px;
+}
+
+/* ticked (same language as the plan page): kale fill, white check pops in */
+.checkbox-24::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: url(assets/icons/check-sm.svg) center / 10px 7.5px no-repeat;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 160ms ease, transform 280ms cubic-bezier(0.22, 1.5, 0.36, 1);
+}
+.checkbox-24.on::before { background: var(--kale-500); transition: background 160ms ease; }
+.checkbox-24.on { animation: tick-pop 360ms cubic-bezier(0.22, 1.5, 0.36, 1); }
+@keyframes tick-pop { 0% { transform: scale(0.9); } 55% { transform: scale(1.14); } 100% { transform: scale(1); } }
+.ingredient.done .ingredient__label { transition: color 240ms ease; }
+.ingredient { border-radius: 12px; }
+.checkbox-24.on::after { opacity: 1; transform: scale(1); }
+.ingredient.done .ingredient__label { color: var(--black-300); text-decoration: line-through; }
+.ingredient.done .ingredient__thumb { opacity: 0.55; }
+
+/* Clove's cook-tonight nudge, lands at the bottom of the list once a few items are ticked */
+.groc-content .ai-card--cook { margin: 12px 0 4px; scroll-margin-bottom: 124px; /* clears the floating tab bar */ }
+
+/* small round "+" chip used on pantry rows */
+.addcircle-24 {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 100px;
+  background: var(--black-100);
+  cursor: pointer;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ingredient__label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1 0 0;
+  min-width: 0;
+  padding-top: 11px;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--black-500);
+  white-space: nowrap;
+}
+
+.ingredient__label .qty { font-weight: 400; }
+.ingredient__label .name { font-weight: 500; }
+
+.ingredient .icon-button {
+  padding: 12px;
+  flex: none;
+}
+
+/* ------------------------------------------------------------
+   Lists grid (My lists tab)
+   ------------------------------------------------------------ */
+.lists-grid-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-xl);
+  align-items: center;
+  padding: 24px 16px;
+}
+
+.lists-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 16px;
+  row-gap: 24px;
+  width: 100%;
+}
+
+.list-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.list-card__art {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--black-100);
+}
+
+.list-card__art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.list-card__title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 26px;
+  color: var(--black-500);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.list-card__title .count { color: var(--black-300); }
+
+.list-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--black-400);
+}
+
+.list-card__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+/* ------------------------------------------------------------
+   My Pantry detail
+   ------------------------------------------------------------ */
+.pantry-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 49px 10px 0;
+}
+
+.pantry-nav .icon-button {
+  filter: drop-shadow(0px 8px 8px rgba(15, 18, 21, 0.15));
+  background: var(--white);
+}
+
+.pantry-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-xl);
+  padding: 12px 16px 0;
+}
+
+.pantry-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-m);
+}
+
+.pantry-head h1 {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.32px;
+  color: var(--black-500);
+  white-space: nowrap;
+}
+
+.pantry-head h1 .count { color: var(--black-300); }
+
+.pantry-head .desc {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--black-500);
+}
+
+.pantry-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pantry-tag .tag-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2xs);
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 100px;
+  background: var(--black-100);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--black-500);
+  white-space: nowrap;
+}
+
+.pantry-tag .tag-note {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--black-400);
+  white-space: nowrap;
+}
+
+.pantry-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-s);
+}
+
+/* Bottom CTA */
+.cta-bar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 402px;
+  background: var(--white);
+  z-index: 40;
+}
+
+.cta-bar__stack {
+  display: flex;
+  gap: var(--sp-s);
+  padding: 8px 16px;
+}
+
+.cta-bar .home-indicator {
+  height: 31px;
+  position: relative;
+}
+
+.cta-bar .home-indicator::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  transform: translateX(-50%);
+  width: 139px;
+  height: 5px;
+  border-radius: 100px;
+  background: var(--black-500);
+}
+
+button.list-card {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+}
+
+/* ------------------------------------------------------------
+   Ready-to-shop widget (Figma 28005:43116) — appears once the
+   list is full, floats above the tab bar
+   ------------------------------------------------------------ */
+.ready-widget {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%) translateY(24px);
+  bottom: 92px;
+  width: 370px;
+  padding: 16px;
+  border-radius: 24px;
+  background: var(--white);
+  box-shadow: 0 0 40px rgba(15, 18, 21, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 42;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ready-widget.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+  transition: opacity 320ms ease,
+    transform 420ms cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+
+.ready-widget__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ready-widget__head h3 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 25px;
+  letter-spacing: -0.09px;
+  color: var(--black-500);
+}
+
+.ready-widget__close {
+  border: none;
+  background: none;
+  padding: 4px;
+  display: flex;
+  cursor: pointer;
+}
+
+.ready-widget__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ready-widget__row img.collage {
+  width: 72px;
+  height: 72px;
+  flex: none;
+}
+
+.ready-widget__row .t1 {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 26px;
+  color: var(--black-500);
+}
+
+.ready-widget__row .t2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--black-400);
+}
+
+.ready-widget__row .tick {
+  width: 18px;
+  height: 18px;
+  border-radius: 100px;
+  background: var(--kale-300);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+/* item product view: larger shot + substitutes (same rows as the Woolworths order) */
+.ingredient { cursor: pointer; }
+.ing-menu__card--big { margin: 4px 0 6px 32px; padding: 12px; gap: 14px; }
+.ing-menu__card--big .pimg { width: 84px; height: 84px; border-radius: 16px; padding: 6px; }
+.ing-menu__card--big .pn { font-size: 16px; font-weight: 600; line-height: 22px; }
+.ing-menu__card--big .pp { font-size: 13.5px; }
+.ing-chip { white-space: nowrap; }
+.ing-subs { display: flex; flex-direction: column; margin: 0 0 12px 32px; }
+.ing-subs .li-alt {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 8px 8px 8px 10px; margin-top: 6px; border: 1px solid var(--black-200); border-radius: 14px;
+  background: var(--white); font-family: inherit; text-align: left; cursor: pointer;
+}
+.ing-subs .li-alt:first-child { margin-top: 0; }
+.ing-subs .li-img { width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--black-100); background: var(--white); overflow: hidden; flex: none; display: flex; align-items: center; justify-content: center; }
+.ing-subs .li-img img { width: 86%; height: 86%; object-fit: contain; }
+.ing-subs .li-alt__t { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.ing-subs .li-alt__t b { font-size: 13.5px; font-weight: 500; line-height: 18px; color: var(--black-500); }
+.ing-subs .li-alt__pp { font-size: 12.5px; line-height: 17px; color: var(--black-400); }
+.ing-subs .li-alt__go { flex: none; height: 32px; padding: 0 12px; border-radius: 100px; background: var(--black-100); display: flex; align-items: center; font-size: 13px; font-weight: 500; color: var(--kale-500); }
+.ing-subs .li-alt:active { transform: scale(0.985); }
+
+/* aisle groups (store mode): badge leads the heading */
+.aisle-heading { display: flex; align-items: center; gap: 10px; }
+.aisle-heading .aisle-badge { margin-left: auto; } /* the pill sits to the right of the title */
+.aisle-section .list-group { padding-bottom: 4px; }
+section.shoplist-section[hidden] { display: none; }

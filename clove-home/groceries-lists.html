@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clove - Lists</title>
+<link rel="stylesheet" href="base.css" />
+<script src="frame.js"></script>
+<link rel="stylesheet" href="groceries.css" />
+<link rel="stylesheet" href="checkout.css" />
+<link rel="stylesheet" href="chat.css" />
+</head>
+<body>
+
+<div class="phone">
+<!-- ============ Header ============ -->
+<header class="page-header">
+  <div class="page-header__bar">
+    <button class="icon-button" aria-label="More">
+      <span class="ico ico-24"><img src="assets/icons/more-h.svg" alt="" /></span>
+    </button>
+
+    <a class="avatar-group" href="profile.html" aria-label="Profile">
+      <div class="user-stack">
+        <button class="user-stack__add" aria-label="Add person">
+          <span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span>
+        </button>
+        <div class="avatar-32"><img src="assets/img/avatar-user1.png" alt="" /></div>
+        <div class="avatar-32"><img src="assets/img/avatar-user2.png" alt="" /></div>
+      </div>
+      <span class="ico ico-20"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+    </a>
+  </div>
+</header>
+<nav class="seg-tabs">
+  <a class="seg-tab" href="groceries.html">By category</a>
+  <a class="seg-tab" href="groceries.html">By recipe</a>
+  <a class="seg-tab" href="groceries-lists.html" aria-current="page">Lists<span class="dot"></span></a>
+</nav>
+  <!-- ============ Lists · 28052:48476 ============ -->
+  <main class="lists-grid-wrap">
+    <div class="lists-grid">
+      <a class="list-card" href="pantry.html">
+        <span class="list-card__art"><img src="assets/img/list-pantry.png" alt="" /></span>
+        <div class="list-card__text">
+          <p class="list-card__title">My pantry <span class="count">15</span></p>
+          <div class="list-card__meta">
+            <span class="ico ico-16"><img src="assets/icons/rotate-cw.svg" alt="" /></span>
+            <span>Excluded</span>
+          </div>
+        </div>
+      </a>
+      <a class="list-card" href="pantry.html">
+        <span class="list-card__art"><img src="assets/img/list-staples.png" alt="" /></span>
+        <div class="list-card__text">
+          <p class="list-card__title">Weekly staples <span class="count">15</span></p>
+          <div class="list-card__meta">
+            <span class="ico ico-16"><img src="assets/icons/rotate-cw.svg" alt="" /></span>
+            <span>Weekly</span>
+          </div>
+        </div>
+      </a>
+      <button class="list-card">
+        <span class="list-card__art"><img src="assets/img/list-create.png" alt="" /></span>
+        <div class="list-card__text">
+          <p class="list-card__title">Create list</p>
+        </div>
+      </button>
+    </div>
+  </main>
+
+<!-- ============ TabBar ============ -->
+<nav class="tabbar">
+  <div class="tab-group">
+    <a class="tab-button" href="index.html" aria-label="Home">
+      <span class="ico ico-24"><img src="assets/icons/tab-house.svg" alt="" /></span>
+    </a>
+    <a class="tab-button" href="recipes.html" aria-label="Library">
+      <span class="ico ico-24"><img src="assets/icons/tab-bookmark.svg" alt="" /></span>
+    </a>
+    <a class="tab-button" href="groceries.html" aria-label="Groceries" aria-current="page">
+      <span class="ico ico-24"><img src="assets/icons/tab-basket-active.svg" alt="" /></span>
+    </a>
+    <a class="tab-button" href="plan.html" aria-label="Plan">
+      <span class="ico ico-24"><img src="assets/icons/tab-calendar.svg" alt="" /></span>
+    </a>
+  </div>
+  <button class="chat-button" aria-label="Ask Clove">
+    <span class="mark">
+      <img class="logo" src="assets/icons/clove-white.svg" alt="" />
+      <img class="spark" src="assets/icons/clove-sparkle.svg" alt="" />
+    </span>
+  </button>
+</nav>
+
+</div>
+
+<script src="app.js"></script>
+<script src="chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,939 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clove - Groceries</title>
+<link rel="stylesheet" href="base.css" />
+<script src="frame.js"></script>
+<link rel="stylesheet" href="groceries.css" />
+<link rel="stylesheet" href="checkout.css" />
+<link rel="stylesheet" href="picker.css" />
+<link rel="stylesheet" href="clove-ask.css" />
+<link rel="stylesheet" href="memory.css" />
+<link rel="stylesheet" href="chat.css" />
+</head>
+<body>
+
+<div class="phone">
+<!-- ============ Header ============ -->
+<header class="page-header">
+  <div class="page-header__bar">
+    <button class="icon-button" aria-label="More">
+      <span class="ico ico-24"><img src="assets/icons/more-h.svg" alt="" /></span>
+    </button>
+
+    <a class="avatar-group" href="profile.html" aria-label="Profile">
+      <div class="user-stack">
+        <button class="user-stack__add" aria-label="Add person">
+          <span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span>
+        </button>
+        <div class="avatar-32"><img src="assets/img/avatar-user1.png" alt="" /></div>
+        <div class="avatar-32"><img src="assets/img/avatar-user2.png" alt="" /></div>
+      </div>
+      <span class="ico ico-20"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+    </a>
+  </div>
+</header>
+<nav class="seg-tabs">
+  <!-- once Clove knows where you shop, this tab shows the list for that store -->
+  <a class="seg-tab seg-tab--store" id="tabCategory" href="groceries.html" aria-current="page"><img class="seg-tab__logo" id="tabStoreLogo" src="assets/img/logo-woolworths.png" alt="" hidden />By category</a>
+  <a class="seg-tab" href="groceries.html">By recipe</a>
+  <a class="seg-tab" href="groceries-lists.html">Lists<span class="dot"></span></a>
+</nav>
+  <!-- ============ By category · 28052:48530 ============ -->
+  <main class="groc-content">
+    <button class="add-item">
+      <span class="ico ico-24"><img src="assets/icons/add.svg" alt="" /></span>
+      <p>Add ingredient</p>
+    </button>
+
+    <!-- Shopping at: the list shows the chosen store's products + aisles.
+         The check turns the store details off (plain category list again);
+         the pencil goes back to choosing delivery / pickup across stores. -->
+    <div class="store-bar" id="storeBar" hidden>
+      <button class="checkbox-24 store-bar__check on" id="storeCheck" role="switch" aria-checked="true" aria-label="Show where to find items at this store"></button>
+      <span class="store-bar__logo"><img src="assets/img/logo-woolworths.png" alt="" /></span>
+      <span class="store-bar__text">
+        <span class="store-bar__l">Shopping at</span>
+        <span class="store-bar__n">Woolworths Surry Hills</span>
+      </span>
+      <a class="icon-button-32 store-bar__edit" id="storeEdit" href="checkout.html?view=compare&tab=pickup" aria-label="Change store or delivery">
+        <span class="ico ico-20"><img src="assets/icons/pencil.svg" alt="" style="width:16px;height:16px" /></span>
+      </a>
+    </div>
+
+    <!-- Start shopping CTA (Figma 26011:6733): sticky above the tab bar, see #shopCta below -->
+
+    <section class="shoplist-section">
+      <div class="shoplist-heading"><h2>Vegetables <span class="count">8</span></h2></div>
+      <div class="list-group">
+      <div class="ingredient" data-item="tomatoes">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-tomatoes.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">400g</span><span class="name">tomatoes</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-tomatoes.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Gourmet Tomato</p>
+          <p class="pp">$0.54 each, 4 in your plan</p>
+          <div class="chips"><span class="ing-chip ok">In stock at 8 stores</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="greenbeans">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-greenbeans.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">350g</span><span class="name">green beans</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-greenbeans.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Beans Round per 250g</p>
+          <p class="pp">$2.42 for 350g</p>
+          <div class="chips"><span class="ing-chip ok">In stock at 8 stores</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="spinach">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-spinach.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">200g</span><span class="name">spinach</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-spinach.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Woolworths Baby Leaf Spinach 120g</p>
+          <p class="pp">$2.50, need 2</p>
+          <div class="chips"><span class="ing-chip ok">In stock at 8 stores</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="mushrooms">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-mushrooms.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">150g</span><span class="name">mushrooms</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-mushrooms.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Mushroom Cups Punnet 200g</p>
+          <p class="pp">$4.00</p>
+          <div class="chips"><span class="ing-chip ok">In stock at 8 stores</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="redonions">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-redonions.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">100g</span><span class="name">red onions</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-redonions.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Onion Red each</p>
+          <p class="pp">$0.83 each</p>
+          <div class="chips"><span class="ing-chip ok">In stock at 8 stores</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="carrots">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-carrots.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">250g</span><span class="name">carrots</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-carrots.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Carrot Fresh each</p>
+          <p class="pp">$0.36 each, 3 in your plan</p>
+          <div class="chips"><span class="ing-chip ok">In stock at 8 stores</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="potatoes">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-potatoes.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">500g</span><span class="name">potatoes</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-potatoes.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Potato Brushed each</p>
+          <p class="pp">$0.77 each, 4 in your plan</p>
+          <div class="chips"><span class="ing-chip ok">In stock at 8 stores</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="kale">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-kale.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">1 bunch</span><span class="name">kale</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-kale.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Kale Fresh Bunch each</p>
+          <p class="pp">$2.90</p>
+          <div class="chips"><span class="ing-chip bad">Sold out at Milkrun</span><span class="ing-chip ok">In stock at Woolworths</span></div>
+        </div>
+      </div></div></div>
+      </div>
+    </section>
+
+    <section class="shoplist-section">
+      <div class="shoplist-heading"><h2>Meat <span class="count">4</span></h2></div>
+      <div class="list-group">
+      <div class="ingredient" data-item="rumpsteak">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-rumpsteak.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">750g</span><span class="name">Rump steak</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-rumpsteak.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Woolworths Beef Rump Steak</p>
+          <p class="pp sale">$7.50, on special</p>
+          <div class="chips"><span class="ing-chip ok">In stock at 8 stores</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="lambmince">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-lambmince.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">500g</span><span class="name">Lamb mince</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-lambmince.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Woolworths Lamb Mince 500g</p>
+          <p class="pp">$15.00</p>
+          <div class="chips"><span class="ing-chip ok">In stock at 8 stores</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="chickenbreast">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-chickenbreast.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">1kg</span><span class="name">Chicken breast</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-chickenbreast.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">RSPCA Approved Chicken Breast Fillet</p>
+          <p class="pp">$10.90</p>
+          <div class="chips"><span class="ing-chip ok">In stock at 8 stores</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="porkbelly">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-porkbelly.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">300g</span><span class="name">Pork belly</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-porkbelly.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Woolworths Pork Belly Roast</p>
+          <p class="pp">$9.30</p>
+          <div class="chips"><span class="ing-chip ok">In stock at 8 stores</span></div>
+        </div>
+      </div></div></div>
+      </div>
+    </section>
+
+    <section class="shoplist-section">
+      <div class="shoplist-heading"><h2>Pantry <span class="count">5</span></h2></div>
+      <div class="list-group">
+      <div class="ingredient" data-item="penne">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-penne.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">500g</span><span class="name">penne</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-penne.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">San Remo Penne Pasta No 18 500g</p>
+          <p class="pp">$2.30</p>
+          <div class="chips"><span class="ing-chip ok">In stock at Woolworths</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="stock">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-stock.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">1L</span><span class="name">chicken stock</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-stock.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Campbell's Real Stock Chicken 1L</p>
+          <p class="pp">$2.25</p>
+          <div class="chips"><span class="ing-chip ok">In stock at Woolworths</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="coconutmilk">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-coconutmilk.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">400mL</span><span class="name">coconut milk</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-coconutmilk.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Pandaroo Coconut Milk 400mL</p>
+          <p class="pp">$2.00</p>
+          <div class="chips"><span class="ing-chip ok">In stock at Woolworths</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="garlicpowder">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-garlicpowder.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">50g</span><span class="name">garlic powder</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-garlicpowder.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Woolworths Garlic Powder 50g</p>
+          <p class="pp">$2.00</p>
+          <div class="chips"><span class="ing-chip ok">In stock at Woolworths</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="shapes">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-shapes.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">175g</span><span class="name">Shapes Barbecue</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-shapes.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Arnott's Shapes Barbecue 175g</p>
+          <p class="pp">$2.00</p>
+          <div class="chips"><span class="ing-chip ok">In stock at Woolworths</span></div>
+        </div>
+      </div></div></div>
+      </div>
+    </section>
+
+    <section class="shoplist-section">
+      <div class="shoplist-heading"><h2>Canned <span class="count">4</span></h2></div>
+      <div class="list-group">
+      <div class="ingredient" data-item="corn">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-corn.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">420g</span><span class="name">corn kernels</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-corn.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Edgell Corn Kernels 420g</p>
+          <p class="pp">$2.20</p>
+          <div class="chips"><span class="ing-chip ok">In stock at Woolworths</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="dicedtomatoes">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-dicedtomatoes.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">400g</span><span class="name">diced tomatoes</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-dicedtomatoes.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Annalisa Diced Tomatoes 400g</p>
+          <p class="pp">$1.35</p>
+          <div class="chips"><span class="ing-chip ok">In stock at Woolworths</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="crushedtomatoes">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-crushedtomatoes.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">810g</span><span class="name">crushed tomatoes</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-crushedtomatoes.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Ardmona Crushed Vine Ripened Tomatoes 810g</p>
+          <p class="pp sale">$3.50, on special</p>
+          <div class="chips"><span class="ing-chip ok">In stock at Woolworths</span></div>
+        </div>
+      </div></div></div>
+      <div class="ingredient" data-item="tuna">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-tuna.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">95g</span><span class="name">tuna in oil</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-tuna.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Sirena Tuna In Oil Italian Style 95g</p>
+          <p class="pp">$2.30</p>
+          <div class="chips"><span class="ing-chip ok">In stock at Woolworths</span></div>
+        </div>
+      </div></div></div>
+      </div>
+    </section>
+
+    <section class="shoplist-section">
+      <div class="shoplist-heading"><h2>Dairy <span class="count">1</span></h2></div>
+      <div class="list-group">
+      <div class="ingredient" data-item="parmesan">
+        <div class="ingredient__check"><button class="checkbox-24" aria-label="Check off"></button></div>
+        <span class="ingredient__thumb"><img src="assets/img/woolies/g-parmesan.jpg" alt="" /></span>
+        <div class="ingredient__label"><span class="qty">100g</span><span class="name">parmesan</span></div>
+        <button class="icon-button ing-toggle" aria-label="Options">
+          <span class="ico ico-24"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+        </button>
+      </div>
+      <div class="ing-menu"><div><div class="ing-menu__card">
+        <img class="pimg" src="assets/img/woolies/g-parmesan.jpg" alt="" />
+        <div class="ptext">
+          <p class="pn">Perfect Italiano Parmesan Shaved 125g</p>
+          <p class="pp">$5.50</p>
+          <div class="chips"><span class="ing-chip bad">Out of stock at Coles</span><span class="ing-chip ok">In stock at Woolworths</span></div>
+        </div>
+      </div></div></div>
+      </div>
+    </section>
+
+  </main>
+
+
+<!-- ============ TabBar ============ -->
+<!-- Start shopping · Figma 26011:6733 "Chat Wrapper": kale button in a gradient well above the tab bar -->
+<div class="shop-cta" id="shopCtaWrap">
+  <button class="btn-primary shop-cta__btn" id="shopCta">
+    <span class="ico ico-24"><img src="assets/icons/basket-white.svg" alt="" style="width:22px;height:18px" /></span>
+    <span>Start shopping</span>
+  </button>
+</div>
+
+<nav class="tabbar">
+  <div class="tab-group">
+    <a class="tab-button" href="index.html" aria-label="Home">
+      <span class="ico ico-24"><img src="assets/icons/tab-house.svg" alt="" /></span>
+    </a>
+    <a class="tab-button" href="recipes.html" aria-label="Library">
+      <span class="ico ico-24"><img src="assets/icons/tab-bookmark.svg" alt="" /></span>
+    </a>
+    <a class="tab-button" href="groceries.html" aria-label="Groceries" aria-current="page">
+      <span class="ico ico-24"><img src="assets/icons/tab-basket-active.svg" alt="" /></span>
+    </a>
+    <a class="tab-button" href="plan.html" aria-label="Plan">
+      <span class="ico ico-24"><img src="assets/icons/tab-calendar.svg" alt="" /></span>
+    </a>
+  </div>
+  <button class="chat-button" aria-label="Ask Clove">
+    <span class="mark">
+      <img class="logo" src="assets/icons/clove-white.svg" alt="" />
+      <img class="spark" src="assets/icons/clove-sparkle.svg" alt="" />
+    </span>
+  </button>
+</nav>
+
+</div>
+
+<script src="app.js"></script>
+<script src="memory.js"></script>
+<script src="clove-ask.js"></script>
+<script src="dial.js"></script>
+<script>
+  // Tapping Start shopping asks two quick questions BEFORE Clove shops:
+  // what you value, then your rough weekly budget (the draggable dial,
+  // Figma 26028:21963). Both answers steer the store pick on the next screen
+  // and land together as "2 memories added" there.
+  (function () {
+    var OPTIONS = [
+      { t: "Low prices", s: "Stretch the weekly budget", v: "Low prices" },
+      { t: "Quality produce", s: "The good tomatoes, always", v: "Quality produce" },
+      { t: "Convenience", s: "Fastest path to dinner", v: "Convenience" },
+    ];
+    function finish(value, budget) {
+      CloveMemory.replace("Values ", "🛍️", "Values " + value.toLowerCase() + " when shopping", "Shopping · you told Clove");
+      sessionStorage.setItem("shopValue", value);
+      if (budget) {
+        CloveMemory.replace("Budget: ", "💸", "Budget: $" + budget + " a week", "Shopping · you told Clove");
+        sessionStorage.setItem("shopBudget", String(budget));
+      } else sessionStorage.removeItem("shopBudget");
+      sessionStorage.setItem("shopValueFresh", "1"); // the toast shows on the checkout page, not here
+      setTimeout(function () { location.href = "checkout.html"; }, 320);
+    }
+    function askBudget(cask, value) {
+      CloveAsk.swap(cask, function () {
+        cask.el.querySelector(".cask__q").textContent = "What’s your rough weekly budget for groceries?";
+        var c = cask.el.querySelector(".cask__content");
+        c.innerHTML =
+          '<div class="budget-dial"></div>' +
+          '<div class="cask-foot"><input type="text" placeholder="Something else" />' +
+          '<button class="skip">Skip</button>' +
+          '<button class="go" aria-label="Continue"><span class="ico ico-24"><img src="assets/icons/arrow-up-white.svg" alt="" style="width:16px;height:18px" /></span></button></div>';
+        var dial = CloveDial.mount(c.querySelector(".budget-dial"), { min: 20, max: 220, step: 10, value: 120, fmt: function (v) { return "$" + v; } });
+        c.querySelector(".skip").addEventListener("click", function (e) { e.stopPropagation(); cask.dismiss(true); finish(value, null); });
+        c.querySelector(".go").addEventListener("click", function (e) { e.stopPropagation(); cask.dismiss(true); finish(value, dial.value()); });
+      });
+    }
+    function openShopAsk() {
+      return CloveAsk.show({
+        compact: "Shop these items",
+        title: "When you shop, what do you value most?",
+        hint: "Tap to answer · swipe to dismiss",
+        bodyHTML:
+          '<div class="iw-options">' +
+          OPTIONS.map(function (o, i) { return '<button class="iw-option" data-i="' + i + '"><span class="t">' + o.t + '</span><span class="s">' + o.s + "</span></button>"; }).join("") +
+          "</div>",
+        onBody: function (content) {
+          content.querySelectorAll(".iw-option").forEach(function (b) {
+            b.addEventListener("click", function (e) {
+              e.stopPropagation();
+              b.classList.add("on");
+              var o = OPTIONS[Number(b.dataset.i)];
+              setTimeout(function () { askBudget(window._shopCask, o.v); }, 340);
+            });
+          });
+        },
+        // swiped away without answering: the CTA comes back
+        onDismiss: function () {
+          var w = document.getElementById("shopCtaWrap");
+          w.classList.remove("out");
+          w.classList.add("back");
+          document.getElementById("shopCta").style.pointerEvents = "";
+        },
+      });
+    }
+    document.getElementById("shopCta").addEventListener("click", function () {
+      // the CTA hands over to the sheet and disappears
+      var w = document.getElementById("shopCtaWrap");
+      w.classList.remove("back", "spring");
+      w.classList.add("out");
+      this.style.pointerEvents = "none"; // invisible, so not tappable
+      window._shopCask = openShopAsk();
+      window._shopCask.expand();
+    });
+  })();
+</script>
+<script>
+  // First landing on the list this session: the items pop into place
+  // (they were just added from the plan), then the pink nudge follows.
+  (function () {
+    if (location.search.indexOf("view=aisle") > -1) return;
+    if (sessionStorage.getItem("grocEntered")) return;
+    sessionStorage.setItem("grocEntered", "1");
+    var items = Array.prototype.slice.call(document.querySelectorAll(".groc-content .shoplist-heading, .groc-content .ingredient"));
+    var cta = document.getElementById("shopCtaWrap");
+    items.forEach(function (el) { el.classList.add("gpop"); });
+    cta.classList.add("gpop");
+    void document.body.offsetWidth; // commit the hidden state before animating
+    items.forEach(function (el, i) { setTimeout(function () { el.classList.add("in"); }, 140 + i * 38); });
+    var after = 140 + items.length * 38 + 120;
+    setTimeout(function () { cta.classList.add("in", "spring"); }, after + 80);
+  })();
+</script>
+<script>
+  // Store mode: once Clove knows where you shop (Find in store on checkout),
+  // the category list shows that store's products and where to find them.
+  // The "Shopping at" check turns the details off; the pencil changes store.
+  (function () {
+    var VEG = ["tomatoes", "greenbeans", "spinach", "mushrooms", "redonions", "carrots", "potatoes", "kale"];
+    var MEAT = ["rumpsteak", "lambmince", "chickenbreast", "porkbelly"];
+    var PASTA = ["penne", "stock", "coconutmilk"];
+    var CANNED = ["corn", "dicedtomatoes", "crushedtomatoes", "tuna"];
+    var SPICE = ["garlicpowder"];
+    var SNACK = ["shapes"];
+    var STORES = {
+      "Woolworths Surry Hills": { logo: "logo-woolworths.png", short: "Woolies", aisles: [
+        { name: "Fresh produce", where: "Front of store", items: VEG },
+        { name: "Pasta, rice & sauces", where: "Aisle 3", items: PASTA },
+        { name: "Canned goods", where: "Aisle 5", items: CANNED },
+        { name: "Herbs & spices", where: "Aisle 7", items: SPICE },
+        { name: "Dairy & eggs", where: "Aisle 9", items: ["parmesan"] },
+        { name: "Biscuits & snacks", where: "Aisle 11", items: SNACK },
+        { name: "Meat & seafood", where: "Back wall", items: MEAT },
+      ] },
+      "Coles Surry Hills": { logo: "logo-coles.png", short: "Coles", aisles: [
+        { name: "Fresh produce", where: "Front of store", items: VEG },
+        { name: "Dairy", where: "Aisle 1", items: ["parmesan"] },
+        { name: "Pasta & rice", where: "Aisle 4", items: PASTA },
+        { name: "Canned goods", where: "Aisle 6", items: CANNED },
+        { name: "Spices", where: "Aisle 8", items: SPICE },
+        { name: "Snacks", where: "Aisle 10", items: SNACK },
+        { name: "Meat & deli", where: "Back wall", items: MEAT },
+      ] },
+      "ALDI Broadway": { logo: "logo-aldi.png", short: "ALDI", aisles: [
+        { name: "Fresh produce", where: "Aisle 1", items: VEG },
+        { name: "Chilled & dairy", where: "Aisle 2", items: ["parmesan"] },
+        { name: "Pantry", where: "Aisle 3", items: PASTA.concat(SPICE, SNACK) },
+        { name: "Meat", where: "Aisle 4", items: MEAT },
+        { name: "Canned goods", where: "Aisle 5", items: CANNED },
+      ] },
+      "Harris Farm Surry Hills": { logo: "logo-harris.png", short: "Harris Farm", aisles: [
+        { name: "Fruit & veg", where: "Front of store", items: VEG },
+        { name: "Pantry", where: "Aisle 2", items: PASTA.concat(SPICE, SNACK) },
+        { name: "Cheese room", where: "Aisle 3", items: ["parmesan"] },
+        { name: "Deli & canned", where: "Aisle 4", items: CANNED },
+        { name: "Butcher", where: "Back counter", items: MEAT },
+      ] },
+    };
+
+    var name = localStorage.getItem("cloveStoreName");
+    if (!name || !STORES[name]) { if (localStorage.getItem("cloveStore")) name = "Woolworths Surry Hills"; else return; }
+    var st = STORES[name];
+    var landing = /[?&]view=(store|aisle)/.test(location.search); // straight from "Find in store"
+    if (landing) localStorage.setItem("cloveStoreOn", "1");
+    var on = localStorage.getItem("cloveStoreOn") !== "0";
+
+    document.body.classList.add("store-set"); // a store is known: already shopped
+    var bar = document.getElementById("storeBar");
+    var check = document.getElementById("storeCheck");
+    var edit = document.getElementById("storeEdit");
+    var tabLogo = document.getElementById("tabStoreLogo");
+    bar.hidden = false;
+    bar.querySelector(".store-bar__logo img").src = "assets/img/" + st.logo;
+    bar.querySelector(".store-bar__n").textContent = name;
+    tabLogo.src = "assets/img/" + st.logo;
+
+    // store mode regroups the list by AISLE, in the walk through the store
+    // (aisle badge up top of each group); off, the general categories return.
+    // Rows (+ their product menus) are MOVED, so listeners come along.
+    var main = document.querySelector("main.groc-content");
+    var catSections = Array.prototype.slice.call(document.querySelectorAll("section.shoplist-section"));
+    var home = {}; // item -> {list, row, menu} in its category
+    catSections.forEach(function (sec) {
+      sec.querySelectorAll(".ingredient").forEach(function (row) {
+        var menu = row.nextElementSibling && row.nextElementSibling.classList.contains("ing-menu") ? row.nextElementSibling : null;
+        home[row.dataset.item] = { list: row.parentNode, row: row, menu: menu, sec: sec };
+      });
+    });
+    var catOrder = Object.keys(home); // original order, for putting rows back
+    var grouped = false;
+    function groupByAisle(animate) {
+      if (grouped) return;
+      grouped = true;
+      var anchor = catSections[0];
+      var delay = 0;
+      st.aisles.forEach(function (a) {
+        var items = a.items.filter(function (k) { return home[k]; });
+        if (!items.length) return;
+        var sec = document.createElement("section");
+        sec.className = "shoplist-section aisle-section";
+        sec.innerHTML =
+          '<div class="shoplist-heading aisle-heading"><h2>' + a.name + ' <span class="count">' + items.length + '</span></h2><span class="aisle-badge' + (/^Aisle/.test(a.where) ? "" : " area") + '">' + a.where + "</span></div>" +
+          '<div class="list-group"></div>';
+        var list = sec.querySelector(".list-group");
+        items.forEach(function (k) { list.appendChild(home[k].row); if (home[k].menu) list.appendChild(home[k].menu); });
+        main.insertBefore(sec, anchor);
+        if (animate) {
+          var els = [sec.querySelector(".shoplist-heading")].concat(Array.prototype.slice.call(sec.querySelectorAll(".ingredient")));
+          els.forEach(function (el) { el.classList.remove("in"); el.classList.add("gpop"); });
+          void sec.offsetWidth;
+          els.forEach(function (el) { setTimeout(function () { el.classList.add("in"); }, 30 + delay); delay += 28; });
+        }
+      });
+      catSections.forEach(function (sec) { sec.hidden = true; });
+    }
+    function ungroup(animate) {
+      if (!grouped) return;
+      grouped = false;
+      catOrder.forEach(function (k) { var h = home[k]; h.list.appendChild(h.row); if (h.menu) h.list.appendChild(h.menu); });
+      main.querySelectorAll(".aisle-section").forEach(function (x) { x.remove(); });
+      catSections.forEach(function (sec) { sec.hidden = false; });
+      if (animate) {
+        var delay = 0;
+        catSections.forEach(function (sec) {
+          var els = [sec.querySelector(".shoplist-heading")].concat(Array.prototype.slice.call(sec.querySelectorAll(".ingredient")));
+          els.forEach(function (el) { el.classList.remove("in"); el.classList.add("gpop"); });
+          void sec.offsetWidth;
+          els.forEach(function (el) { setTimeout(function () { el.classList.add("in"); }, 30 + delay); delay += 22; });
+        });
+      }
+    }
+
+    function apply(isOn, animate) {
+      on = isOn;
+      localStorage.setItem("cloveStoreOn", isOn ? "1" : "0");
+      check.classList.toggle("on", isOn);
+      check.setAttribute("aria-checked", isOn ? "true" : "false");
+      bar.classList.toggle("off", !isOn);
+      edit.tabIndex = isOn ? 0 : -1;
+      tabLogo.hidden = !isOn;
+      document.body.classList.toggle("store", isOn);
+      if (!animate) document.body.classList.add("store-instant");
+      if (isOn) groupByAisle(animate); else ungroup(animate);
+    }
+    apply(on, false);
+    // let the first paint settle, then transitions are live
+    setTimeout(function () { document.body.classList.remove("store-instant"); }, 60);
+
+    check.addEventListener("click", function () {
+      apply(!on, true);
+      bar.animate([{ transform: "scale(1)" }, { transform: "scale(0.985)" }, { transform: "scale(1)" }], { duration: 260, easing: "ease-out" });
+    });
+    // the pencil is inert while the store details are off
+    edit.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (on) location.href = edit.getAttribute("href"); // back to delivery / store options
+    });
+
+    // landing here straight from "Find in store": the bar rises, every
+    // product shot and aisle pops into place, and the new memory says hello
+    if (landing && on) {
+      bar.classList.add("rise");
+      var thumbs = Array.prototype.slice.call(document.querySelectorAll("body.store .ingredient__thumb"));
+      thumbs.forEach(function (el, i) {
+        el.animate(
+          [{ opacity: 0, transform: "scale(0.6)" }, { opacity: 1, transform: "none" }],
+          { duration: 420, easing: "cubic-bezier(0.22, 1.3, 0.36, 1)", delay: 260 + i * 45, fill: "backwards" }
+        );
+      });
+      document.querySelectorAll(".aisle-heading .aisle-badge").forEach(function (b, i) {
+        b.animate([{ opacity: 0, transform: "scale(0.7)" }, { opacity: 1, transform: "none" }], { duration: 420, easing: "cubic-bezier(0.22, 1.3, 0.36, 1)", delay: 200 + i * 90, fill: "backwards" });
+      });
+      sessionStorage.removeItem("storeMemFresh"); // the memory is saved quietly, no toast here
+    }
+  })();
+</script>
+<script>
+  // Ticking items off. Once a few are in the basket, Clove suggests the
+  // recipe you can already cook (pink in-UI nudge at the bottom of the list).
+  (function () {
+    var ticked = 0, shown = false;
+    var main = document.querySelector("main.groc-content");
+    function showCookNudge() {
+      if (shown) return;
+      shown = true;
+      var n = document.createElement("button");
+      n.className = "ai-card ai-card--cook ai-card--wait";
+      n.id = "cookNudge";
+      n.innerHTML =
+        '<span class="ai-card__clove"><span class="mark"><img class="logo" src="assets/icons/clove-white.svg" alt="" /><img class="spark" src="assets/icons/clove-sparkle.svg" alt="" /></span></span>' +
+        '<span class="ai-card__text">' +
+        '<span class="t">Cook tonight: Crispy Chicken Caesar Salad</span>' +
+        '<span class="s">You have ticked off everything it needs</span>' +
+        "</span>";
+      n.addEventListener("click", function () { localStorage.setItem("cloveShopped", "1"); location.href = "recipe.html"; });
+      main.appendChild(n);
+      // the same entrance as the health tracker's nudge, after the cascade
+      setTimeout(function () {
+        n.classList.remove("ai-card--wait");
+        n.classList.add("ai-card--reveal");
+      }, 600);
+      // the list is long: bring the new card into view so it is seen
+      setTimeout(function () { n.scrollIntoView({ behavior: "smooth", block: "end" }); }, 650);
+    }
+    function tick(cb, on) {
+      cb.classList.toggle("on", on);
+      var row = cb.closest(".ingredient");
+      if (row) row.classList.toggle("done", on);
+      ticked += on ? 1 : -1;
+    }
+
+    // On the aisle tab the first tick plays the whole shop: items check off
+    // one after another, the page glides along with them, and the nudge
+    // waits at the bottom of the list.
+    var aisle = document.body.classList.contains("store-set"); // shopping in store: one tick plays the whole shop
+    var cascading = false;
+    function keepInView(row) {
+      var r = row.getBoundingClientRect();
+      var target = window.scrollY + r.top - window.innerHeight * 0.42;
+      if (r.top > window.innerHeight * 0.55) window.scrollTo({ top: target, behavior: "smooth" });
+    }
+    function cascade() {
+      cascading = true;
+      var rest = Array.prototype.slice.call(document.querySelectorAll(".groc-content .ingredient .checkbox-24:not(.on)"));
+      var i = 0, gap = 260;
+      (function next() {
+        if (i >= rest.length) {
+          cascading = false;
+          setTimeout(showCookNudge, 260);
+          return;
+        }
+        var cb = rest[i++];
+        tick(cb, true);
+        var row = cb.closest(".ingredient");
+        if (row) {
+          keepInView(row);
+        }
+        gap = Math.max(175, gap * 0.97); // picks up pace like a real shop, unhurried
+        setTimeout(next, gap);
+      })();
+    }
+
+    document.querySelectorAll(".ingredient .checkbox-24").forEach(function (cb) {
+      cb.addEventListener("click", function () {
+        if (cascading) return;
+        var on = !cb.classList.contains("on");
+        tick(cb, on);
+        if (aisle) { if (on) setTimeout(cascade, 260); return; }
+        if (ticked >= 3) showCookNudge();
+      });
+    });
+  })();
+</script>
+<script>
+  // Tapping an item opens its product: a larger shot, the price line, and
+  // substitutes you can swap in (the same pattern as the Woolworths order).
+  (function () {
+    // catalogue of the products each row maps to, read from the markup
+    var CAT = {};
+    document.querySelectorAll("section.shoplist-section .ingredient[data-item]").forEach(function (row) {
+      var menu = row.nextElementSibling;
+      var card = menu && menu.querySelector(".ing-menu__card");
+      if (!card) return;
+      CAT[row.dataset.item] = {
+        img: card.querySelector(".pimg").getAttribute("src"),
+        pn: card.querySelector(".pn").textContent,
+        pp: card.querySelector(".pp").textContent,
+        chips: (card.querySelector(".chips") || {}).innerHTML || "",
+      };
+    });
+    // real Woolworths alternatives (assets/img/sub-*.jpg)
+    var EXTRA = {
+      eyefillet: { img: "assets/img/sub-eyefillet.jpg", pn: "Beef Eye Fillet Thick Cut 320g", pp: "$26.00 each", chips: '<span class="ing-chip">Premium cut</span>' },
+      chuck: { img: "assets/img/sub-chuck.jpg", pn: "Beef Chuck Steak 500g", pp: "$14.40 each", chips: '<span class="ing-chip">Slow cook</span>' },
+      porterhouse: { img: "assets/img/sub-porterhouse.jpg", pn: "Beef Porterhouse & Butter 400g", pp: "$18.00 each", chips: '<span class="ing-chip">2 steaks</span>' },
+      stirfry: { img: "assets/img/sub-stirfry.jpg", pn: "Macro Grass Fed Stir-Fry Beef 500g", pp: "$13.00 each", chips: '<span class="ing-chip ok">Grass fed</span>' },
+      garliccloves: { img: "assets/img/sub-garliccloves.jpg", pn: "Garlic Cloves 70g", pp: "$2.90 each", chips: '<span class="ing-chip">Peeled, fresh</span>' },
+      garlic3: { img: "assets/img/sub-garlic3.jpg", pn: "Garlic 3 pack", pp: "$3.50 each", chips: '<span class="ing-chip ok">Best value</span>' },
+    };
+    Object.keys(EXTRA).forEach(function (k) { CAT[k] = EXTRA[k]; });
+    var SUBS = {
+      rumpsteak: ["eyefillet", "chuck", "porterhouse", "stirfry"],
+      garlicpowder: ["garliccloves", "garlic3"],
+      lambmince: ["rumpsteak", "chickenbreast", "porkbelly"],
+      chickenbreast: ["porkbelly", "lambmince", "rumpsteak"],
+      porkbelly: ["chickenbreast", "rumpsteak"],
+      tomatoes: ["dicedtomatoes", "crushedtomatoes"],
+      dicedtomatoes: ["crushedtomatoes", "tomatoes"],
+      crushedtomatoes: ["dicedtomatoes", "tomatoes"],
+      spinach: ["kale", "greenbeans"],
+      kale: ["spinach", "greenbeans"],
+      greenbeans: ["spinach", "kale"],
+      potatoes: ["carrots", "redonions"],
+      carrots: ["potatoes", "redonions"],
+      redonions: ["carrots", "potatoes"],
+      mushrooms: ["spinach"],
+    };
+
+    document.querySelectorAll("section.shoplist-section .ingredient[data-item]").forEach(function (row) {
+      var key = row.dataset.item;
+      var menu = row.nextElementSibling;
+      if (!menu || !menu.classList.contains("ing-menu")) return;
+      var toggle = row.querySelector(".ing-toggle");
+      var inner = menu.firstElementChild;
+      var current = key; // which product fulfils this row
+      var pool = [key].concat(SUBS[key] || []);
+      var built = false;
+
+      function cardHTML(p) {
+        return '<img class="pimg" src="' + p.img + '" alt="" /><div class="ptext"><p class="pn">' + p.pn + '</p><p class="pp">' + p.pp + '</p><div class="chips">' + p.chips + "</div></div>";
+      }
+      function render() {
+        var p = CAT[current];
+        inner.innerHTML =
+          '<div class="ing-menu__card ing-menu__card--big">' + cardHTML(p) + "</div>" +
+          (pool.length > 1
+            ? '<div class="ing-subs">' +
+              pool.filter(function (k) { return k !== current; }).map(function (k) {
+                var q = CAT[k];
+                return '<button class="li-alt" data-k="' + k + '"><span class="li-img"><img src="' + q.img + '" alt="" /></span>' +
+                  '<span class="li-alt__t"><b>' + q.pn + "</b><span class=\"li-alt__pp\">" + q.pp + "</span></span>" +
+                  '<span class="li-alt__go">Swap</span></button>';
+              }).join("") + "</div>"
+            : "");
+        inner.querySelectorAll(".li-alt").forEach(function (b) {
+          b.addEventListener("click", function (e) {
+            e.stopPropagation();
+            swapTo(b.dataset.k);
+          });
+        });
+        built = true;
+      }
+      function swapTo(k) {
+        if (k === current) return;
+        var h0 = inner.offsetHeight;
+        var card = inner.querySelector(".ing-menu__card");
+        // the old product slides out, the new one slides in; the row's thumb follows
+        card.animate([{ transform: "translateX(0)", opacity: 1 }, { transform: "translateX(-24px)", opacity: 0 }], { duration: 180, easing: "ease-in" }).onfinish = function () {
+          current = k;
+          row.dataset.product = k;
+          var thumb = row.querySelector(".ingredient__thumb img");
+          if (thumb) {
+            thumb.src = CAT[k].img;
+            thumb.animate([{ transform: "scale(0.6)", opacity: 0 }, { transform: "scale(1)", opacity: 1 }], { duration: 420, easing: "cubic-bezier(0.22, 1.3, 0.36, 1)" });
+          }
+          render();
+          var h1 = inner.offsetHeight;
+          inner.querySelector(".ing-menu__card").animate([{ transform: "translateX(24px)", opacity: 0 }, { transform: "translateX(0)", opacity: 1 }], { duration: 320, easing: "cubic-bezier(0.22, 1, 0.36, 1)" });
+          inner.querySelectorAll(".li-alt").forEach(function (b, i) {
+            b.animate([{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], { duration: 300, delay: 60 + i * 50, easing: "ease-out", fill: "backwards" });
+          });
+          if (h1 !== h0) inner.animate([{ height: h0 + "px" }, { height: h1 + "px" }], { duration: 300, easing: "cubic-bezier(0.22, 1, 0.36, 1)" });
+        };
+      }
+      function setOpen(on) {
+        if (on && !built) render();
+        menu.classList.toggle("open", on);
+        toggle.classList.toggle("open", on);
+        row.classList.toggle("expanded", on);
+      }
+      // the whole row opens it (the tick and the card swipe keep their own jobs)
+      row.addEventListener("click", function (e) {
+        if (e.target.closest(".checkbox-24, .ingredient__check")) return;
+        setOpen(!menu.classList.contains("open"));
+      });
+    });
+  })();
+</script>
+<script src="chat.js"></script>
+</body>
+</html>

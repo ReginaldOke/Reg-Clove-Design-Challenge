@@ -1,0 +1,273 @@
+/* ============================================================
+   Clove — health goals (tracker page, profile card, pinned home card)
+   Reference: "Set health goals" Claude design, adapted to Clove tokens.
+   ============================================================ */
+
+/* ---- shared card (home pin + design's tracker card) ---- */
+.goal-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 16px 16px 16px 18px;
+  border-radius: 24px;
+  background: var(--white);
+  border: 0.5px solid var(--black-200);
+  box-shadow: 0 8px 16px rgba(15, 18, 21, 0.12);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.goal-card:active { transform: scale(0.985); }
+.goal-card__rings { width: 76px; height: 76px; flex: none; display: flex; }
+.goal-card__text { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; }
+.goal-card__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--kale-500);
+}
+.goal-card__eyebrow img { width: 11px; height: 12px; }
+.goal-card__title { margin-top: 6px; font-size: 20px; font-weight: 600; line-height: 1.15; letter-spacing: -0.4px; color: var(--black-500); }
+.goal-card__line { margin-top: 4px; font-size: 13.5px; line-height: 1.4; color: var(--black-400); }
+.goal-card__arrow { font-size: 20px; color: var(--kale-500); flex: none; }
+
+/* pinned on the homepage, under the hero */
+#goalPinSlot { padding: 0 16px 8px; }
+#goalPinSlot .goal-card { animation: rise-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* ---- profile option card ---- */
+.option-card--goals { text-decoration: none; color: inherit; display: block; }
+.option-card--goals .goal-art { width: 84px; height: 84px; display: flex; align-items: center; justify-content: center; }
+.option-card__sub { font-size: 12px; line-height: 17px; color: var(--black-400); text-align: center; margin-top: -8px; }
+/* green highlight when arriving from a health-goal toast: ring + soft kale wash, held so it is noticed */
+.option-card--goals.flash { animation: goal-flash 2.4s ease 1; }
+@keyframes goal-flash {
+  0%, 100% { box-shadow: 0 8px 16px rgba(15, 18, 21, 0.15); background: var(--white); }
+  20%, 70% { box-shadow: 0 0 0 3px var(--kale-300), 0 8px 24px rgba(26, 171, 86, 0.35); background: var(--kale-100); }
+}
+
+/* ---- goals page: the same bones as My Kitchen ---- */
+body.goals .phone { background: var(--white); }
+.gl-nav { display: flex; align-items: center; justify-content: space-between; padding: 24px 10px 0; }
+.gl-nav__back { width: 44px; height: 44px; border: none; background: none; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 100px; }
+.gl-nav__back:active { background: var(--black-100); }
+.gl-nav__pin[hidden] { display: none; }
+.gl-title { font-size: 32px; font-weight: 600; line-height: 1.2; letter-spacing: -0.32px; color: var(--black-500); }
+
+.pcard { position: relative; width: 100%; background: var(--white); border: 0.5px solid var(--black-200); border-radius: 24px; box-shadow: 0 8px 16px rgba(15, 18, 21, 0.15); }
+.gl-hero { padding: 14px 16px 14px; }
+.gl-hero[hidden] { display: none; }
+.gl-hero__eyebrow { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; color: var(--kale-500); }
+.gl-hero__eyebrow img { width: 12px; height: 13px; }
+.gl-hero__rings { display: flex; justify-content: center; padding-top: 8px; }
+.gl-hero__wrap { position: relative; width: 152px; height: 152px; }
+.gl-hero__wrap .gl-ring { position: absolute; inset: 0; }
+.gl-hero__center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+/* sized to sit clear of the innermost ring, not fill the hole */
+.gl-hero__pct { font-size: 21px; font-weight: 600; letter-spacing: -0.4px; line-height: 1; color: var(--black-500); }
+.gl-hero__lbl { margin-top: 3px; font-size: 11px; line-height: 15px; color: var(--black-400); white-space: nowrap; }
+
+.gl-body { display: flex; flex-direction: column; gap: 14px; padding: 0 16px 120px; }
+.gl-body > [hidden], .gl-boost[hidden] { display: none !important; }
+
+.gl-rings { display: flex; gap: 10px; }
+.gl-ringcard {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 8px 12px;
+  border-radius: 16px;
+  background: var(--white);
+  border: 0.5px solid var(--black-200);
+  box-shadow: 0 8px 16px rgba(15, 18, 21, 0.08);
+}
+.gl-ringcard__wrap { position: relative; width: 62px; height: 62px; }
+.gl-ringcard__wrap .gl-ring { position: absolute; inset: 0; }
+.gl-ringcard__pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; color: var(--black-500); }
+.gl-ringcard__lbl { font-size: 13px; font-weight: 600; line-height: 1.2; color: var(--black-500); text-align: center; }
+.gl-ringcard__sub { font-size: 11.5px; line-height: 16px; color: var(--black-400); white-space: nowrap; text-align: center; }
+
+.gl-week__head { display: flex; align-items: baseline; justify-content: space-between; }
+.gl-eyebrow { font-size: 12px; letter-spacing: 0.6px; text-transform: uppercase; font-weight: 600; color: var(--kale-500); }
+.gl-week__tot { font-size: 12.5px; color: var(--black-400); }
+.gl-week__tot b { color: var(--black-500); font-weight: 600; }
+/* drawWeek paints in the svg's real pixel box, so a taller box just gives
+   the chart more room, nothing stretches */
+.gl-week svg { display: block; width: 100%; height: 108px; overflow: visible; margin-top: 10px; }
+.gl-week__days { display: flex; margin-top: 6px; }
+.gl-week__days span { flex: 1 0 0; text-align: center; font-size: 11px; color: var(--black-300); }
+.gl-week__days span.today { color: var(--black-500); font-weight: 600; }
+
+.gl-insight {
+  padding: 20px;
+  border-radius: 24px;
+  background: var(--kale-100);
+}
+.gl-insight__eyebrow { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; color: var(--kale-500); }
+.gl-insight__eyebrow img { width: 12px; height: 13px; }
+.gl-insight__h { margin-top: 8px; font-size: 20px; font-weight: 600; line-height: 1.3; letter-spacing: -0.2px; color: var(--kale-500); }
+.gl-insight__b { margin-top: 6px; font-size: 14px; line-height: 22px; color: var(--black-400); }
+.gl-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  margin-top: 16px;
+  border: none;
+  border-radius: 100px;
+  background: var(--kale-500);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--white);
+  cursor: pointer;
+  transition: transform 160ms ease;
+}
+.gl-cta:active { transform: scale(0.97); }
+
+.gl-boost[hidden] { display: none; }
+.gl-boost__title { font-size: 20px; font-weight: 600; letter-spacing: -0.2px; color: var(--black-500); }
+.gl-boost__sub { font-size: 13px; line-height: 1.4; color: var(--black-400); margin-top: 2px; }
+.gl-boost__list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.gl-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 16px;
+  background: var(--white);
+  border: 0.5px solid var(--black-200);
+  box-shadow: 0 8px 16px rgba(15, 18, 21, 0.06);
+  opacity: 0;
+  transform: translateY(10px);
+  animation: rise-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+.gl-item img { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; flex: none; }
+.gl-item__body { flex: 1 0 0; min-width: 0; }
+.gl-item__top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.gl-item__t { font-size: 15px; font-weight: 600; color: var(--black-500); }
+.gl-item__time { font-size: 12px; color: var(--black-400); white-space: nowrap; }
+.gl-item__gain { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 12px; font-weight: 600; color: var(--kale-500); }
+.gl-item__bar { width: 64px; height: 4px; border-radius: 100px; background: var(--black-100); overflow: hidden; }
+.gl-item__bar i { display: block; height: 100%; border-radius: 100px; background: linear-gradient(90deg, #d5ff73, #1aab56); }
+.gl-item__why { margin-top: 4px; font-size: 12px; line-height: 1.4; color: var(--black-400); }
+.gl-item__add {
+  margin-top: 8px;
+  height: 30px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 100px;
+  background: var(--black-100);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--black-500);
+  cursor: pointer;
+}
+.gl-item__add.done { background: var(--kale-100); color: var(--kale-500); }
+
+/* plan nudge: the recipe page's pink .ai-card, full width */
+.gl-plan { width: 100%; }
+.gl-plan .ai-card { width: 100%; }
+
+/* grey browse CTA: first action under the chart, with room to breathe */
+.gl-browse { width: 100%; margin-top: 12px; }
+.gl-week { margin: 10px 0 12px; padding-bottom: 4px; }
+.gl-browse[hidden] { display: none !important; }
+.gl-boost.reveal { animation: gl-reveal 420ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes gl-reveal { from { opacity: 0; transform: translateY(10px); } }
+
+/* header row: title left, pencil edit disc right (opens the goal picker),
+   same icon language as the grocery "Shopping at" bar */
+.gl-title-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.gl-edit {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 999px;
+  background: var(--black-100);
+  cursor: pointer;
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.gl-edit:active { transform: scale(0.92); }
+.gl-edit[hidden] { display: none; }
+
+/* the pink nudge's late arrival uses the shared .ai-card--wait/--reveal
+   entrance in memory.css */
+
+/* empty state: promo (design's "Cook toward a goal.") */
+.gl-promo { padding: 20px; }
+.gl-promo__top { display: flex; align-items: center; gap: 18px; }
+.gl-promo__rings { width: 88px; height: 88px; flex: none; }
+.gl-promo__title { margin-top: 6px; font-size: 24px; font-weight: 600; letter-spacing: -0.24px; line-height: 1.3; color: var(--black-500); }
+.gl-promo__body { margin-top: 15px; font-size: 13.5px; line-height: 1.45; color: var(--black-400); }
+.gl-promo__chips { display: flex; gap: 6px; margin-top: 14px; }
+.gl-chip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 999px; background: var(--black-100); font-size: 12px; font-weight: 500; color: var(--black-500); white-space: nowrap; }
+.gl-promo__cta { display: inline-flex; align-items: center; margin-top: 16px; font-size: 15px; font-weight: 600; color: var(--kale-500); background: none; border: none; font-family: inherit; cursor: pointer; padding: 0; }
+
+/* ---- "What are you working on?" sheet ---- */
+.gl-sheet[hidden] { display: none; }
+.gl-sheet { position: fixed; inset: 0; z-index: 70; }
+.gl-sheet__scrim { position: absolute; inset: 0; background: rgba(12, 16, 18, 0.28); opacity: 0; transition: opacity 260ms ease; }
+.gl-sheet.show .gl-sheet__scrim { opacity: 1; }
+.gl-sheet__card {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 402px;
+  max-height: 86vh;
+  overflow: auto;
+  transform: translate(-50%, 104%);
+  padding: 12px 16px 40px;
+  border-radius: 24px 24px 0 0;
+  background: var(--white);
+  box-shadow: 0 -12px 40px rgba(15, 18, 21, 0.18);
+  transition: transform 460ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+.gl-sheet.show .gl-sheet__card { transform: translate(-50%, 0); }
+.gl-sheet__grab { width: 40px; height: 4px; border-radius: 100px; background: var(--black-200); margin: 0 auto 16px; }
+.gl-sheet__h { font-size: 24px; font-weight: 600; letter-spacing: -0.3px; line-height: 1.2; color: var(--black-500); }
+.gl-sheet__s { margin-top: 4px; font-size: 13.5px; color: var(--black-400); }
+.gl-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.gl-opt {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 14px;
+  min-height: 96px;
+  border-radius: 16px;
+  border: 0.5px solid var(--black-200);
+  background: var(--white);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+.gl-opt:active { transform: scale(0.97); }
+.gl-opt.on { border-color: var(--kale-500); background: var(--kale-100); }
+.gl-opt.have { opacity: 0.5; }
+.gl-opt .e { font-size: 26px; line-height: 1; }
+.gl-opt .l { margin-top: 8px; font-size: 14px; font-weight: 600; color: var(--black-500); }
+.gl-opt .s { font-size: 11.5px; line-height: 1.35; color: var(--black-400); }
+.gl-opt .have-tag { font-size: 11px; font-weight: 600; color: var(--kale-500); }
+
+/* health-goal toast variant (memory toast, different colour + icon) */
+/* same build as the memory spark (pro gradient + white mark), in greens: heart + a little sparkle */
+.mem-toast.mem-toast--goal .mem-toast__spark { background: linear-gradient(-90deg, #c9e08f 0%, #1aab56 26.9%, #1aab56 49%, #d5ff73 100%); }
+.mem-toast.mem-toast--goal .mem-toast__spark img { width: 16px; height: 16px; }
+.mem-toast.mem-toast--goal { box-shadow: inset 0 0 0 1px rgba(52, 168, 83, 0.25), 0 12px 32px rgba(15, 18, 21, 0.22); }

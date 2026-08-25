@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clove - Plan</title>
+<link rel="stylesheet" href="base.css" />
+<script src="frame.js"></script>
+<link rel="stylesheet" href="plan.css" />
+<link rel="stylesheet" href="memory.css" />
+<link rel="stylesheet" href="picker.css" />
+<link rel="stylesheet" href="clove-ask.css" />
+<link rel="stylesheet" href="chat.css" />
+</head>
+<body>
+
+<div class="phone">
+  <!-- ============ Header ============ -->
+  <header class="plan-header">
+    <div class="plan-header__bar">
+      <button class="icon-button" aria-label="Settings">
+        <span class="ico ico-24"><img src="assets/icons/settings-2.svg" alt="" /></span>
+      </button>
+
+      <a class="avatar-group" href="profile.html" aria-label="Profile">
+        <div class="user-stack">
+          <button class="user-stack__add" aria-label="Add person">
+            <span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span>
+          </button>
+          <div class="avatar-32"><img src="assets/img/avatar-user1.png" alt="" /></div>
+          <div class="avatar-32"><img src="assets/img/avatar-user2.png" alt="" /></div>
+        </div>
+        <span class="ico ico-20"><img src="assets/icons/chevron-down.svg" alt="" /></span>
+      </a>
+    </div>
+
+    <div class="week-switch-wrap">
+      <button class="week-switch">
+        <span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%) rotate(90deg)" /></span>
+        <span>This week</span>
+        <span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%) rotate(-90deg)" /></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ Empty state · 28042:15615 ============ -->
+  <main class="plan-content" id="planEmpty">
+    <!-- pink AI nudge (Figma 28063:53251): parked. Arriving from the recipe
+         drops the first meal in and goes straight to the days question. -->
+    <div class="plan-ai" hidden>
+      <div class="ai-card ai-card--stack" id="planCard" role="button" tabindex="0">
+        <div class="ai-card__main">
+          <span class="ai-card__clove"><span class="mark"><img class="logo" src="assets/icons/clove-white.svg" alt="" /><img class="spark" src="assets/icons/clove-sparkle.svg" alt="" /></span></span>
+          <span class="ai-card__text">
+            <span class="t">Plan the rest of my week</span>
+            <span class="s" id="planCardSub">Uses your saved recipes and tastes.</span>
+          </span>
+          <button class="ai-card__chev" id="planCardChev" aria-label="Show the memories used" aria-expanded="false" hidden>
+            <span class="ico ico-20"><img src="assets/icons/chevron-eggplant.svg" alt="" /></span>
+          </button>
+        </div>
+        <div class="ai-card__more"><div class="ai-card__mems" id="planCardMems"></div></div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+    <div class="day-heading">
+      <h2>Monday <span class="date">13 Jan</span></h2>
+      <button class="add-btn"><span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span></button>
+    </div>
+    <!-- the empty week shows no meals: everything (the saved Caesar included)
+         lands only once the planning questions are answered -->
+    <div class="hr"></div>
+    <div class="day-heading">
+      <h2>Tuesday <span class="date">14 Jan</span></h2>
+      <button class="add-btn"><span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span></button>
+    </div>
+    <div class="hr"></div>
+    <div class="day-heading">
+      <h2>Wednesday <span class="date">15 Jan</span></h2>
+      <button class="add-btn"><span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span></button>
+    </div>
+    <div class="hr"></div>
+    <div class="day-heading">
+      <h2>Thursday <span class="date">16 Jan</span></h2>
+      <button class="add-btn"><span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span></button>
+    </div>
+    <div class="hr"></div>
+    <div class="day-heading">
+      <h2>Friday <span class="date">17 Jan</span></h2>
+      <button class="add-btn"><span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span></button>
+    </div>
+    <div class="hr"></div>
+    <div class="day-heading">
+      <h2>Saturday <span class="date">18 Jan</span></h2>
+      <button class="add-btn"><span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span></button>
+    </div>
+    <div class="hr"></div>
+    <div class="day-heading">
+      <h2>Sunday <span class="date">19 Jan</span></h2>
+      <button class="add-btn"><span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span></button>
+    </div>
+    <div class="hr"></div>
+  </main>
+
+  <!-- ============ Populated state · 28042:15659 ============ -->
+  <main class="plan-content" id="planFull">
+    <div class="plan-title"><h1>Our weekly meal plan</h1></div>
+
+    <!-- the route to the grocery list (Figma 28068:91115), replaces the floating nudge -->
+    <a class="grocery-row pop" id="groceryRow" href="groceries.html">
+      <span class="grocery-row__tile"><span class="ico ico-24"><img src="assets/icons/basket-24.svg" alt="" /></span></span>
+      <div class="grocery-row__text">
+        <p class="grocery-row__title">Grocery List</p>
+        <div class="grocery-row__sub">
+          <span class="checkcircle-sm"><span class="ico ico-12"><img src="assets/icons/check-sm.svg" alt="" /></span></span>
+          <span id="groceryRowCount">6/6 recipes</span>
+        </div>
+      </div>
+      <span class="icon-button-32" aria-label="Reminders">
+        <span class="ico ico-20"><img src="assets/icons/bell.svg" alt="" /></span>
+      </span>
+    </a>
+
+    <div class="hr"></div>
+
+    <section class="day-section">
+      <div class="day-heading">
+        <h2>Any day</h2>
+        <button class="add-btn"><span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span></button>
+      </div>
+      <div class="meal-row pop">
+        <button class="checkcircle" aria-label="Done"></button>
+        <div class="meal-row__body">
+          <span class="meal-row__img"><img src="assets/img/recipes/breakfast-jars.webp" alt="" /></span>
+          <div class="meal-row__text">
+            <p class="meal-row__title">Iron-Rich Breakfast Jars</p>
+            <p class="meal-row__sub">9 Ingredients · 15 min</p>
+          </div>
+          <button class="icon-button-32" aria-label="More">
+            <span class="ico ico-20"><img src="assets/icons/ellipsis-v.svg" alt="" /></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div class="hr"></div>
+
+    <!-- day sections are filled by JS from the user's day-picker selection -->
+    <section class="day-section" data-day="0">
+      <div class="day-heading">
+        <h2>Monday <span class="date">13 Jan</span></h2>
+        <button class="add-btn"><span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span></button>
+      </div>
+    </section>
+
+    <div class="hr"></div>
+
+    <section class="day-section" data-day="1">
+      <div class="day-heading">
+        <h2>Tuesday <span class="date">14 Jan</span></h2>
+        <button class="add-btn"><span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span></button>
+      </div>
+    </section>
+
+    <div class="hr"></div>
+
+    <section class="day-section" data-day="2">
+      <div class="day-heading">
+        <h2>Wednesday <span class="date">15 Jan</span></h2>
+        <button class="add-btn"><span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span></button>
+      </div>
+    </section>
+
+    <div class="hr"></div>
+
+    <section class="day-section" data-day="3">
+      <div class="day-heading">
+        <h2>Thursday <span class="date">16 Jan</span></h2>
+        <button class="add-btn"><span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span></button>
+      </div>
+    </section>
+
+    <div class="hr"></div>
+
+    <section class="day-section" data-day="4">
+      <div class="day-heading">
+        <h2>Friday <span class="date">17 Jan</span></h2>
+        <button class="add-btn"><span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span></button>
+      </div>
+    </section>
+
+    <div class="hr"></div>
+
+    <section class="day-section" data-day="5">
+      <div class="day-heading">
+        <h2>Saturday <span class="date">18 Jan</span></h2>
+        <button class="add-btn"><span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span></button>
+      </div>
+    </section>
+
+    <div class="hr"></div>
+
+    <section class="day-section" data-day="6">
+      <div class="day-heading">
+        <h2>Sunday <span class="date">19 Jan</span></h2>
+        <button class="add-btn"><span class="ico ico-20"><img src="assets/icons/add-20.svg" alt="" /></span></button>
+      </div>
+    </section>
+
+    <div class="hr"></div>
+  </main>
+</a>
+
+  <!-- ============ TabBar ============ -->
+  <nav class="tabbar">
+    <div class="tab-group">
+      <a class="tab-button" href="index.html" aria-label="Home">
+        <span class="ico ico-24"><img src="assets/icons/tab-house.svg" alt="" /></span>
+      </a>
+      <a class="tab-button" href="recipes.html" aria-label="Library">
+        <span class="ico ico-24"><img src="assets/icons/tab-bookmark.svg" alt="" /></span>
+      </a>
+      <a class="tab-button" href="groceries.html" aria-label="Groceries">
+        <span class="ico ico-24"><img src="assets/icons/tab-basket.svg" alt="" /></span>
+      </a>
+      <a class="tab-button" href="plan.html" aria-label="Plan" aria-current="page">
+        <span class="ico ico-24"><img src="assets/icons/tab-calendar-active.svg" alt="" /></span>
+      </a>
+    </div>
+    <button class="chat-button" aria-label="Ask Clove">
+      <span class="mark">
+        <img class="logo" src="assets/icons/clove-white.svg" alt="" />
+        <img class="spark" src="assets/icons/clove-sparkle.svg" alt="" />
+      </span>
+    </button>
+  </nav>
+
+  <!-- ============ Meal actions sheet: ⋮ on a plan meal ============ -->
+  <div class="meal-sheet" id="mealSheet">
+    <div class="meal-sheet__scrim" id="mealSheetScrim"></div>
+    <div class="meal-sheet__card" id="mealSheetCard">
+      <span class="meal-sheet__grab"></span>
+      <div class="meal-sheet__head">
+        <span class="meal-sheet__img"><img id="mealSheetImg" src="assets/img/recipe-video.jpg" alt="" /></span>
+        <div class="meal-sheet__intro">
+          <p class="meal-sheet__name" id="mealSheetName">Crispy Chicken Caesar Salad</p>
+          <a class="meal-sheet__view" id="mealSheetView" href="recipe.html">View recipe</a>
+        </div>
+      </div>
+      <div class="meal-sheet__list">
+        <button class="meal-sheet__row"><span class="ico ico-24"><img src="assets/icons/cal-24-dark.svg" alt="" /></span>Change day(s)</button>
+        <button class="meal-sheet__row"><span class="ico ico-24"><img src="assets/icons/swap-24.svg" alt="" /></span>Swap recipe</button>
+        <button class="meal-sheet__row"><span class="ico ico-24"><img src="assets/icons/clock-24.svg" alt="" /></span>Set meal type</button>
+        <button class="meal-sheet__row"><span class="ico ico-24"><img src="assets/icons/basket-24-dark.svg" alt="" /></span>Remove from Groceries</button>
+        <button class="meal-sheet__row"><span class="ico ico-24"><img src="assets/icons/note-pen-24.svg" alt="" /></span>Add recipe note</button>
+        <button class="meal-sheet__row" data-act="remove"><span class="ico ico-24"><img src="assets/icons/trash-2.svg" alt="" /></span>Remove from Plan</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+<script src="memory.js"></script>
+<script src="goals.js"></script>
+<script src="chat.js"></script>
+<script src="clove-ask.js"></script>
+<script>
+  (function () {
+    var SPRING = "cubic-bezier(0.24, 1.1, 0.32, 1)";
+    var empty = document.getElementById("planEmpty");
+    var answers = { days: 4, shop: null };
+
+    function showShopNudge() {
+      // the plan is accounted for: the green Grocery List row is the way
+      // forward (meals stay unticked until they are cooked)
+      var recipes = document.querySelectorAll("#planFull .meal-row").length;
+      document.getElementById("groceryRowCount").textContent = recipes + "/" + recipes + " recipes";
+    }
+
+    /* The day-picker selection decides which days get a recipe.
+       The saved Caesar salad goes to the first selected day. */
+    // every dinner in the plan is picked to move the iron goal (the subs
+    // stay clean: no badge text)
+    var DAY_MEALS = [
+      ["recipe-video.jpg", "Crispy Chicken Caesar Salad", "8 Ingredients · 25 min"],
+      ["recipes/short-ribs.webp", "Short Rib in Red Wine", "10 Ingredients · 3 hrs"],
+      ["recipes/greens.webp", "Braised Greens and Lemon", "7 Ingredients · 40 min"],
+      ["recipes/beef-stew.webp", "Sunday Beef Stew", "12 Ingredients · 2 hrs 30"],
+      ["recipes/white-beans.webp", "White Beans in Olive Oil", "6 Ingredients · 20 min"],
+      ["recipes/ragu-pot.webp", "Lentil and Beef Ragu", "11 Ingredients · 50 min"],
+      ["recipes/skewers.webp", "Lamb Skewers with Spinach", "9 Ingredients · 30 min"],
+    ];
+
+    // after cooking: "I didn't use all the spinach" → Clove adds a dinner that
+    // uses it up, on the first free day (persisted: cloveLeftoverMeal/Day)
+    var LEFTOVER_MEAL = ["recipes/creamy-pasta.webp", "Spinach and Ricotta Pasta", "25 min"];
+    function mealRow(meal, extraSub) {
+      var d = document.createElement("div");
+      d.className = "meal-row pop";
+      d.innerHTML =
+        '<button class="checkcircle" aria-label="Done"></button>' +
+        '<div class="meal-row__body">' +
+        '<span class="meal-row__img"><img src="assets/img/' + meal[0] + '" alt="" /></span>' +
+        '<div class="meal-row__text"><p class="meal-row__title">' + meal[1] + '</p><p class="meal-row__sub">' + (extraSub || "") + meal[2] + "</p></div>" +
+        '<button class="icon-button-32" aria-label="More"><span class="ico ico-20"><img src="assets/icons/ellipsis-v.svg" alt="" /></span></button>' +
+        "</div>";
+      return d;
+    }
+    function leftoverTarget() {
+      var saved = localStorage.getItem("cloveLeftoverDay");
+      if (saved !== null) { var s = document.querySelector('#planFull .day-section[data-day="' + saved + '"]'); if (s) return s; }
+      var secs = Array.prototype.slice.call(document.querySelectorAll("#planFull .day-section[data-day]"));
+      return secs.filter(function (x) { return !x.querySelector(".meal-row"); })[0] || secs[secs.length - 1];
+    }
+    var LEFTOVER_SUB = '<span class="swap-mark">✦</span>Uses leftover spinach · ';
+
+    function buildDays() {
+      var days = answers.dayList || JSON.parse(localStorage.getItem("clovePlanDays") || "null") || [0, 1, 2, 3];
+      document.querySelectorAll('#planFull .day-section[data-day] .meal-row').forEach(function (r) { r.remove(); });
+      days.slice().sort(function (a, b) { return a - b; }).forEach(function (day, i) {
+        var sec = document.querySelector('#planFull .day-section[data-day="' + day + '"]');
+        if (!sec) return;
+        var meal = DAY_MEALS[i % DAY_MEALS.length];
+        var d = document.createElement("div");
+        d.className = "meal-row pop";
+        d.innerHTML =
+          '<button class="checkcircle" aria-label="Done"></button>' +
+          '<div class="meal-row__body">' +
+          '<span class="meal-row__img"><img src="assets/img/' + meal[0] + '" alt="" /></span>' +
+          '<div class="meal-row__text"><p class="meal-row__title">' + meal[1] + '</p><p class="meal-row__sub">' + meal[2] + "</p></div>" +
+          '<button class="icon-button-32" aria-label="More"><span class="ico ico-20"><img src="assets/icons/ellipsis-v.svg" alt="" /></span></button>' +
+          "</div>";
+        sec.appendChild(d);
+      });
+      if (localStorage.getItem("cloveLeftoverMeal")) leftoverTarget().appendChild(mealRow(LEFTOVER_MEAL, LEFTOVER_SUB));
+    }
+
+    // Clove thinks over one day (pink swirl hugging it), then the dinner lands
+    function addLeftoverMeal() {
+      var sec = leftoverTarget();
+      localStorage.setItem("cloveLeftoverDay", sec.dataset.day);
+      sec.scrollIntoView({ behavior: "smooth", block: "center" });
+      sec.classList.add("ai-host");
+      // the day opens up a slot for the dinner while Clove thinks it over
+      var h0 = sec.offsetHeight;
+      sec.style.transition = "min-height 420ms cubic-bezier(0.22, 1, 0.36, 1)";
+      sec.style.minHeight = h0 + "px";
+      void sec.offsetWidth;
+      sec.style.minHeight = (h0 + 72) + "px";
+      var glow = AIGlow.wrap(sec);
+      glow.el.style.inset = "-6px -8px 0 -8px";
+      glow.el.style.borderRadius = "20px";
+      setTimeout(function () {
+        // no wash on the row: the swirl alone marks the AI moment
+        var row = mealRow(LEFTOVER_MEAL, LEFTOVER_SUB);
+        sec.appendChild(row);
+        void row.offsetWidth;
+        row.classList.add("in");
+        sec.style.minHeight = "";
+        localStorage.setItem("cloveLeftoverMeal", "1");
+        setTimeout(function () {
+          glow.stop();
+          setTimeout(function () { sec.classList.remove("ai-host"); }, 800);
+        }, 700);
+        // the conversation carries over from the recipe: the chat surface
+        // confirms in place (quietly remembered, no memory toast here)
+        setTimeout(function () {
+          CloveMemory.replace("Uses up leftovers", "🥬", "Uses up leftovers", "Habit · noticed after cooking");
+          var DAYNAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+          leftoverChat(DAYNAMES[Number(sec.dataset.day)] || "this week");
+        }, 1000);
+      }, 1700);
+    }
+
+    /* the chat surface from the recipe, continued: Clove confirms the
+       added dinner in the same voice (streamed reply, no toast) */
+    function leftoverChat(dayName) {
+      var card = document.createElement("div");
+      card.className = "plan-chat";
+      card.innerHTML =
+        '<span class="plan-chat__grab"></span>' +
+        '<button class="plan-chat__close" aria-label="Close"><span class="ico ico-20"><img src="assets/icons/x.svg" alt="" /></span></button>' +
+        '<p class="plan-chat__you">I didn’t use all the spinach</p>' +
+        '<p class="plan-chat__resp"></p>';
+      document.body.appendChild(card);
+      void card.offsetWidth;
+      card.classList.add("on");
+      var resp = card.querySelector(".plan-chat__resp");
+      var TEXT = "Done. Spinach and Ricotta Pasta is in for " + dayName + " night. It uses up the leftover spinach.";
+      resp.textContent = TEXT; // measure first so the card never grows mid-stream
+      resp.style.minHeight = resp.offsetHeight + "px";
+      resp.textContent = "";
+      resp.classList.add("streaming");
+      var i = 0;
+      (function tick() {
+        i = Math.min(TEXT.length, i + 2);
+        resp.textContent = TEXT.slice(0, i);
+        if (i < TEXT.length) setTimeout(tick, 16);
+        else resp.classList.remove("streaming");
+      })();
+      card.querySelector(".plan-chat__close").addEventListener("click", function () {
+        card.classList.remove("on");
+        setTimeout(function () { card.remove(); }, 420);
+      });
+    }
+
+    window.cloveLeftover = addLeftoverMeal; // presenting hook
+
+    function showPlanned(instant) {
+      document.body.classList.add("planned");
+      buildDays();
+      var pops = document.querySelectorAll("#planFull .pop");
+      if (instant) {
+        pops.forEach(function (el) { el.classList.add("in"); });
+        setTimeout(showShopNudge, 600);
+        return;
+      }
+      window.scrollTo(0, 0);
+      // AI is building the plan: pink glow swirls, then leaves with the task
+      // (unhurried: the swirl breathes a moment before and after the meals land)
+      AIGlow.start();
+      pops.forEach(function (el, i) {
+        setTimeout(function () { el.classList.add("in"); }, 700 + i * 480);
+      });
+      setTimeout(function () { AIGlow.stop(); }, 700 + pops.length * 480 + 900);
+      setTimeout(showShopNudge, 700 + pops.length * 480 + 1200);
+    }
+
+    /* ---- the anchored planning chat: two questions, then the plan ---- */
+    function swapQuestion(cask, mutate) {
+      var wrap = cask.el.querySelector(".cask__body > div");
+      var inner = cask.el.querySelector(".cask__inner");
+      var h0 = wrap.offsetHeight;
+      inner.animate([{ opacity: 1 }, { opacity: 0, transform: "translateY(-8px)" }], { duration: 150, easing: "ease-in" }).onfinish = function () {
+        mutate();
+        var h1 = wrap.offsetHeight;
+        wrap.animate([{ height: h0 + "px" }, { height: h1 + "px" }], { duration: 380, easing: SPRING });
+        inner.animate(
+          [{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }],
+          { duration: 300, easing: "ease-out", delay: 70, fill: "backwards" }
+        );
+      };
+    }
+
+    function finishAsk(cask) {
+      cask.dismiss(true);
+      var n = answers.days;
+      var m = answers.macros; // [kcal, protein, fat, carbs] or null (skipped)
+      var proteinText = m ? "Aiming for " + m[1] + "g protein a day" : null;
+      // the AI swirl starts building the plan FIRST; the memories toast
+      // lands once the swirl is visibly under way
+      setTimeout(function () {
+        localStorage.setItem("clovePlanned", "1");
+        localStorage.setItem("clovePlanDays", JSON.stringify(answers.dayList || [0, 1, 2, 3]));
+        empty.classList.add("leaving");
+        setTimeout(function () { showPlanned(false); }, 260);
+      }, 600);
+      // the answers become memories, ONE toast: "2 memories added" + short summaries
+      setTimeout(function () {
+        CloveMemory.replace("Plans dinners ", "📅", "Plans dinners " + n + " nights a week", "Habit · from planning with Clove");
+        var items = [{ text: "Plans dinners " + n + " nights a week", short: "Plans " + n + " nights a week" }];
+        if (proteinText) {
+          CloveMemory.replace(/^Aiming for/, "🎯", proteinText, "Goal · you told Clove");
+          items.push({ text: proteinText, short: m[1] + "g protein a day" });
+        }
+        // shorter than usual: the build animation is the star here
+        if (items.length > 1) CloveMemory.toastMany(items, { duration: 3400 });
+        else CloveMemory.toast(items[0].text, "Habit · saved to Clove’s memory", { duration: 3400 });
+      }, 1900);
+    }
+
+    // Figma 26028:21957, the InputWidget macro steppers: daily targets the
+    // user can tweak, or skip
+    var MACROS = [
+      { label: "Calories", value: 550, step: 25, unit: "kcal" },
+      { label: "Protein", value: 180, step: 5, unit: "g" },
+      { label: "Fat", value: 120, step: 5, unit: "g" },
+      { label: "Carbohydrates", value: 130, step: 5, unit: "g" },
+    ];
+    function askQ2(cask) {
+      swapQuestion(cask, function () {
+        cask.el.querySelector(".cask__q").textContent = "What are your daily nutritional macro targets?";
+        var c = cask.el.querySelector(".cask__content");
+        c.innerHTML =
+          '<div class="iw-macros">' +
+          MACROS.map(function (r, i) {
+            return '<div class="iw-macro" data-i="' + i + '"><span class="lbl">' + r.label + '</span><span class="pill">' +
+              '<button data-d="-1" aria-label="Less"><span class="ico ico-16"><img src="assets/icons/minus.svg" alt="" style="width:12px;height:2px" /></span></button>' +
+              '<span class="v"></span>' +
+              '<button data-d="1" aria-label="More"><span class="ico ico-16"><img src="assets/icons/add.svg" alt="" style="width:11px;height:11px" /></span></button>' +
+              "</span></div>";
+          }).join("") +
+          "</div>" +
+          '<div class="cask-foot"><input type="text" placeholder="Something else" />' +
+          '<button class="skip">Skip</button>' +
+          '<button class="go" aria-label="Continue"><span class="ico ico-24"><img src="assets/icons/arrow-up-white.svg" alt="" style="width:16px;height:18px" /></span></button></div>';
+        var vals = MACROS.map(function (r) { return r.value; });
+        function render() {
+          c.querySelectorAll(".iw-macro").forEach(function (m, i) { m.querySelector(".v").textContent = vals[i] + MACROS[i].unit; });
+        }
+        c.querySelectorAll(".iw-macro button").forEach(function (b) {
+          b.addEventListener("click", function (e) {
+            e.stopPropagation();
+            var i = Number(b.closest(".iw-macro").dataset.i);
+            vals[i] = Math.max(0, vals[i] + Number(b.dataset.d) * MACROS[i].step);
+            render();
+            b.closest(".pill").animate([{ transform: "scale(1)" }, { transform: "scale(1.04)" }, { transform: "scale(1)" }], { duration: 220, easing: "ease-out" });
+          });
+        });
+        render();
+        c.querySelector(".skip").addEventListener("click", function (e) { e.stopPropagation(); answers.macros = null; finishAsk(cask); });
+        c.querySelector(".go").addEventListener("click", function (e) { e.stopPropagation(); answers.macros = vals.slice(); finishAsk(cask); });
+      });
+    }
+
+    function openAsk() {
+      var cask = CloveAsk.show({
+        compact: "Help plan your week",
+        title: "Which days would you like to plan dinners for this week?",
+        hint: "Tap to answer · swipe to dismiss",
+        bodyHTML:
+          '<div class="cask-days">' +
+          "MTWTFSS".split("").map(function (d, i) {
+            return '<button class="day-chip' + (i < 4 ? " on" : "") + '" data-i="' + i + '">' + d + "</button>";
+          }).join("") +
+          "</div>" +
+          '<div class="cask-foot"><input type="text" placeholder="Something else" />' +
+          '<button class="go" aria-label="Continue"><span class="ico ico-24"><img src="assets/icons/arrow-up-white.svg" alt="" style="width:16px;height:18px" /></span></button></div>',
+        onBody: function (c) {
+          c.querySelectorAll(".day-chip").forEach(function (b) {
+            b.addEventListener("click", function (e) {
+              e.stopPropagation();
+              b.classList.toggle("on");
+            });
+          });
+          c.querySelector(".go").addEventListener("click", function (e) {
+            e.stopPropagation();
+            answers.dayList = Array.from(c.querySelectorAll(".day-chip.on")).map(function (b) { return Number(b.dataset.i); });
+            if (!answers.dayList.length) answers.dayList = [0, 1, 2, 3];
+            answers.days = answers.dayList.length;
+            askQ2(cask);
+          });
+        },
+      });
+      return cask;
+    }
+
+    // Arriving from the goal nudge: the week is EMPTY, the questions come
+    // first, and every meal (the saved Caesar included) lands only after.
+    if (location.search.indexOf("ask=1") > -1) {
+      localStorage.removeItem("clovePlanned");
+      setTimeout(function () { openAsk().expand(); }, 650);
+    } else if (location.search.indexOf("leftover=spinach") > -1) {
+      // from the recipe's "Update meal plan": the plan is up, then Clove adds to it
+      localStorage.setItem("clovePlanned", "1");
+      empty.style.display = "none";
+      showPlanned(true);
+      if (!localStorage.getItem("cloveLeftoverMeal")) setTimeout(addLeftoverMeal, 900);
+    } else if (location.search.indexOf("planned=1") > -1) {
+      // presenting shortcut: land on the built plan directly
+      localStorage.setItem("clovePlanned", "1");
+      empty.style.display = "none";
+      showPlanned(true);
+    } else if (localStorage.getItem("clovePlanned")) {
+      // the plan survives leaving the tab and coming back
+      empty.style.display = "none";
+      showPlanned(true);
+    }
+    // a plain visit to the empty plan shows just the week (no pill); the
+    // conversation starts from the recipe's nudge (?ask=1) or the day + buttons
+
+    /* ---- meal actions sheet: ⋮ on any meal row slides it up ---- */
+    var mealSheet = document.getElementById("mealSheet");
+    var mealSheetCard = document.getElementById("mealSheetCard");
+    var mealSheetRow = null; // the meal row the sheet was opened from
+
+    function openMealSheet(row) {
+      mealSheetRow = row;
+      document.getElementById("mealSheetImg").src = row.querySelector(".meal-row__img img").src;
+      document.getElementById("mealSheetName").textContent = row.querySelector(".meal-row__title").textContent;
+      mealSheet.classList.add("open");
+      void mealSheet.offsetWidth; // commit display before the slide starts
+      mealSheet.classList.add("in");
+    }
+    function closeMealSheet() {
+      mealSheet.classList.remove("in");
+      mealSheetCard.style.transform = "";
+      setTimeout(function () { mealSheet.classList.remove("open"); }, 500);
+    }
+
+    // rows are built at runtime, so the ⋮ taps are delegated
+    document.addEventListener("click", function (e) {
+      var more = e.target.closest && e.target.closest(".meal-row .icon-button-32");
+      if (more) { e.preventDefault(); openMealSheet(more.closest(".meal-row")); }
+    });
+    document.getElementById("mealSheetScrim").addEventListener("click", closeMealSheet);
+
+    mealSheet.querySelectorAll(".meal-sheet__row").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (b.dataset.act === "remove" && mealSheetRow) {
+          // the row folds shut as the sheet leaves
+          var r = mealSheetRow;
+          r.style.height = r.offsetHeight + "px";
+          r.style.overflow = "hidden";
+          r.style.transition = "height 380ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease";
+          void r.offsetWidth;
+          r.style.height = "0px";
+          r.style.opacity = "0";
+          setTimeout(function () { r.remove(); showShopNudge(); }, 400);
+        }
+        closeMealSheet();
+      });
+    });
+
+    // drag the sheet down to dismiss (capture only after real movement,
+    // so the menu rows still take plain taps)
+    (function () {
+      var sy = 0, dragging = false, captured = false;
+      mealSheetCard.addEventListener("pointerdown", function (e) {
+        dragging = true; captured = false; sy = e.clientY;
+      });
+      mealSheetCard.addEventListener("pointermove", function (e) {
+        if (!dragging) return;
+        var dy = e.clientY - sy;
+        if (!captured && dy > 8) {
+          captured = true;
+          try { mealSheetCard.setPointerCapture(e.pointerId); } catch (err) {}
+          mealSheetCard.style.transition = "none";
+        }
+        if (captured) mealSheetCard.style.transform = "translateY(" + Math.max(0, dy) + "px)";
+      });
+      function up(e) {
+        if (!dragging) return;
+        dragging = false;
+        if (!captured) return;
+        var dy = e.clientY - sy;
+        mealSheetCard.style.transition = "";
+        if (dy > 90) closeMealSheet();
+        else mealSheetCard.style.transform = "";
+      }
+      mealSheetCard.addEventListener("pointerup", up);
+      mealSheetCard.addEventListener("pointercancel", up);
+    })();
+
+    // The pink card starts the conversation, growing straight into the sheet;
+    // its chevron just peeks at the memories Clove will plan with.
+    var planCard = document.getElementById("planCard");
+    var chev = document.getElementById("planCardChev");
+    planCard.addEventListener("click", function (e) {
+      if (e.target.closest && e.target.closest(".ai-card__chev")) return;
+      openAsk().expand();
+    });
+    planCard.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openAsk().expand(); } });
+    chev.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var open = planCard.classList.toggle("open");
+      chev.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    // which memories feed the plan: the ones captured so far that matter for dinners
+    (function () {
+      var all = CloveMemory.all();
+      var prefer = [/^Cooks for/, /high-protein/i, /crunchy salad/i, /TikTok/i, /^Plans dinners/, /^(Meal planner|Preps|Free spirit)/, /^Values/];
+      var picked = [];
+      prefer.forEach(function (re) {
+        all.forEach(function (m) { if (picked.length < 3 && picked.indexOf(m) === -1 && re.test(m.text)) picked.push(m); });
+      });
+      all.forEach(function (m) { if (picked.length < 3 && picked.indexOf(m) === -1) picked.push(m); });
+      // the health goal leads the list when there is one
+      var goal = window.CloveGoals && CloveGoals.primary();
+      if (!picked.length && !goal) return;
+      var items = (goal ? [{ icon: goal.emoji, text: "Health goal: " + goal.rings[0].label, goal: true }] : []).concat(picked);
+      var n = picked.length;
+      var sub = n ? "Using " + n + " saved " + (n === 1 ? "memory" : "memories") : "Using your health goal";
+      if (goal && n) sub = "Using " + n + " " + (n === 1 ? "memory" : "memories") + " and your " + goal.rings[0].label.toLowerCase() + " goal";
+      document.getElementById("planCardSub").textContent = sub;
+      document.getElementById("planCardMems").innerHTML = items.map(function (m) {
+        return '<div class="ai-mem' + (m.goal ? " ai-mem--goal" : "") + '"><span class="e">' + (m.icon || "✦") + '</span><span class="x">' + m.text + "</span></div>";
+      }).join("");
+      chev.hidden = false;
+    })();
+  })();
+</script>
+
+</body>
+</html>

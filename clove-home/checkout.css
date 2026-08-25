@@ -1,0 +1,1415 @@
+/* ============================================================
+   Clove — Grocery checkout flow
+   Flow adapted from "clove grocery flow/Grocery checkout.dc.html",
+   styled per Figma 26011:7271 + the newer Clove design language.
+   ============================================================ */
+
+/* scoped to checkout.html so the shared stylesheet cannot leak onto
+   the groceries pages that only borrow the fab */
+body.checkout .phone {
+  background: var(--white); /* the phone screen stays light; only the stage behind it is dark */
+  padding-bottom: 140px;
+}
+
+/* ------------------------------------------------------------
+   AI thinking frame — the pink/violet glow only shows while
+   Clove is actively doing something on the page.
+   ------------------------------------------------------------ */
+.ai-frame {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  width: 402px;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 45;
+}
+
+.ai-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 700ms ease;
+  background:
+    radial-gradient(90% 30% at 50% -6%, rgba(232, 138, 232, 0.95) 0%, rgba(189, 83, 234, 0.55) 45%, transparent 100%),
+    linear-gradient(90deg, rgba(189, 83, 234, 0.35) 0%, transparent 9%, transparent 91%, rgba(189, 83, 234, 0.35) 100%),
+    linear-gradient(0deg, rgba(189, 83, 234, 0.28) 0%, transparent 12%);
+  animation: ai-breathe 2.6s ease-in-out infinite;
+}
+
+/* the full-page frame is retired: the scan swirl is element-scoped now */
+.ai-frame { display: none; }
+body.ai-thinking .ai-frame::before { opacity: 1; }
+
+/* white plate that keeps the middle clean so only the edges glow */
+.ai-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+  background: var(--white);
+  transition: inset 600ms cubic-bezier(0.22, 1, 0.36, 1), border-radius 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.ai-thinking .ai-frame::after {
+  inset: 14px 10px;
+  border-radius: 36px;
+}
+
+@keyframes ai-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+/* everything on the page sits above the white plate */
+.checkout-body { position: relative; z-index: 46; }
+
+/* ------------------------------------------------------------
+   Progress pill
+   ------------------------------------------------------------ */
+.progress-pill-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 96px 16px 8px;
+}
+
+.progress-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(189, 83, 234, 0.35);
+  background: rgba(243, 231, 255, 0.45);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--eggplant-300);
+  transition: opacity 500ms ease;
+}
+
+body:not(.ai-thinking) .progress-pill { display: none; }
+body:not(.ai-thinking) .progress-pill-wrap { padding-bottom: 0; }
+
+/* header used once shopping is done */
+.checkout-title {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px 0;
+}
+
+body:not(.ai-thinking) .checkout-title { display: flex; }
+
+/* plain back chevron, same as My Kitchen (Figma 28042:23337): no disc, no shadow */
+.checkout-title .back {
+  background: none;
+  flex: none;
+}
+
+.checkout-title h1 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: -0.1px;
+}
+
+.checkout-title p {
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--black-400);
+}
+
+/* ------------------------------------------------------------
+   Review sections
+   ------------------------------------------------------------ */
+.co-content {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px 0;
+}
+
+.co-section-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 48px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: -0.1px;
+  color: var(--black-500);
+}
+
+.co-section-head .count { color: var(--black-300); }
+
+.review-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-s);
+  min-height: 48px;
+  padding: 8px 0;
+}
+
+.warn-circ {
+  width: 24px;
+  height: 24px;
+  border-radius: 100px;
+  border: 2px solid #e59413;
+  color: #e59413;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  flex: none;
+}
+
+.review-row .txt {
+  flex: 1 0 0;
+  min-width: 0;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--black-500);
+}
+
+.review-row .txt .nm { font-weight: 500; }
+
+.review-chip {
+  display: flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 8px;
+  background: var(--paprika-100);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b4a00;
+  cursor: pointer;
+  flex: none;
+}
+
+/* ------------------------------------------------------------
+   Added-to-cart groups
+   ------------------------------------------------------------ */
+.cart-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  height: 56px;
+}
+
+.cart-head h2 {
+  display: flex;
+  gap: 4px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: -0.1px;
+}
+
+.cart-head h2 .count { color: var(--black-300); }
+
+.view-cart {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 8px;
+  background: var(--black-100);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--black-500);
+  cursor: pointer;
+}
+
+.cart-group {
+  padding: 6px 0 10px;
+}
+
+.cart-group__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-s);
+  min-height: 40px;
+}
+
+.check-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 100px;
+  background: var(--kale-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.cart-group__head .txt {
+  flex: 1 0 0;
+  min-width: 0;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--black-500);
+}
+
+.cart-group__head .txt .nm { font-weight: 500; }
+
+.cart-group__head .chev {
+  border: none;
+  background: none;
+  display: flex;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.product-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-s);
+  padding: 8px 0 0 36px;
+}
+
+.product-row__img {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  overflow: hidden;
+  /* retailer product shots come on white */
+  background: var(--white);
+  border: 1px solid var(--black-100);
+  flex: none;
+}
+.product-row__img img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
+
+.product-row__text {
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+.product-row__name {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: var(--black-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-row__price {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.product-row__price .now { font-weight: 600; color: var(--black-500); }
+.product-row__price .now.deal { color: var(--kale-300); }
+.product-row__price .now.deal::before { content: "⭐ "; font-size: 12px; }
+.product-row__price .was { color: var(--black-300); text-decoration: line-through; }
+.product-row__price .unit { color: var(--black-400); }
+
+.product-row__acts { display: flex; gap: 4px; flex: none; }
+
+.pr-act {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: none;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 17px;
+  color: var(--black-500);
+}
+
+/* ------------------------------------------------------------
+   Summary sheet
+   ------------------------------------------------------------ */
+/* floats above the list like the contextual nudges, same liquid glass */
+.summary-card {
+  position: fixed;
+  left: 50%;
+  bottom: 96px;
+  width: 370px;
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.93);
+  -webkit-backdrop-filter: blur(22px) saturate(1.6);
+  backdrop-filter: blur(22px) saturate(1.6);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 12px 32px rgba(15, 18, 21, 0.22);
+  z-index: 84;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  opacity: 0;
+  transform: translateX(-50%) translateY(24px);
+  transition: opacity 460ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 460ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+body:not(.ai-thinking) .summary-card {
+  opacity: 1;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+/* the list scrolls clear of the floating card */
+#viewShop .co-content { padding-bottom: 330px; }
+
+/* item this store doesn't carry: muted, flagged */
+.line-item.oos .li-name,
+.line-item.oos .li-for,
+.line-item.oos .li-price .p { color: var(--black-300); }
+.line-item.oos .li-img { opacity: 0.45; }
+
+/* product shot on each order line item */
+.li-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  border: 1px solid var(--black-100);
+  background: var(--white);
+  overflow: hidden;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+}
+
+.li-img img {
+  width: 86%;
+  height: 86%;
+  object-fit: contain;
+  display: block;
+}
+
+/* ------------------------------------------------------------
+   Finding stores — AI scans catalogues (grocery flow design)
+   ------------------------------------------------------------ */
+.scan-wrap {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0 8px 100px;
+  /* the ambient AI swirl (.ai-glow, z95) floats over the page edge; only its fringe bleeds in */
+  position: relative;
+  z-index: 1;
+  /* top-anchored just below the toast zone (toast sits at 54-118px), so
+     the header reads right under it instead of drifting to centre */
+  padding-top: 124px;
+}
+
+.scan-inner { position: relative; padding: 22px 20px 18px; }
+/* while Clove is checking, the tab bar floats clean over the swirl: no white band, no blur */
+body.ai-thinking .tabbar { background: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+/* the whole block cascades in together: title, subtitle, then the rows */
+.scan-wrap h1,
+.scan-sub {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 520ms ease, transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.scan-wrap h1.in,
+.scan-sub.in { opacity: 1; transform: none; }
+.scan-wrap h1 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.12px;
+  color: var(--black-500);
+}
+
+.scan-sub {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--black-400);
+  margin-top: 8px;
+}
+
+.scan-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.scan-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--white);
+  border: 1px solid var(--black-100);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 380ms ease, transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scan-row.in { opacity: 1; transform: none; }
+
+.scan-row__logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--black-100);
+  overflow: hidden;
+  flex: none;
+}
+
+.scan-row__logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.scan-row__text { flex: 1 0 0; min-width: 0; }
+
+.scan-row__text .n { font-size: 15px; font-weight: 500; color: var(--black-500); }
+.scan-row__text .s { font-size: 12.5px; line-height: 17px; color: var(--black-400); margin-top: 1px; }
+
+/* the clove mark itself is the loader (Figma 28005:42420) */
+.scan-row__spin {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  animation: scan-spin 3.2s linear infinite;
+}
+
+.scan-row__spin img {
+  width: 100%;
+  height: 100%;
+  /* the clove svg is 24.8x28: contain keeps its own ratio, no squash */
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  display: block;
+}
+
+@keyframes scan-spin { to { transform: rotate(360deg); } }
+
+.scan-row__done {
+  width: 24px;
+  height: 24px;
+  border-radius: 100px;
+  background: var(--kale-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  animation: check-pop 400ms cubic-bezier(0.2, 1.4, 0.35, 1) both;
+}
+
+.scan-row__done img { width: 11px; height: 8px; }
+
+@keyframes check-pop {
+  from { transform: scale(0.3); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* once the card is up, the values pill glides above it */
+body.checkout:not(.ai-thinking) .cask.mini {
+  bottom: 396px;
+  transition: bottom 460ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.summary-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--paprika-100);
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b4a00;
+}
+
+.summary-banner .warn-circ { border-color: #b06a00; color: #b06a00; }
+
+.summary-card h2 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: -0.1px;
+  color: var(--black-500);
+}
+
+.summary-cart {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.summary-cart img {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+}
+
+.summary-cart .t1 { font-size: 16px; font-weight: 500; line-height: 26px; }
+.summary-cart .t2 { font-size: 14px; line-height: 22px; color: var(--black-500); }
+
+.summary-cart .t3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--black-400);
+  padding-top: 2px;
+}
+
+.summary-actions { display: flex; flex-direction: column; gap: 8px; }
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-xs);
+  height: 48px;
+  width: 100%;
+  border: none;
+  border-radius: 100px;
+  background: var(--kale-500);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--white);
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------
+   Compare + detail + done views
+   ------------------------------------------------------------ */
+.co-view { display: none; }
+.co-view.active { display: block; }
+
+/* no fill: a lingering transform effect would hijack position:fixed children */
+.co-view {
+  animation: view-in 340ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes view-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+}
+
+.compare-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 56px 16px 0;
+}
+
+.compare-head .back {
+  background: none;
+  flex: none;
+}
+
+.compare-head .t h1 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: -0.1px;
+}
+
+.compare-head .t p {
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--black-400);
+}
+
+.pick-card {
+  margin: 16px 16px 0;
+  padding: 16px;
+  border-radius: 20px;
+  background: var(--kale-100);
+  display: block;
+  border: none;
+  text-align: left;
+  font-family: inherit;
+  width: calc(100% - 32px);
+  cursor: pointer;
+}
+
+.pick-card .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--kale-500);
+}
+
+.pick-card .eyebrow img { width: 14px; height: 14px; }
+
+.pick-card .t1 {
+  padding-top: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  color: var(--kale-500);
+}
+
+.pick-card .t2 {
+  padding-top: 6px;
+  font-size: 13.5px;
+  line-height: 20px;
+  color: #3c5c48;
+}
+
+.pick-card .t3 {
+  padding-top: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--kale-500);
+}
+
+.mode-switch {
+  display: flex;
+  gap: 6px;
+  margin: 16px 16px 0;
+  padding: 4px;
+  border-radius: 100px;
+  background: var(--black-100);
+}
+
+.mode-switch button {
+  flex: 1 0 0;
+  height: 40px;
+  border: none;
+  border-radius: 100px;
+  background: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--black-400);
+  cursor: pointer;
+}
+
+.mode-switch button.on {
+  background: var(--white);
+  color: var(--black-500);
+  box-shadow: 0 2px 6px rgba(15, 18, 21, 0.12);
+}
+
+.retailer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 16px 0;
+}
+
+.retailer-card {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  border-radius: 22px;
+  background: var(--white);
+  border: 1.5px solid var(--black-200);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  animation: view-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.retailer-card.pick { border-color: var(--kale-500); }
+
+.retailer-card .pick-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 11px 0 9px;
+  border-radius: 999px;
+  background: var(--kale-100);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: var(--kale-500);
+  margin-bottom: 12px;
+}
+
+.retailer-card .pick-tag img { width: 12px; height: 12px; }
+
+.retailer-card__main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.retailer-card__logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--white);
+  border: 1px solid var(--black-200);
+  overflow: hidden;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.retailer-card__logo img { width: 100%; height: 100%; object-fit: contain; }
+
+.retailer-card__info { flex: 1 0 0; min-width: 0; }
+
+.retailer-card__name {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+  color: var(--black-500);
+}
+
+.retailer-card__meta {
+  font-size: 12.5px;
+  line-height: 18px;
+  color: var(--black-400);
+  padding-top: 2px;
+}
+
+.retailer-card__total { text-align: right; flex: none; }
+
+.retailer-card__total .p {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  color: var(--black-500);
+}
+
+.retailer-card__total .d {
+  font-size: 11.5px;
+  color: var(--black-300);
+  padding-top: 2px;
+}
+
+.retailer-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 12px;
+}
+
+.rtag {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.rtag--good { background: var(--kale-100); color: var(--kale-500); }
+.rtag--warn { background: var(--paprika-100); color: #6b4a00; }
+.rtag--bad { background: var(--tomato-100); color: #a11a2c; }
+.rtag--info { background: var(--blueberry-100); color: #0f5578; }
+
+/* Detail view */
+.detail-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 16px 0;
+}
+
+/* grid: shot | name · price on the first row, then the "for …" line and the
+   tag run the full width under both; every card shares one height */
+.line-item {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) auto;
+  grid-template-rows: auto auto auto;
+  column-gap: 12px;
+  align-items: start;
+  min-height: 114px; /* tallest variant (name + for + tag): every card matches it */
+  padding: 13px 15px;
+  border-radius: 16px;
+  border: 1px solid var(--black-200);
+  background: var(--white);
+  box-sizing: border-box;
+}
+.line-item .li-img { grid-column: 1; grid-row: 1 / span 3; align-self: center; }
+.line-item .li-body { display: contents; }
+.line-item .li-name { grid-column: 2; grid-row: 1; }
+.line-item .li-price { grid-column: 3; grid-row: 1; }
+.line-item .li-for { grid-column: 2 / 4; grid-row: 2; }
+.line-item .li-flag { grid-column: 2 / 4; grid-row: 3; justify-self: start; }
+.line-item.more-items { display: flex; align-items: center; min-height: 0; }
+
+.line-item .li-name {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+  color: var(--black-500);
+}
+
+.line-item .li-for {
+  font-size: 12.5px;
+  line-height: 17px;
+  color: var(--black-400);
+  padding-top: 2px;
+}
+
+.line-item .li-flag {
+  display: inline-flex;
+  margin-top: 7px;
+}
+
+.line-item .li-price { text-align: right; flex: none; }
+
+.line-item .li-price .p {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--black-500);
+}
+.line-item .li-price .p.deal { color: var(--kale-300); }
+
+.line-item .li-price .was {
+  font-size: 11.5px;
+  color: var(--black-300);
+  text-decoration: line-through;
+  padding-top: 2px;
+}
+
+.totals-card {
+  margin: 16px 16px 0;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid var(--black-200);
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.totals-card .tr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--black-400);
+}
+
+.totals-card .tr .v { color: var(--black-500); font-weight: 500; }
+
+.totals-card .tr.grand { font-size: 16px; }
+.totals-card .tr.grand div:first-child { color: var(--black-500); font-weight: 600; }
+.totals-card .tr.grand .v { font-weight: 600; }
+
+.clove-note {
+  margin: 14px 16px 0;
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--kale-100);
+  font-size: 13.5px;
+  line-height: 20px;
+  color: var(--kale-500);
+}
+
+.detail-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 402px;
+  padding: 14px 16px 34px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 30%);
+  z-index: 50;
+}
+
+.detail-cta [hidden] { display: none; }
+.detail-cta .btn-plain {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 100px;
+  background: none;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--black-500);
+  cursor: pointer;
+}
+
+/* Done view */
+.done-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 78vh;
+  padding: 0 26px;
+}
+
+.done-check {
+  width: 62px;
+  height: 62px;
+  border-radius: 100px;
+  background: var(--kale-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: check-pop 500ms cubic-bezier(0.2, 1.4, 0.35, 1) both;
+}
+
+@keyframes check-pop {
+  0% { transform: scale(0.3); opacity: 0; }
+  70% { transform: scale(1.18); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.done-wrap h1 {
+  margin-top: 20px;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.3px;
+  color: var(--black-500);
+}
+
+.done-wrap .sub {
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--black-400);
+}
+
+.done-wrap .totals-card { margin: 22px 0 0; }
+
+.start-over {
+  margin-top: 22px;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--black-400);
+  cursor: pointer;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 120px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--kale-500);
+  color: var(--white);
+  padding: 12px 18px 12px 13px;
+  border-radius: 999px;
+  box-shadow: 0 12px 30px rgba(3, 51, 27, 0.35);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 70;
+  opacity: 0;
+  transition: opacity 250ms ease, transform 350ms cubic-bezier(0.2, 1.3, 0.35, 1);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-6px);
+}
+
+.toast .tick {
+  width: 26px;
+  height: 26px;
+  border-radius: 100px;
+  background: var(--kale-100);
+  color: var(--kale-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.toast .msg { font-size: 15px; font-weight: 500; }
+
+/* rows shimmer in while Clove shops */
+.shop-in { opacity: 0; transform: translateY(10px); }
+.shop-in.in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* checkout entry pill on groceries pages */
+.checkout-fab {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 96px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 100px;
+  background: var(--kale-500);
+  color: var(--white);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 12px 24px rgba(3, 51, 27, 0.3);
+  cursor: pointer;
+  z-index: 41;
+}
+
+/* keep the glass footer above the glow frame */
+.checkout-body .tabbar { z-index: 47; }
+
+/* "+ 30 more items": tappable row + collapsible rest-of-order */
+.line-item.more-items {
+  width: 100%;
+  justify-content: center;
+  border-style: dashed;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.more-list {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.more-list.open { grid-template-rows: 1fr; }
+
+.more-list > div {
+  overflow: hidden;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.more-list.open > div { padding-bottom: 12px; }
+
+.li-img--emoji {
+  font-size: 24px;
+  background: var(--black-100);
+  border-color: transparent;
+}
+
+/* order-placed card reuses the Clove's-pick card UI */
+.pick-card.done-card { margin: 0; width: 100%; cursor: default; }
+.pick-card .eyebrow img { mix-blend-mode: normal; }
+.done-card .t1 { font-size: 18px; line-height: 26px; }
+.done-card .t2 { font-size: 14px; line-height: 21px; }
+
+/* parked: Clove's pick card is hidden for now (markup kept in checkout.html) */
+.pick-card[hidden] { display: none !important; }
+
+/* ------------------------------------------------------------
+   Woolworths checkout handoff sheet (Figma 26011:7619 GroceryAuth)
+   ------------------------------------------------------------ */
+.gauth {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  bottom: 0;
+  width: 402px;
+  z-index: 95;
+}
+.gauth[hidden] { display: none; }
+.gauth__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(12, 16, 18, 0.35);
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+.gauth.show .gauth__scrim { opacity: 1; }
+.gauth__sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 810px;
+  max-height: calc(100% - 56px);
+  border-radius: 48px 48px 0 0;
+  background: var(--white);
+  overflow: hidden;
+  box-shadow: 0 -12px 40px rgba(15, 18, 21, 0.18);
+  transform: translateY(104%);
+  transition: transform 560ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.gauth.show .gauth__sheet { transform: none; }
+/* the store's page: 402 wide, top-aligned (the phone's own chrome is covered by the bars) */
+.gauth__shot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 402px;
+  height: 875.32px;
+  object-fit: cover;
+  display: block;
+}
+.gauth__bar { position: absolute; left: 0; right: 0; background: var(--white); }
+.gauth__bar--top { top: 0; height: 66px; }
+.gauth__bar--bottom { top: 738.77px; height: 80px; }
+.gauth__head {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 402px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 16px 0 24px;
+}
+.gauth__close {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  border: none;
+  border-radius: 100px;
+  background: var(--white);
+  box-shadow: 0 8px 16px rgba(15, 18, 21, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.gauth__head p { flex: 1 0 0; min-width: 0; font-size: 16px; line-height: 1.6; color: var(--black-500); }
+/* the sheet's contents settle in just after it lands */
+.gauth__head, .gauth__shot { opacity: 0; transition: opacity 260ms ease 220ms; }
+.gauth.show .gauth__head, .gauth.show .gauth__shot { opacity: 1; }
+
+/* ------------------------------------------------------------
+   Nearby stores on a map (Leaflet + CARTO light tiles)
+   ------------------------------------------------------------ */
+.leaflet-container { background: #f3f3f3; font-family: inherit; }
+.leaflet-container:focus, .leaflet-container:focus-visible { outline: none; }
+/* quiet basemap with a Clove touch: the blue water turns a soft sage green,
+   land stays light grey (hue shift on the near-grey tiles) */
+.leaflet-tile-pane { filter: hue-rotate(-70deg) saturate(1.45) brightness(1.02) contrast(0.96); }
+.co-pin-wrap { background: none; border: none; }
+.co-pin {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: max-content;
+}
+.co-pin__logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--white);
+  border: 1.5px solid var(--white);
+  box-shadow: 0 6px 14px rgba(15, 18, 21, 0.22);
+  overflow: hidden;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.co-pin__logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.co-pin--pick .co-pin__logo { box-shadow: 0 0 0 2px var(--kale-500), 0 6px 14px rgba(15, 18, 21, 0.22); }
+.co-pin__label {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 10px 5px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 6px 14px rgba(15, 18, 21, 0.16);
+  white-space: nowrap;
+  line-height: 1.2;
+}
+.co-pin__label b { font-size: 12px; font-weight: 600; color: var(--black-500); }
+.co-pin__label span { font-size: 12px; color: var(--black-400); }
+.co-pin__label span { font-weight: 600; color: var(--kale-500); }
+/* eastern stores carry their label on the left so nothing runs off the edge */
+.co-pin--left { flex-direction: row-reverse; transform: translateX(calc(-100% + 32px)); }
+.co-pin--mini .co-pin__logo { width: 16px; height: 16px; border-radius: 5px; border-width: 1px; }
+.co-pin--mini .co-pin__label { display: none; }
+/* the little map, bottom-left above the tab bar */
+.co-map-mini {
+  position: fixed;
+  left: calc(50% - 201px + 16px);
+  bottom: 104px;
+  width: 88px;
+  height: 88px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 0.5px solid var(--black-200);
+  box-shadow: 0 8px 16px rgba(15, 18, 21, 0.18);
+  background: #f3f3f3;
+  z-index: 45;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(12px) scale(0.94);
+  transition: opacity 280ms ease, transform 480ms cubic-bezier(0.22, 1.3, 0.36, 1);
+}
+.co-map-mini.in { opacity: 1; transform: none; }
+.co-map-mini[hidden] { display: none; }
+.co-map-mini__map { position: absolute; inset: 0; pointer-events: none; }
+.co-map-mini__hint {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+  padding: 2px 6px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 4px 10px rgba(15, 18, 21, 0.12);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--black-500);
+  z-index: 2;
+  pointer-events: none;
+}
+.co-map-mini:active { transform: scale(0.97); }
+/* the expanded map sheet */
+.co-map {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  bottom: 0;
+  width: 402px;
+  z-index: 95;
+}
+.co-map[hidden] { display: none; }
+.co-map__scrim { position: absolute; inset: 0; background: rgba(12, 16, 18, 0.35); opacity: 0; transition: opacity 320ms ease; }
+.co-map.show .co-map__scrim { opacity: 1; }
+.co-map__sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 92%;
+  border-radius: 32px 32px 0 0;
+  background: #f3f3f3;
+  box-shadow: 0 -12px 40px rgba(15, 18, 21, 0.18);
+  overflow: hidden;
+  will-change: transform;
+  /* open/close geometry is animated from the little map (WAAPI); the drag
+     handle sets inline transforms while pulling */
+}
+.co-map.closing .co-map__scrim { opacity: 0; transition: opacity 320ms ease; }
+/* a transparent band over the top of the map: grab it to pull the sheet down */
+.co-map__head { position: absolute; left: 0; right: 0; top: 0; height: 64px; z-index: 1001; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
+.co-map__head:active { cursor: grabbing; }
+.co-map__grab { position: absolute; left: 50%; top: 10px; width: 40px; height: 4px; border-radius: 100px; background: rgba(255, 255, 255, 0.95); box-shadow: 0 1px 4px rgba(15, 18, 21, 0.25); transform: translateX(-50%); z-index: 1002; pointer-events: none; }
+.co-map__chip { position: absolute; left: 50%; top: 26px; transform: translateX(-50%); z-index: 1000; padding: 6px 12px; border-radius: 100px; background: rgba(255,255,255,0.94); box-shadow: 0 6px 14px rgba(15,18,21,.16); font-size: 12px; font-weight: 600; color: var(--black-500); pointer-events: none; white-space: nowrap; }
+.co-map__canvas { position: absolute; inset: 0; touch-action: none; }
+/* a legend chip, top-left of the map */
+.co-map__legend { position: absolute; left: 20px; top: 84px; z-index: 1000; display: flex; align-items: center; gap: 6px; padding: 6px 10px 6px 8px; border-radius: 100px; background: var(--kale-500); box-shadow: 0 6px 14px rgba(15,18,21,.18); font-size: 12px; font-weight: 600; color: var(--white); pointer-events: none; }
+.co-map__legend i { width: 10px; height: 10px; border-radius: 100px; background: var(--kale-500); box-shadow: 0 0 0 2px var(--white); }
+.co-map__hint { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); padding: 6px 12px; border-radius: 100px; background: rgba(255,255,255,0.94); box-shadow: 0 6px 14px rgba(15,18,21,.16); font-size: 12px; color: var(--black-400); pointer-events: none; z-index: 1000; }
+/* room under the list for the little map */
+#viewCompare .retailer-list { padding-bottom: 150px; }
+
+/* ------------------------------------------------------------
+   Swap-to-substitute (Woolworths order): swipe the card, tap for the list
+   ------------------------------------------------------------ */
+.li-swap { position: relative; }
+.li-swap__stage { position: relative; overflow: hidden; border-radius: 16px; }
+.li-swap__card { position: relative; z-index: 1; }
+body.woolies .li-swap__card { touch-action: pan-y; cursor: grab; will-change: transform; }
+body.woolies .li-swap__card:active { cursor: grabbing; }
+.li-swap__incoming { position: absolute; inset: 0; z-index: 2; }
+.li-alt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 8px 8px 10px;
+  margin-top: 6px;
+  border: 1px solid var(--black-200);
+  border-radius: 14px;
+  background: var(--white);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.li-alt:first-child { margin-top: 8px; }
+.li-alt .li-img { width: 40px; height: 40px; border-radius: 10px; }
+.li-alt__t { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.li-alt__t b { font-size: 13.5px; font-weight: 500; line-height: 18px; color: var(--black-500); }
+.li-alt__t .rtag { align-self: flex-start; }
+.li-alt__p { font-size: 13.5px; font-weight: 600; color: var(--black-500); flex: none; }
+.li-alt__go { flex: none; height: 32px; padding: 0 12px; border-radius: 100px; background: var(--black-100); display: flex; align-items: center; font-size: 13px; font-weight: 500; color: var(--kale-500); }
+.li-alt:active { transform: scale(0.985); }
+
+/* the substitutes modal: grows out of the tapped card */
+.swap-modal { position: fixed; left: 50%; transform: translateX(-50%); top: 0; bottom: 0; width: 402px; z-index: 96; display: flex; align-items: center; justify-content: center; }
+.swap-modal[hidden] { display: none; }
+.swap-modal__scrim { position: absolute; inset: 0; background: rgba(12, 16, 18, 0.3); opacity: 0; }
+.swap-modal__card {
+  position: relative;
+  width: 370px;
+  max-height: 78%;
+  overflow: auto;
+  border-radius: 28px;
+  background: var(--white);
+  border: 0.5px solid var(--black-200);
+  box-shadow: 0 24px 48px rgba(15, 18, 21, 0.18);
+  will-change: transform;
+}
+.swap-modal__inner { padding: 16px; }
+.swap-modal__head { display: flex; align-items: center; gap: 14px; }
+.swap-modal__head .li-img { width: 72px; height: 72px; border-radius: 16px; }
+.swap-modal__t { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.swap-modal__t b { font-size: 17px; font-weight: 600; line-height: 22px; color: var(--black-500); }
+.swap-modal__t span { font-size: 13.5px; line-height: 18px; color: var(--black-400); }
+.swap-modal__l { margin: 16px 0 2px; font-size: 12px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; color: var(--black-400); }
+.swap-modal__list { display: flex; flex-direction: column; }
+.swap-modal__list .li-alt:first-child { margin-top: 6px; }
+
+/* the landing hint: a dark kale card sits behind the product card; the card
+   drifts aside to reveal "Swipe to swap", then glides back */
+.li-swap__cue {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-right: 22px;
+  border-radius: 16px;
+  background: var(--kale-500);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  pointer-events: none;
+  opacity: 0;
+  white-space: nowrap;
+}
+.li-swap__cue-arrow { font-size: 16px; line-height: 1; opacity: 0.9; }
+.li-swap__incoming { z-index: 2; }
+.li-swap__card { z-index: 1; }

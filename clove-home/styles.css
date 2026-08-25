@@ -1,0 +1,624 @@
+/* ============================================================
+   Clove — Home
+   Figma: Reg Clove Design Challenge · node 28005:47933 (402 × 2202)
+   Shared tokens/header/tabbar live in base.css
+   ============================================================ */
+
+/* Rectangle 510 — kale → white wash behind the header + hero */
+.bg-wash {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 349px;
+  background: linear-gradient(180deg, var(--kale-100) 0%, var(--white) 100%);
+}
+
+/* ------------------------------------------------------------
+   Hero — Frame 6051
+   ------------------------------------------------------------ */
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-m);
+  padding: var(--sp-l) var(--sp-m);
+}
+
+.hero__title {
+  width: 370px;
+  font-size: 24px;
+  font-weight: 600;
+  /* Figma rounds the 1.3 line box to a 31px frame */
+  line-height: 31px;
+  letter-spacing: -0.24px;
+  text-align: center;
+  color: var(--kale-500);
+}
+
+.hero__composer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-l);
+  width: 370px;
+}
+
+.chat-surface {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 370px;
+  padding-left: 12px;
+  border-radius: var(--sp-2xl);
+  background: var(--white);
+  filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.25));
+}
+
+.chat-surface__logo {
+  width: 28px;
+  height: 28px;
+  flex: none;
+}
+
+.chat-surface__field {
+  display: flex;
+  align-items: center;
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+.chat-surface__field p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--black-400);
+  white-space: pre;
+}
+
+.chat-surface__action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2xs);
+  width: 48px;
+  height: 48px;
+  padding: 6px;
+  flex: none;
+}
+
+.composer-button {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 999px;
+  background: var(--kale-500);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: none;
+}
+
+/* Suggested prompt carousel — bleeds past the 16px gutter */
+.prompt-rail {
+  width: 402px;
+  margin-left: -16px;
+  overflow: hidden;
+}
+
+.prompt-rail__strip {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  width: max-content;
+  /* One full set of chips scrolls past every 130s; content is duplicated
+     in JS so the loop is seamless. */
+  animation: prompt-marquee 130s linear infinite;
+  will-change: transform;
+}
+
+@keyframes prompt-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(-1 * var(--loop, 1000px))); }
+}
+
+.prompt {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-s);
+  padding: 12px;
+  border: none;
+  box-shadow: inset 0 0 0 0.5px var(--black-300);
+  border-radius: 12px;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  color: var(--black-500);
+  white-space: nowrap;
+  flex: none;
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------
+   Content
+   ------------------------------------------------------------ */
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-l);
+  padding-top: var(--sp-l);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-m);
+}
+
+/* CarouselHeader */
+.carousel-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xs);
+  padding: 0 var(--sp-m);
+}
+
+.carousel-header__block {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.carousel-header__heading {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+}
+
+.carousel-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 25px;
+  letter-spacing: -0.09px;
+  color: var(--black-500);
+  white-space: nowrap;
+}
+
+/* Horizontal rails */
+.rail {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+.rail::-webkit-scrollbar { display: none; }
+
+.rail__strip {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 0 16px;
+  width: max-content;
+}
+
+/* --- content_recipecardXS ---------------------------------- */
+.card-xs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3xs);
+  width: 117px;
+  flex: none;
+}
+
+.card-xs__image {
+  position: relative;
+  width: 117px;
+  height: 117px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--kale-300);
+}
+
+.card-xs__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-xs__title {
+  width: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 17px;
+  color: var(--black-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- content_recipecard / CardRecipe ------------------------ */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-xs);
+  width: 200px;
+  flex: none;
+}
+
+.card__image {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--paprika-300);
+}
+
+.card__image > img.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card__badge {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  min-width: 24px;
+  padding: 0 8px;
+  border-radius: 100px;
+  background: var(--white);
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--black-500);
+}
+
+.card__bookmark {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 100px;
+  background: var(--white);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.card__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.card__title {
+  width: 100%;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  color: var(--black-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card__desc {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3xs);
+  width: 100%;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--black-400);
+}
+
+.avatar-16 {
+  width: 16px;
+  height: 16px;
+  border-radius: 100px;
+  background: var(--black-400);
+  flex: none;
+  overflow: hidden;
+}
+.avatar-16 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- Community tile ---------------------------------------- */
+.tile-community {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 16px;
+  background: var(--eggplant-100);
+  flex: none;
+}
+
+.tile-community p {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  width: 139.5px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 25px;
+  letter-spacing: -0.09px;
+  color: #000;
+}
+
+.tile-community .tile-community__arrow {
+  position: absolute;
+  left: 16px;
+  top: 160px;
+  transform: rotate(90deg);
+}
+
+/* --- Twists ------------------------------------------------- */
+.twist {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 200px;
+  height: 120px;
+  padding: 12px;
+  border: none;
+  border-radius: 16px;
+  flex: none;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.twist--protein { background: var(--eggplant-100); }
+.twist--healthy { background: var(--tomato-100); }
+.twist--salad { background: var(--kale-100); }
+.twist--simpler { background: var(--paprika-100); }
+.twist--substitute { background: var(--blueberry-100); }
+
+.twist__icon {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex: none;
+}
+
+/* Salad / Emulsification / Refresh ship as one 80x80 SVG: the Shadow/300
+   effect expands the 48px node by 16px sideways, 8px up and 24px down. */
+.twist__icon--art > img {
+  position: absolute;
+  left: -16px;
+  top: -8px;
+  width: 80px;
+  height: 80px;
+}
+
+/* Protein + Healthy are composed from their exported layers so the card
+   colour behind them stays transparent. */
+.twist__icon--protein,
+.twist__icon--heart {
+  filter: drop-shadow(0px 8px 8px rgba(15, 18, 21, 0.15));
+}
+
+.twist__icon--protein > img.base,
+.twist__icon--heart > img.base {
+  position: absolute;
+  inset: 0;
+  width: 48px;
+  height: 48px;
+}
+
+.twist__ring {
+  position: absolute;
+  left: 3.586px;
+  top: 3.586px;
+  width: 40.828px;
+  height: 40.828px;
+}
+
+.twist__ring .arc {
+  position: absolute;
+  left: 2.402px;
+  top: 2.402px;
+  width: 36.025px;
+  height: 36.025px;
+}
+
+.twist__ring .arc--track { transform: scaleY(-1); mix-blend-mode: multiply; }
+.twist__ring .arc--track img {
+  position: absolute;
+  left: -2.402px;
+  top: -2.402px;
+  width: 40.828px;
+  height: 40.828px;
+}
+
+.twist__ring .arc--fill { transform: scaleX(-1); }
+.twist__ring .arc--fill img {
+  position: absolute;
+  left: -2.402px;
+  top: -2.402px;
+  width: 22.816px;
+  height: 35.552px;
+}
+
+.twist__ring .glyph {
+  position: absolute;
+  left: 13.209px;
+  top: 13.209px;
+  width: 14.41px;
+  height: 14.41px;
+}
+
+.twist__icon--heart > img.inner {
+  position: absolute;
+  left: 6.888px;
+  top: 6.578px;
+  width: 34.666px;
+  height: 34.844px;
+}
+
+.twist__icon--heart > .emoji {
+  position: absolute;
+  left: 14.4px;
+  top: 12.6px;
+  width: 20px;
+  height: 23px;
+  font-size: 19.2px;
+  line-height: 1.2;
+  letter-spacing: -0.192px;
+  text-align: center;
+}
+
+.twist p {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  color: var(--black-500);
+  width: 100%;
+}
+
+.twists-rail .rail__strip { gap: 8px; align-items: center; }
+
+/* --- RecipeCardXLVideo -------------------------------------- */
+.rail--xl .rail__strip { gap: 8px; }
+
+.card-xl {
+  position: relative;
+  width: 370px;
+  height: 616px;
+  border-radius: 24px;
+  overflow: hidden;
+  flex: none;
+  background: #000;
+}
+
+.card-xl__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-xl__scrim {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 370px;
+  height: 88.744px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000 100%);
+}
+
+.list-cookbook {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 346px;
+  height: 72px;
+  padding: var(--sp-s);
+  border-radius: 16px;
+  background: var(--black-100);
+  filter: drop-shadow(0px 8px 8px rgba(15, 18, 21, 0.15));
+}
+
+.list-cookbook__image {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--white);
+  flex: none;
+}
+.list-cookbook__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.list-cookbook__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+.list-cookbook__title {
+  width: 100%;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  color: var(--black-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-cookbook__desc {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3xs);
+  width: 100%;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--black-400);
+  white-space: nowrap;
+}
+
+.list-cookbook__dot {
+  font-size: 14px;
+  line-height: 23px;
+  color: var(--black-400);
+}
+
+.list-cookbook__plays {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.button-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3xs);
+  width: 73px;
+  height: 32px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 100px;
+  background: var(--kale-500);
+  overflow: hidden;
+  cursor: pointer;
+  flex: none;
+}
+
+.button-primary span {
+  min-width: 24px;
+  text-align: center;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  color: var(--white);
+  white-space: nowrap;
+}

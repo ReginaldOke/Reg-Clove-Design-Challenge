@@ -1,0 +1,370 @@
+/* ============================================================
+   Clove asks — ambient questions/prompts from the clove button.
+   Compact pill anchored above the tab bar; morphs out of the
+   purple clove logo, expands on tap, swipes away.
+   ============================================================ */
+
+.cask {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 96px;
+  width: 370px;
+  border-radius: 20px;
+  /* liquid glass, matching the tab bar */
+  background: rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: blur(18px) saturate(1.7);
+  backdrop-filter: blur(18px) saturate(1.7);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 12px 32px rgba(15, 18, 21, 0.22);
+  z-index: 84;
+  overflow: hidden;
+  touch-action: none;
+  visibility: hidden;
+  will-change: transform;
+}
+
+.cask.show { visibility: visible; }
+
+/* --- compact row ------------------------------------------- */
+.cask__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cask__spark {
+  width: 30px;
+  height: 30px;
+  border-radius: 100px;
+  background: var(--eggplant-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.cask__spark img { width: 13px; height: 15px; }
+
+.cask__text {
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+.cask__title {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19px;
+  color: var(--black-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cask__hint {
+  display: block;
+  font-size: 11.5px;
+  line-height: 15px;
+  color: var(--black-400);
+}
+
+.cask.expanded .cask__hint { display: none; }
+
+.cask__chev {
+  display: flex;
+  flex: none;
+  padding: 4px;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cask.expanded .cask__chev { transform: rotate(180deg); }
+
+/* --- expandable body --------------------------------------- */
+.cask__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 420ms cubic-bezier(0.22, 1.1, 0.36, 1);
+}
+
+.cask.expanded .cask__body { grid-template-rows: 1fr; }
+
+.cask__body > div {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.cask__inner {
+  padding: 2px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+/* InputWidget header (Figma 28005:45678 / 45675) */
+.cask__q {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.09px;
+  color: var(--black-500);
+  padding: 4px 36px 6px 4px;
+}
+
+.cask__qx {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: none;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.cask__qx img { width: 13px; height: 13px; }
+
+/* expanded sheets close by dragging down, not an X */
+.cask.expanded .cask__qx { display: none; }
+
+.cask.expanded .cask__title { display: none; }
+
+/* options reuse the InputWidget option look, sized for thumbs */
+.cask .iw-option { padding: 12px 16px; }
+
+/* swipe-out */
+.cask.dismissing {
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.7, 1), opacity 260ms ease;
+  opacity: 0;
+}
+
+/* ------------------------------------------------------------
+   Mini state — a quiet pill just above the clove button
+   ------------------------------------------------------------ */
+.cask.mini {
+  left: auto;
+  /* right edge flush with the clove button (phone is a centred 402px column) */
+  right: calc(50% - 177px);
+  bottom: 102px;
+  width: auto;
+  max-width: 312px;
+  border-radius: 999px;
+  transform: none;
+}
+
+.cask.mini .cask__row {
+  padding: 9px 16px;
+  gap: 8px;
+}
+
+.cask.mini .cask__spark { width: 26px; height: 26px; }
+.cask.mini .cask__spark img { width: 11px; height: 13px; }
+
+.cask.mini .cask__title { font-size: 13px; line-height: 18px; }
+
+.cask.mini .cask__hint,
+.cask.mini .cask__chev,
+.cask.mini .cask__body,
+/* the clove button below is the icon — no second clove */
+.cask.mini .cask__spark {
+  display: none;
+}
+
+/* ------------------------------------------------------------
+   Anchored AI question content (Figma 28050:45261 · 28005:45666)
+   ------------------------------------------------------------ */
+.cask-days {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 4px 8px;
+}
+
+.day-chip {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 100px;
+  background: var(--black-100);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--black-500);
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease, transform 180ms cubic-bezier(0.22, 1.4, 0.36, 1);
+}
+
+.day-chip.on {
+  background: var(--kale-500);
+  color: var(--white);
+}
+
+.day-chip:active { transform: scale(0.88); }
+
+.cask-emoji-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  background: var(--black-100);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--black-500);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.cask-emoji-opt .e { font-size: 18px; flex: none; }
+
+.cask-emoji-opt.on {
+  border-color: var(--kale-300);
+  background: var(--kale-100);
+}
+
+.cask-emoji-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* footer inside the anchored card: ghost input + submit arrow */
+.cask-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+}
+
+.cask-foot input {
+  flex: 1 0 0;
+  min-width: 0;
+  border: none;
+  background: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--black-500);
+}
+
+.cask-foot input::placeholder { color: var(--black-300); }
+
+.cask-foot .go {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 999px;
+  background: var(--kale-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: none;
+}
+
+/* dismiss X on the mini pill */
+.cask__x {
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 100px;
+  background: var(--black-100);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: none;
+}
+
+.cask__x img { width: 9px; height: 9px; }
+
+.cask.mini .cask__x { display: flex; }
+
+/* expanded sheet: no clove, no chevron, just a grabber; swipe dismisses */
+.cask.expanded .cask__spark,
+.cask.expanded .cask__chev,
+.cask.expanded .cask__x {
+  display: none;
+}
+
+.cask.expanded .cask__row {
+  justify-content: center;
+  padding: 10px 12px 2px;
+  cursor: grab;
+}
+
+.cask.expanded .cask__row::before {
+  content: "";
+  width: 44px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--black-200);
+}
+
+.cask.expanded .cask__text { display: none; }
+
+/* footer Skip (Figma InputWidgetFooter): plain text button beside the submit */
+.cask-foot .skip {
+  height: 48px;
+  padding: 0 16px;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--black-500);
+  cursor: pointer;
+}
+/* macro steppers inside the ask card: the Figma pill (160px min, 48px) */
+.cask .iw-macro { padding: 12px 0; border-bottom: 0.5px solid var(--black-200); }
+.cask .iw-macro:last-child { border-bottom: none; }
+.cask .iw-macro .lbl { font-size: 16px; }
+.cask .iw-macro .pill { height: 48px; min-width: 160px; padding: 0 12px; justify-content: space-between; }
+.cask .iw-macro .pill .v { font-weight: 400; font-size: 16px; min-width: 64px; }
+
+/* ---- the budget dial (Figma 26028:21963 ruler), draggable ---- */
+.dial { width: 100%; padding: 8px 0 4px; user-select: none; -webkit-user-select: none; }
+.dial__head { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.dial__pointer {
+  width: 0; height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 14px solid var(--eggplant-300, #bd53ea);
+}
+.dial__val { font-size: 32px; font-weight: 600; line-height: 1.2; letter-spacing: -0.32px; color: var(--black-500); text-align: center; }
+.dial__track {
+  position: relative;
+  height: 76px;
+  margin-top: 12px;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+}
+.dial.dragging .dial__track { cursor: grabbing; }
+.dial__strip { position: absolute; left: 0; top: 0; display: flex; align-items: flex-start; gap: 17px; will-change: transform; }
+.dial__tick {
+  width: 6px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--black-200);
+  flex: none;
+  transition: background-color 160ms ease;
+}
+.dial__tick.on { background: var(--eggplant-300, #bd53ea); }

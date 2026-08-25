@@ -1,0 +1,9 @@
+.DS_Store
+.claude/
+
+# raw design sources and references, not needed by the prototype
+Food images/
+References/
+acaraje-font-family/
+clove grocery flow/
+clove grocery flow.zip

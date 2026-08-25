@@ -1,0 +1,715 @@
+/* ============================================================
+   Clove — shared design language
+   Fonts, tokens, page frame, header patterns, tab bar
+   ============================================================ */
+
+@font-face {
+  font-family: "Acaraje";
+  src: url("assets/fonts/Acaraje-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Acaraje";
+  src: url("assets/fonts/Acaraje-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Acaraje";
+  src: url("assets/fonts/Acaraje-SemiBold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: block;
+}
+
+/* The Fontspring demo cut of Acaraje swaps a "DEMO" watermark in for
+   the numeral 4 and most ASCII punctuation (brackets, hyphen, @ $ & % #,
+   quotes). Figma renders those glyphs normally, so layer a matching
+   grotesque over just those code points. Declared last so it wins the
+   family cascade for the range it covers. */
+@font-face {
+  font-family: "Acaraje";
+  src: local("Helvetica Neue Medium"), local("HelveticaNeue-Medium"), local("Helvetica Neue");
+  font-weight: 400;
+  font-style: normal;
+  unicode-range: U+0021-002B, U+002D, U+002F, U+0034, U+003C-003E, U+0040, U+005B-0060, U+007B-007E;
+}
+@font-face {
+  font-family: "Acaraje";
+  src: local("Helvetica Neue Medium"), local("HelveticaNeue-Medium"), local("Helvetica Neue");
+  font-weight: 500;
+  font-style: normal;
+  unicode-range: U+0021-002B, U+002D, U+002F, U+0034, U+003C-003E, U+0040, U+005B-0060, U+007B-007E;
+}
+@font-face {
+  font-family: "Acaraje";
+  src: local("Helvetica Neue Bold"), local("HelveticaNeue-Bold");
+  font-weight: 600;
+  font-style: normal;
+  unicode-range: U+0021-002B, U+002D, U+002F, U+0034, U+003C-003E, U+0040, U+005B-0060, U+007B-007E;
+}
+
+:root {
+  /* Brand */
+  --kale-100: #e9f7c8;
+  --kale-300: #1aab56;
+  --kale-500: #03331b;
+  --eggplant-100: #f3e7ff;
+  --eggplant-300: #bd53ea;
+  --tomato-100: #fee4e7;
+  --paprika-100: #fdeed1;
+  --paprika-300: #f79310;
+  --paprika-500: #6b2e00;
+  --blueberry-100: #daf3ff;
+
+  /* Neutrals */
+  --black-100: #f3f3f3;
+  --black-200: #e6e7e7;
+  --black-300: #aaacac;
+  --black-400: #616365;
+  --black-500: #0c1012;
+  --white: #ffffff;
+  --quinary: #fbfbfb;
+
+  /* Spacing scale */
+  --sp-3xs: 4px;
+  --sp-2xs: 4px;
+  --sp-xs: 8px;
+  --sp-s: 12px;
+  --sp-m: 16px;
+  --sp-l: 24px;
+  --sp-xl: 32px;
+  --sp-2xl: 48px;
+
+  /* Effects */
+  --shadow-100: 0px 4px 8px rgba(15, 18, 21, 0.15);
+  --shadow-300: 0px 8px 8px rgba(15, 18, 21, 0.15);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  background: #111; /* the dark stage around the phone, same as the TikTok step, throughout */
+  font-family: "Acaraje", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--black-500);
+}
+
+/* the scrollbar gutter is always reserved on both sides, so the centred
+   phone never shifts sideways between short and tall pages */
+html { scrollbar-gutter: stable both-edges; }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+img {
+  display: block;
+  max-width: none;
+  /* Never let a drag lift an image off the page */
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ------------------------------------------------------------
+   Device frame
+   ------------------------------------------------------------ */
+.phone {
+  position: relative;
+  width: 402px;
+  min-height: 100vh;
+  overflow-x: clip;
+  background: var(--white);
+  flex: none;
+  /* keep the last row clear of the fixed tab bar */
+  padding-bottom: 120px;
+}
+
+/* ------------------------------------------------------------
+   Icon boxes — SVGs export at their path bounds and are centred
+   inside a fixed square, exactly as in Figma.
+   ------------------------------------------------------------ */
+.ico {
+  position: relative;
+  flex: none;
+  overflow: hidden;
+}
+.ico > img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.ico-24 { width: 24px; height: 24px; }
+.ico-20 { width: 20px; height: 20px; }
+.ico-16 { width: 16px; height: 16px; }
+.ico-12 { width: 12px; height: 12px; }
+
+/* ------------------------------------------------------------
+   Header patterns
+   ------------------------------------------------------------ */
+.page-header {
+  position: relative;
+  padding-top: var(--sp-2xl);
+}
+
+.page-header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--sp-m);
+  height: 48px;
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-xs);
+  padding: 12px;
+  border-radius: 100px;
+  border: none;
+  background: none;
+  overflow: hidden;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Avatar cluster (shared: home, plan, groceries) */
+.avatar-group {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  padding: 4px 8px 4px 4px;
+  border-radius: 300px;
+  background: rgba(12, 16, 18, 0.08);
+}
+
+.user-stack {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.user-stack > * + * { margin-left: -12px; }
+
+.user-stack__add {
+  position: relative;
+  z-index: 4;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 100px;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.avatar-32 {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 100px;
+  border: 1px solid var(--white);
+  background: var(--black-100);
+  overflow: hidden;
+  flex: none;
+}
+.avatar-32 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.avatar-32:nth-child(2) { z-index: 3; }
+.avatar-32:nth-child(3) { z-index: 2; }
+
+/* ------------------------------------------------------------
+   TabBar — fixed, frosted (subtle iOS liquid glass)
+   ------------------------------------------------------------ */
+.tabbar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 402px;
+  height: 88px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: var(--sp-xs);
+  padding: 0 var(--sp-l) var(--sp-xl);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  /* no backdrop blur: content scrolls crisply under the bar */
+  z-index: 40;
+}
+
+/* solo variant: only the clove button, docked right — no white band,
+   so content beneath is never blurred or washed out */
+.tabbar--solo {
+  justify-content: flex-end;
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.tab-group {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-m);
+  padding: 12px 16px;
+  border-radius: 999px;
+  /* Softly frosted — a nod to iOS liquid glass without full transparency */
+  background: rgba(255, 255, 255, 0.68);
+  -webkit-backdrop-filter: blur(18px) saturate(1.7);
+  backdrop-filter: blur(18px) saturate(1.7);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 8px 16px rgba(15, 18, 21, 0.15);
+}
+
+.tab-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 100px;
+  background: none;
+  cursor: pointer;
+  flex: none;
+}
+
+.chat-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: var(--sp-2xl);
+  background: var(--eggplant-300);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 8px 16px rgba(15, 18, 21, 0.15);
+  cursor: pointer;
+  flex: none;
+}
+
+/* white clove mark + sparkle, per Plan/Groceries designs */
+.chat-button .mark {
+  position: relative;
+  width: 32px;
+  height: 32px;
+}
+.chat-button .mark .logo {
+  position: absolute;
+  left: 1px;
+  top: 3px;
+  width: 24.8px;
+  height: 28px;
+}
+.chat-button .mark .spark {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 8.16px;
+  height: 8.16px;
+}
+
+/* Drag affordances */
+.rail,
+.prompt-rail { cursor: grab; }
+.rail.dragging,
+.prompt-rail.dragging { cursor: grabbing; }
+
+/* Tiny creator avatar (shared) */
+.avatar-16 {
+  width: 16px;
+  height: 16px;
+  border-radius: 100px;
+  background: var(--black-400);
+  flex: none;
+  overflow: hidden;
+}
+.avatar-16 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ------------------------------------------------------------
+   Motion — page transitions + touch feedback
+   ------------------------------------------------------------ */
+
+/* Cross-document view transitions (Chromium): pages crossfade + rise */
+@view-transition {
+  navigation: auto;
+}
+
+/* pure crossfade: the snapshots cover the whole stage (phone included),
+   so any translate here reads as the entire screen jumping */
+@keyframes page-in {
+  from { opacity: 0; }
+}
+@keyframes page-out {
+  to { opacity: 0; }
+}
+
+::view-transition-old(root) {
+  animation: page-out 120ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+::view-transition-new(root) {
+  animation: page-in 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Springy press feedback on anything tappable */
+button,
+.tab-button,
+.chip,
+.prompt,
+.twist,
+.list-card,
+.grid-card,
+.magic-tag,
+.card,
+.card-xs {
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+button:active,
+.tab-button:active,
+.chip:active,
+.prompt:active,
+.twist:active,
+.list-card:active,
+.grid-card:active,
+.magic-tag:active,
+.card:active,
+.card-xs:active {
+  transform: scale(0.96);
+}
+
+.chat-button:active { transform: scale(0.92); }
+
+/* Content rises softly on load (staggered via --d) */
+.rise {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: rise-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+
+@keyframes rise-in {
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise { animation: none; opacity: 1; transform: none; }
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
+
+/* Tonal pill button (shared) */
+.btn-tonal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-xs);
+  height: 48px;
+  border: none;
+  border-radius: 100px;
+  background: var(--black-100);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--black-500);
+  cursor: pointer;
+}
+
+/* ============================================================
+   Presenter controls (desktop): the panel to the right of the
+   phone, its collapse pill, and the rounded device-frame mask.
+   Meta-UI on the stage, so it lives in the dark.
+   ============================================================ */
+.cpanel {
+  position: fixed;
+  right: 24px;
+  top: 24px;
+  width: 264px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  padding: 18px 18px 20px;
+  border-radius: 20px;
+  background: rgba(28, 28, 30, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.92);
+  z-index: 2001;
+  opacity: 0;
+  transform: translateX(12px);
+  pointer-events: none;
+  transition: opacity 260ms ease, transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+  scrollbar-width: none;
+}
+.cpanel::-webkit-scrollbar { display: none; }
+body.cpanel-open .cpanel { opacity: 1; transform: none; pointer-events: auto; }
+
+.cpanel__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.cpanel__head span { font-size: 13px; font-weight: 600; letter-spacing: 0.2px; }
+.cpanel__min {
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+.cpanel__min:hover { background: rgba(255, 255, 255, 0.14); }
+
+.cpanel__round {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  padding: 2px 0 4px;
+}
+.cpanel__round input { position: absolute; opacity: 0; pointer-events: none; }
+.cpanel__round .cb {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+.cpanel__round input:checked + .cb { background: #fff; border-color: #fff; }
+.cpanel__round input:checked + .cb::after {
+  content: "";
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid #111;
+  border-bottom: 2px solid #111;
+  transform: rotate(-45deg) translate(0.5px, -1px);
+}
+
+.cpanel__sec {
+  margin: 16px 0 8px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.cpts {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.cpts li {
+  position: relative;
+  padding-left: 12px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+}
+.cpts li::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 7px;
+  width: 4px;
+  height: 4px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.28);
+}
+.cpanel__keys { display: flex; flex-direction: column; gap: 8px; margin: 0 -8px; }
+.ckey { padding: 8px 8px 10px; border-radius: 14px; transition: background 200ms ease; }
+.ckey.go { cursor: pointer; }
+.ckey.go:hover { background: rgba(255, 255, 255, 0.05); }
+.ckey__row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+.ckey .key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  /* the bottom bevel eats 3px of the cap face: pad so the letter
+     centres on the face, not the full box */
+  padding: 0 0 3px;
+  border-radius: 9px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.07));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.55),
+    0 2px 5px rgba(0, 0, 0, 0.45);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex: none;
+}
+.ckey .key + .key { margin-left: -6px; } /* arrow pair sits close */
+.ckey .name { font-size: 13px; font-weight: 500; color: rgba(255, 255, 255, 0.85); }
+.ckey .cpts { padding-left: 52px; }
+
+/* only the CURRENT screen's block expands, pink, with its steps;
+   the rest stay compact key + name rows */
+.ckey:not(.cur) .cpts { display: none; }
+.ckey:not(.cur) .ckey__row { margin-bottom: 0; }
+.ckey.cur { background: rgba(189, 83, 234, 0.13); }
+.ckey.cur .name { color: #fff; }
+.ckey.cur .cpts li { color: rgba(255, 255, 255, 0.8); }
+.ckey.cur .cpts li::before { background: var(--eggplant-300); box-shadow: 0 0 6px rgba(189, 83, 234, 0.7); }
+
+.cpanel-pill {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2001;
+  padding: 9px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 100px;
+  background: rgba(28, 28, 30, 0.45);
+  color: rgba(255, 255, 255, 0.4);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 240ms ease, transform 320ms cubic-bezier(0.22, 1, 0.36, 1), background 160ms ease;
+}
+body:not(.cpanel-open) .cpanel-pill { opacity: 1; transform: none; pointer-events: auto; }
+.cpanel-pill:hover { background: rgba(28, 28, 30, 0.95); color: rgba(255, 255, 255, 0.85); border-color: rgba(255, 255, 255, 0.12); }
+
+/* rounded device frame: the page itself is inset 16px top and bottom
+   (real padding, so nothing is covered), and a pure-CSS corner mask
+   rounds that smaller window. The class lives on <html> and is set by
+   frame.js in <head>, so every page paints rounded from its first frame. */
+html.frame-rounded body { padding-top: 16px; padding-bottom: 16px; }
+html.frame-rounded .phone { min-height: calc(100vh - 32px); }
+html.frame-rounded::after {
+  content: "";
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 16px;
+  bottom: 16px;
+  width: 402px;
+  border-radius: 36px;
+  pointer-events: none;
+  z-index: 1999;
+  box-shadow: 0 0 0 400px #111;
+}
+
+/* the presenter chrome only fits beside the phone on a real desktop */
+@media (max-width: 1039px) { .cpanel, .cpanel-pill { display: none; } }
+
+/* ============================================================
+   Feature teasers (keys 1/2/3): a framed stage playing looping
+   slices of the prototype with a slow zooming camera.
+   ============================================================ */
+.demo-overlay {
+  position: fixed;
+  inset: 0;
+  background: #0c0c0e;
+  z-index: 3000;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.demo-overlay.on { display: flex; animation: demo-fade 320ms ease both; }
+@keyframes demo-fade { from { opacity: 0; } }
+
+.demo-stage {
+  position: relative;
+  width: 402px;
+  height: min(calc(100vh - 150px), 820px);
+  border-radius: 40px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 40px 90px rgba(0, 0, 0, 0.65);
+}
+
+.demo-cam {
+  width: 100%;
+  height: 100%;
+  transform-origin: 0 0;
+  transition: transform 1500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.demo-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* the Screen Studio mobile cursor: a soft circular touch point that
+   glides between targets and squeezes on press */
+.demo-cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 100px;
+  background: radial-gradient(circle at 38% 32%, rgba(255, 255, 255, 0.95), rgba(235, 235, 238, 0.75));
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.28),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.demo-cursor::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 100px;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.demo-cursor.press {
+  animation: demo-press 240ms cubic-bezier(0.3, 0, 0.2, 1);
+}
+@keyframes demo-press {
+  40% { scale: 0.78; }
+}

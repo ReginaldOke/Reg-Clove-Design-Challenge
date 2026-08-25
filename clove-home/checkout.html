@@ -1,0 +1,1058 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clove - Checkout</title>
+<link rel="stylesheet" href="base.css" />
+<script src="frame.js"></script>
+<link rel="stylesheet" href="checkout.css" />
+<link rel="stylesheet" href="picker.css" />
+<link rel="stylesheet" href="memory.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+<link rel="stylesheet" href="clove-ask.css" />
+<link rel="stylesheet" href="chat.css" />
+</head>
+<body class="checkout ai-thinking">
+
+<div class="ai-frame"></div>
+
+<div class="phone checkout-body">
+
+  <!-- ================= VIEW: Clove shops your list ================= -->
+  <!-- ================= VIEW: Finding stores (AI scan) ================= -->
+  <div class="co-view active" id="viewScan">
+    <div class="scan-wrap">
+      <!-- the AI swirl rides the outer edge of the screen (Figma 28005:43141) -->
+      <div class="scan-inner" id="scanInner">
+        <h1>Checking who has all 36 items…</h1>
+        <p class="scan-sub">Matching every ingredient against store catalogues near Surry Hills.</p>
+        <div class="scan-rows" id="scanRows"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="co-view" id="viewShop">
+    <div class="progress-pill-wrap">
+      <div class="progress-pill">Grocery shopping in progress</div>
+    </div>
+
+    <div class="checkout-title">
+      <a class="icon-button back" href="groceries.html" aria-label="Back">
+        <span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%) rotate(90deg)" /></span>
+      </a>
+      <div>
+        <h1>Your grocery cart</h1>
+        <p>Built from this week’s meal plan</p>
+      </div>
+    </div>
+
+    <main class="co-content">
+      <div class="cart-head shop-in">
+        <h2>In your cart <span class="count">36</span></h2>
+        <button class="view-cart">View cart <span style="font-size:12px">↗</span></button>
+      </div>
+
+<div class="cart-group shop-in">
+  <div class="cart-group__head">
+    <span class="check-badge"><span class="ico ico-16"><img src="assets/icons/check.svg" alt="" style="width:11px;height:8px" /></span></span>
+    <p class="txt">4 cloves <span class="nm">Garlic</span></p>
+    <button class="chev" aria-label="Collapse"><span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%)" /></span></button>
+  </div>
+  <div class="product-row">
+    <span class="product-row__img"><img src="assets/img/prod-garlic.png" alt="" /></span>
+    <div class="product-row__text">
+      <p class="product-row__name">Garlic Head</p>
+      <p class="product-row__price"><span class="now deal">$1.60</span><span class="was">$2.50</span><span class="unit">$1.60/ea</span></p>
+    </div>
+    <div class="product-row__acts">
+      <button class="pr-act swap" aria-label="Swap">↻</button>
+      <button class="pr-act" aria-label="Remove">🗑</button>
+    </div>
+  </div>
+</div>
+<div class="cart-group shop-in">
+  <div class="cart-group__head">
+    <span class="check-badge"><span class="ico ico-16"><img src="assets/icons/check.svg" alt="" style="width:11px;height:8px" /></span></span>
+    <p class="txt">800g <span class="nm">canned tomatoes</span></p>
+    <button class="chev" aria-label="Collapse"><span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%)" /></span></button>
+  </div>
+  <div class="product-row">
+    <span class="product-row__img"><img src="assets/img/prod-tomatoes.png" alt="" /></span>
+    <div class="product-row__text">
+      <p class="product-row__name">2x Macro Diced Italian Tomatoes</p>
+      <p class="product-row__price"><span class="now">$3.60</span><span class="unit">$1.80ea</span></p>
+    </div>
+    <div class="product-row__acts">
+      <button class="pr-act swap" aria-label="Swap">↻</button>
+      <button class="pr-act" aria-label="Remove">🗑</button>
+    </div>
+  </div>
+</div>
+<div class="cart-group shop-in">
+  <div class="cart-group__head">
+    <span class="check-badge"><span class="ico ico-16"><img src="assets/icons/check.svg" alt="" style="width:11px;height:8px" /></span></span>
+    <p class="txt">2kg <span class="nm">flour</span></p>
+    <button class="chev" aria-label="Collapse"><span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%)" /></span></button>
+  </div>
+  <div class="product-row">
+    <span class="product-row__img"><img src="assets/img/prod-flour.png" alt="" /></span>
+    <div class="product-row__text">
+      <p class="product-row__name">2x White Wings Plain Flour 1kg</p>
+      <p class="product-row__price"><span class="now">$2.50</span><span class="unit">$0.25/100g</span></p>
+    </div>
+    <div class="product-row__acts">
+      <button class="pr-act swap" aria-label="Swap">↻</button>
+      <button class="pr-act" aria-label="Remove">🗑</button>
+    </div>
+  </div>
+</div>
+<div class="cart-group shop-in">
+  <div class="cart-group__head">
+    <span class="check-badge"><span class="ico ico-16"><img src="assets/icons/check.svg" alt="" style="width:11px;height:8px" /></span></span>
+    <p class="txt">750g <span class="nm">rump steak</span></p>
+    <button class="chev" aria-label="Collapse"><span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%)" /></span></button>
+  </div>
+  <div class="product-row">
+    <span class="product-row__img"><img src="assets/img/prod-steak.png" alt="" /></span>
+    <div class="product-row__text">
+      <p class="product-row__name">Beef Rump Steak</p>
+      <p class="product-row__price"><span class="now">$7.50</span><span class="unit">$5.00/100g</span></p>
+    </div>
+    <div class="product-row__acts">
+      <button class="pr-act swap" aria-label="Swap">↻</button>
+      <button class="pr-act" aria-label="Remove">🗑</button>
+    </div>
+  </div>
+</div>
+<div class="cart-group shop-in">
+  <div class="cart-group__head">
+    <span class="check-badge"><span class="ico ico-16"><img src="assets/icons/check.svg" alt="" style="width:11px;height:8px" /></span></span>
+    <p class="txt">500g <span class="nm">lamb mince</span></p>
+    <button class="chev" aria-label="Collapse"><span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%)" /></span></button>
+  </div>
+  <div class="product-row">
+    <span class="product-row__img"><img src="assets/img/prod-lamb.png" alt="" /></span>
+    <div class="product-row__text">
+      <p class="product-row__name">Lamb Mince 500g</p>
+      <p class="product-row__price"><span class="now">$15</span><span class="unit">$5.00/100g</span></p>
+    </div>
+    <div class="product-row__acts">
+      <button class="pr-act swap" aria-label="Swap">↻</button>
+      <button class="pr-act" aria-label="Remove">🗑</button>
+    </div>
+  </div>
+</div>
+<div class="cart-group shop-in">
+  <div class="cart-group__head">
+    <span class="check-badge"><span class="ico ico-16"><img src="assets/icons/check.svg" alt="" style="width:11px;height:8px" /></span></span>
+    <p class="txt">1/2 cup <span class="nm">Olive oil</span></p>
+    <button class="chev" aria-label="Collapse"><span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%)" /></span></button>
+  </div>
+  <div class="product-row">
+    <span class="product-row__img"><img src="assets/img/prod-oliveoil.png" alt="" /></span>
+    <div class="product-row__text">
+      <p class="product-row__name">Extra Virgin Olive Oil</p>
+      <p class="product-row__price"><span class="now">$25.60</span><span class="unit">$5.00/100g</span></p>
+    </div>
+    <div class="product-row__acts">
+      <button class="pr-act swap" aria-label="Swap">↻</button>
+      <button class="pr-act" aria-label="Remove">🗑</button>
+    </div>
+  </div>
+</div>
+    </main>
+
+    <section class="summary-card">
+      <h2>Your cart is ready, checked against your pantry and this week’s plan</h2>
+      <div class="summary-cart">
+        <img src="assets/img/list-pantry.png" alt="" style="border-radius:16px" />
+        <div>
+          <p class="t1">36 items in cart</p>
+          <p class="t2">from $116.34</p>
+          <p class="t3"><span class="checkcircle-sm" style="width:16px;height:16px;border-radius:100px;background:var(--kale-300);display:inline-flex;align-items:center;justify-content:center"><span class="ico ico-12"><img src="assets/icons/check-sm.svg" alt="" style="width:8px;height:6px" /></span></span> Priced at 8 stores near you</p>
+        </div>
+      </div>
+      <div class="summary-actions">
+        <button class="btn-primary" id="compareBtn">Compare 8 ways to buy</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= VIEW: Compare ways to buy ================= -->
+  <div class="co-view" id="viewCompare">
+    <div class="compare-head">
+      <button class="icon-button back" onclick="location.href='groceries.html'" aria-label="Back">
+        <span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%) rotate(90deg)" /></span>
+      </button>
+      <div class="t">
+        <h1>36 items, 10 ways to buy</h1>
+        <p>Prices refreshed just now</p>
+      </div>
+    </div>
+
+    <button class="pick-card" id="pickCard" hidden data-note="Clove's pick card parked for now; drop the hidden attribute to bring it back">
+      <span class="eyebrow"><img src="assets/icons/clove-kale.svg" alt="" />Clove’s pick</span>
+      <p class="t1">Woolworths delivery tonight, everything in stock</p>
+      <p class="t2">Two of your items are on special this week, which puts it ahead of Coles even with the higher delivery fee. Arrives before dinner.</p>
+      <p class="t3">See the breakdown →</p>
+    </button>
+
+    <div class="mode-switch">
+      <button class="on" data-modebtn="delivery">Delivery</button>
+      <button data-modebtn="pickup">Nearby stores</button>
+    </div>
+
+    <div class="retailer-list">
+<button class="retailer-card pick" data-mode="delivery" data-retailer="Woolworths">
+  <span class="pick-tag"><img src="assets/icons/clove-kale.svg" alt="" />Clove’s pick</span>
+<span class="retailer-card__main">
+    <span class="retailer-card__logo"><img src="assets/img/logo-woolworths.png" alt="" /></span>
+    <span class="retailer-card__info">
+      <p class="retailer-card__name">Woolworths</p>
+      <p class="retailer-card__meta">Delivery today, 4–6pm</p>
+    </span>
+    <span class="retailer-card__total"><p class="p">$116.34</p></span>
+  </span>
+  <span class="retailer-card__tags">
+    <span class="rtag rtag--good">2 on special</span>
+            <span class="rtag rtag--good">Everything in stock</span>
+  </span>
+</button>
+<button class="retailer-card" data-mode="delivery" data-retailer="Coles">
+  <span class="retailer-card__main">
+    <span class="retailer-card__logo"><img src="assets/img/logo-coles.png" alt="" /></span>
+    <span class="retailer-card__info">
+      <p class="retailer-card__name">Coles</p>
+      <p class="retailer-card__meta">Delivery tomorrow, 8–10am</p>
+    </span>
+    <span class="retailer-card__total"><p class="p">$118.20</p><p class="d">+$1.86</p></span>
+  </span>
+  <span class="retailer-card__tags">
+    <span class="rtag rtag--bad">Parmesan out of stock</span>
+  </span>
+</button>
+<button class="retailer-card" data-mode="delivery" data-retailer="Milkrun">
+  <span class="retailer-card__main">
+    <span class="retailer-card__logo"><img src="assets/img/logo-milkrun.png" alt="" /></span>
+    <span class="retailer-card__info">
+      <p class="retailer-card__name">Milkrun</p>
+      <p class="retailer-card__meta">Delivery in 15 minutes</p>
+    </span>
+    <span class="retailer-card__total"><p class="p">$142.75</p><p class="d">+$26.41</p></span>
+  </span>
+  <span class="retailer-card__tags">
+    <span class="rtag rtag--info">Fastest</span>
+            <span class="rtag rtag--bad">Kale sold out</span>
+  </span>
+</button>
+<button class="retailer-card" data-mode="delivery" data-retailer="Uber Eats · IGA Surry Hills">
+  <span class="retailer-card__main">
+    <span class="retailer-card__logo"><img src="assets/img/logo-ubereats.png" alt="" /></span>
+    <span class="retailer-card__info">
+      <p class="retailer-card__name">Uber Eats · IGA Surry Hills</p>
+      <p class="retailer-card__meta">Delivery in 25 minutes</p>
+    </span>
+    <span class="retailer-card__total"><p class="p">$151.10</p><p class="d">+$34.76</p></span>
+  </span>
+  <span class="retailer-card__tags">
+    <span class="rtag rtag--warn">Smaller rice pack</span>
+  </span>
+</button>
+<button class="retailer-card pick" data-mode="pickup" data-retailer="Coles Surry Hills">
+  <span class="pick-tag"><img src="assets/icons/clove-kale.svg" alt="" />Clove’s pick</span>
+<span class="retailer-card__main">
+    <span class="retailer-card__logo"><img src="assets/img/logo-coles.png" alt="" /></span>
+    <span class="retailer-card__info">
+      <p class="retailer-card__name">Coles Surry Hills</p>
+      <p class="retailer-card__meta">1.2km away · ready in 30 mins</p>
+    </span>
+    <span class="retailer-card__total"><p class="p">$84.60</p><p class="d">−$31.74</p></span>
+  </span>
+  <span class="retailer-card__tags">
+    <span class="rtag rtag--good">Cheapest</span>
+            <span class="rtag rtag--good">Tomatoes on special</span>
+  </span>
+</button>
+<button class="retailer-card" data-mode="pickup" data-retailer="ALDI Broadway">
+  <span class="retailer-card__main">
+    <span class="retailer-card__logo"><img src="assets/img/logo-aldi.png" alt="" /></span>
+    <span class="retailer-card__info">
+      <p class="retailer-card__name">ALDI Broadway</p>
+      <p class="retailer-card__meta">2.4km away · in store only</p>
+    </span>
+    <span class="retailer-card__total"><p class="p">$92.40</p><p class="d">−$23.94</p></span>
+  </span>
+  <span class="retailer-card__tags">
+    <span class="rtag rtag--warn">2 not stocked</span>
+  </span>
+</button>
+<button class="retailer-card" data-mode="pickup" data-retailer="Woolworths Surry Hills">
+  <span class="retailer-card__main">
+    <span class="retailer-card__logo"><img src="assets/img/logo-woolworths.png" alt="" /></span>
+    <span class="retailer-card__info">
+      <p class="retailer-card__name">Woolworths Surry Hills</p>
+      <p class="retailer-card__meta">1.8km away · ready in 2 hours</p>
+    </span>
+    <span class="retailer-card__total"><p class="p">$108.30</p><p class="d">−$8.04</p></span>
+  </span>
+  <span class="retailer-card__tags">
+    <span class="rtag rtag--good">Everything in stock</span>
+  </span>
+</button>
+<button class="retailer-card" data-mode="pickup" data-retailer="Harris Farm Surry Hills">
+  <span class="retailer-card__main">
+    <span class="retailer-card__logo"><img src="assets/img/logo-harris.png" alt="" /></span>
+    <span class="retailer-card__info">
+      <p class="retailer-card__name">Harris Farm Surry Hills</p>
+      <p class="retailer-card__meta">0.8km away · in store only</p>
+    </span>
+    <span class="retailer-card__total"><p class="p">$164.20</p><p class="d">+$47.86</p></span>
+  </span>
+  <span class="retailer-card__tags">
+    <span class="rtag rtag--info">Best produce</span>
+            <span class="rtag rtag--bad">5 not stocked</span>
+  </span>
+</button>
+<button class="retailer-card" data-mode="pickup" data-retailer="IGA Surry Hills">
+  <span class="retailer-card__main">
+    <span class="retailer-card__logo"><img src="assets/img/logo-iga.svg" alt="" /></span>
+    <span class="retailer-card__info">
+      <p class="retailer-card__name">IGA Surry Hills</p>
+      <p class="retailer-card__meta">0.9km away · ready in 1 hour</p>
+    </span>
+    <span class="retailer-card__total"><p class="p">$118.90</p><p class="d">+$2.56</p></span>
+  </span>
+  <span class="retailer-card__tags">
+    <span class="rtag rtag--info">Open late</span>
+    <span class="rtag rtag--warn">3 not stocked</span>
+  </span>
+</button>
+<button class="retailer-card" data-mode="pickup" data-retailer="Maloneys Grocer Surry Hills">
+  <span class="retailer-card__main">
+    <span class="retailer-card__logo"><img src="assets/img/logo-maloneys.svg" alt="" /></span>
+    <span class="retailer-card__info">
+      <p class="retailer-card__name">Maloneys Grocer Surry Hills</p>
+      <p class="retailer-card__meta">0.4km away · in store only</p>
+    </span>
+    <span class="retailer-card__total"><p class="p">$171.40</p><p class="d">+$55.06</p></span>
+  </span>
+  <span class="retailer-card__tags">
+    <span class="rtag rtag--info">Closest</span>
+    <span class="rtag rtag--bad">6 not stocked</span>
+  </span>
+</button>
+    </div>
+  </div>
+
+  <!-- ================= VIEW: Retailer detail ================= -->
+  <div class="co-view" id="viewDetail">
+    <div class="compare-head">
+      <button class="icon-button back" data-goto="viewCompare" aria-label="Back">
+        <span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%) rotate(90deg)" /></span>
+      </button>
+      <span class="retailer-card__logo"><img src="assets/img/logo-woolworths.png" alt="" /></span>
+      <div class="t">
+        <h1>Woolworths</h1>
+        <p>Delivery today, 4–6pm</p>
+      </div>
+    </div>
+
+    <div class="detail-lines">
+<div class="line-item">
+  <span class="li-img"><img src="assets/img/prod-steak.png" alt="" /></span>
+  <div class="li-body">
+    <p class="li-name">Beef Rump Steak</p>
+    <p class="li-for">for Lamb Skewers with Spinach swap</p>
+    <span class="li-flag rtag rtag--good">On special</span>
+  </div>
+  <div class="li-price"><p class="p deal">$7.50</p><p class="was">$9.20</p></div>
+</div>
+<div class="line-item">
+  <span class="li-img"><img src="assets/img/prod-oliveoil.png" alt="" /></span>
+  <div class="li-body">
+    <p class="li-name">Extra Virgin Olive Oil</p>
+    <p class="li-for">for the pantry staples</p>
+    <span class="li-flag rtag rtag--good">On special</span>
+  </div>
+  <div class="li-price"><p class="p deal">$25.60</p><p class="was">$28.90</p></div>
+</div>
+<div class="line-item">
+  <span class="li-img"><img src="assets/img/prod-garlic.png" alt="" /></span>
+  <div class="li-body">
+    <p class="li-name">Garlic Head</p>
+    <p class="li-for">for Lentil and Beef Ragu</p>
+    
+  </div>
+  <div class="li-price"><p class="p">$1.60</p></div>
+</div>
+<div class="line-item">
+  <span class="li-img"><img src="assets/img/prod-tomatoes.png" alt="" /></span>
+  <div class="li-body">
+    <p class="li-name">2x Macro Diced Italian Tomatoes</p>
+    <p class="li-for">for Lentil and Beef Ragu</p>
+    
+  </div>
+  <div class="li-price"><p class="p">$3.60</p></div>
+</div>
+<div class="line-item">
+  <span class="li-img"><img src="assets/img/prod-lamb.png" alt="" /></span>
+  <div class="li-body">
+    <p class="li-name">Lamb Mince 500g</p>
+    <p class="li-for">for Sunday Beef Stew swap</p>
+    
+  </div>
+  <div class="li-price"><p class="p">$15.00</p></div>
+</div>
+<div class="line-item">
+  <span class="li-img"><img src="assets/img/prod-flour.png" alt="" /></span>
+  <div class="li-body">
+    <p class="li-name">2x White Wings Plain Flour 1kg</p>
+    <p class="li-for">for Iron-Rich Breakfast Jars</p>
+    
+  </div>
+  <div class="li-price"><p class="p">$2.50</p></div>
+</div>
+        <!-- the rest of the order, revealed on tap -->
+        <div class="more-list" id="moreList"><div></div></div>
+        <button class="line-item more-items" id="moreItems">
+          <p class="li-for" style="padding:0">+ 30 more items</p>
+        </button>
+    </div>
+
+    <div class="totals-card">
+      <div class="tr"><div>Subtotal</div><div class="v">$108.34</div></div>
+      <div class="tr"><div>Delivery</div><div class="v">$8.00</div></div>
+      <div class="tr grand"><div>Total</div><div class="v">$116.34</div></div>
+    </div>
+
+    <p class="clove-note">✦ Two of your items are on special this week, which is what puts this ahead of Coles even with the higher delivery fee.</p>
+
+    <div style="height:170px" id="detailSpacer"></div>
+
+    <!-- ButtonStack: find it yourself is primary, the store's own fulfilment is secondary -->
+    <div class="detail-cta">
+      <button class="btn-primary" id="findInStore">Find in store</button>
+      <button class="btn-plain" id="placeOrder">Place order · $116.34</button>
+    </div>
+  </div>
+
+  <!-- ================= VIEW: Done ================= -->
+  <div class="co-view" id="viewDone">
+    <div class="done-wrap">
+      <div class="pick-card done-card" id="doneCard">
+        <span class="eyebrow"><img src="assets/icons/clove-kale.svg" alt="" />Order placed</span>
+        <p class="t1">Woolworths is packing your order, delivery today 4–6pm</p>
+        <p class="t2">Clove will keep an eye on substitutions and let you know if anything changes before it arrives. $116.34 all up, you saved $12.40 against this week’s plan.</p>
+        <p class="t3">Track your order →</p>
+      </div>
+      <button class="clove-nudge" style="margin-top:22px" onclick="location.href='recipe.html'">
+        <span class="clove-nudge__logo"><span class="mark"><img class="logo" src="assets/icons/clove-white.svg" alt="" /><img class="spark" src="assets/icons/clove-sparkle.svg" alt="" /></span></span>
+        <span class="clove-nudge__text">
+          <span class="t">Cook tonight: Crispy Chicken Caesar Salad</span>
+          <span class="s">Everything you need is in this order</span>
+        </span>
+        <span class="clove-nudge__arrow">→</span>
+      </button>
+      <button class="start-over" onclick="location.href='index.html'">Back to Home</button>
+    </div>
+  </div>
+
+  <!-- ============ TabBar ============ -->
+  <nav class="tabbar" id="coTabbar">
+    <div class="tab-group">
+      <a class="tab-button" href="index.html" aria-label="Home">
+        <span class="ico ico-24"><img src="assets/icons/tab-house.svg" alt="" /></span>
+      </a>
+      <a class="tab-button" href="recipes.html" aria-label="Library">
+        <span class="ico ico-24"><img src="assets/icons/tab-bookmark.svg" alt="" /></span>
+      </a>
+      <a class="tab-button" href="groceries.html" aria-label="Groceries" aria-current="page">
+        <span class="ico ico-24"><img src="assets/icons/tab-basket-active.svg" alt="" /></span>
+      </a>
+      <a class="tab-button" href="plan.html" aria-label="Plan">
+        <span class="ico ico-24"><img src="assets/icons/tab-calendar.svg" alt="" /></span>
+      </a>
+    </div>
+    <button class="chat-button" aria-label="Ask Clove">
+      <span class="mark">
+        <img class="logo" src="assets/icons/clove-white.svg" alt="" />
+        <img class="spark" src="assets/icons/clove-sparkle.svg" alt="" />
+      </span>
+    </button>
+  </nav>
+
+<div class="toast" id="toast"><span class="tick">✓</span><span class="msg" id="toastMsg"></span></div>
+
+<!-- Nearby stores on a map: a little map bottom-left, tap to expand -->
+<div class="co-map-mini" id="mapMini" hidden role="button" aria-label="See nearby stores on a map">
+  <div class="co-map-mini__map" id="mapMiniCanvas"></div>
+  <span class="co-map-mini__hint">11 stores</span>
+</div>
+<div class="co-map" id="mapSheet" hidden>
+  <div class="co-map__scrim" id="mapScrim"></div>
+  <div class="co-map__sheet" role="dialog" aria-label="Nearby stores">
+    <span class="co-map__grab"></span>
+    <!-- no header, no X: the map fills the sheet; drag the top band (grabber) down to dismiss -->
+    <div class="co-map__canvas" id="mapCanvas"></div>
+    <div class="co-map__head" id="mapHead" aria-label="Drag down to close"></div>
+    <span class="co-map__chip">Surry Hills · 11 stores stock your list</span>
+    <span class="co-map__hint">Tap a store to see its prices</span>
+  </div>
+</div>
+
+<!-- Woolworths checkout handoff (Figma 26011:7619 GroceryAuth): the store's own
+     sign-in rises as a sheet inside Clove -->
+<div class="gauth" id="gauth" hidden>
+  <div class="gauth__scrim" id="gauthScrim"></div>
+  <div class="gauth__sheet" role="dialog" aria-label="Woolworths checkout">
+    <img class="gauth__shot" src="assets/img/woolies-checkout.png" alt="" />
+    <div class="gauth__bar gauth__bar--top"></div>
+    <div class="gauth__bar gauth__bar--bottom"></div>
+    <div class="gauth__head">
+      <button class="gauth__close" id="gauthClose" aria-label="Close"><span class="ico ico-24"><img src="assets/icons/x.svg" alt="" style="width:14px;height:14px" /></span></button>
+      <p>Step 1: Sign in to your account</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script src="app.js"></script>
+<script src="memory.js"></script>
+<script src="clove-ask.js"></script>
+<script src="chat.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="swap.js" defer></script>
+<script>
+  (function () {
+    var toastT;
+    function toast(msg) {
+      var t = document.getElementById("toast");
+      document.getElementById("toastMsg").textContent = msg;
+      t.classList.add("show");
+      clearTimeout(toastT);
+      toastT = setTimeout(function () { t.classList.remove("show"); }, 2200);
+    }
+
+    // Presenting shortcuts: ?view=compare|detail|done land there directly,
+    // with the scan already settled.
+    var deepView = (location.search.match(/view=(\w+)/) || [])[1] || null;
+
+    // the cart view is vestigial (the grocery list IS the cart); keep it settled
+    document.querySelectorAll("#viewShop .shop-in").forEach(function (el) { el.classList.add("in"); });
+
+    // Clove checks every store's catalogue: rows land, spinners resolve
+    // to ticks, the AI glow swirls, then the compare step takes over.
+    var STORES = [
+      ["logo-woolworths.png", "Woolworths", "36 of 36 items, everything in stock"],
+      ["logo-coles.png", "Coles", "35 of 36 items, parmesan out of stock"],
+      ["logo-aldi.png", "ALDI", "33 of 36 items"],
+      ["logo-harris.png", "Harris Farm", "34 of 36 items"],
+      ["logo-milkrun.png", "Milkrun", "36 of 36 items, fastest delivery"],
+      ["logo-ubereats.png", "Uber Eats", "IGA Surry Hills, 31 of 36 items"],
+    ];
+
+    function runScan() {
+      // the swirl rides the outer edge of the whole screen while Clove works
+      AIGlow.start();
+      // one cascade: title, then subtitle, then the store rows, so the
+      // heading never sits alone on the page
+      var inner = document.getElementById("scanInner");
+      setTimeout(function () { inner.querySelector("h1").classList.add("in"); }, 80);
+      setTimeout(function () { inner.querySelector(".scan-sub").classList.add("in"); }, 240);
+      var wrap = document.getElementById("scanRows");
+      STORES.forEach(function (s, i) {
+        var d = document.createElement("div");
+        d.className = "scan-row";
+        d.innerHTML =
+          '<span class="scan-row__logo"><img src="assets/img/' + s[0] + '" alt="" /></span>' +
+          '<div class="scan-row__text"><p class="n">' + s[1] + '</p><p class="s">Checking prices…</p></div>' +
+          '<span class="scan-row__spin"><img src="assets/icons/clove-kale.svg" alt="" /></span>';
+        wrap.appendChild(d);
+        setTimeout(function () { d.classList.add("in"); }, 400 + i * 260);
+        setTimeout(function () {
+          d.querySelector(".s").textContent = s[2];
+          var done = document.createElement("span");
+          done.className = "scan-row__done";
+          done.innerHTML = '<img src="assets/icons/check-sm.svg" alt="" />';
+          d.querySelector(".scan-row__spin").replaceWith(done);
+        }, 1900 + i * 700);
+      });
+      var total = 1900 + STORES.length * 700 + 400;
+      setTimeout(function () {
+        AIGlow.stop();
+        document.body.classList.remove("ai-thinking");
+      }, total - 400);
+      setTimeout(function () { show("viewCompare"); }, total);
+    }
+    // the values answer from the grocery list steers Clove's pick
+    var shopValue = sessionStorage.getItem("shopValue");
+    if (shopValue) {
+      var pick = document.querySelector("#pickCard .t2");
+      if (shopValue === "Low prices") pick.textContent = "You said low prices matter most, two of your items are on special here, making it the cheapest full basket delivered tonight.";
+      if (shopValue === "Quality produce") pick.textContent = "You said quality produce matters most, everything is in stock here with the freshest ratings this week, delivered tonight.";
+      if (shopValue === "Convenience") pick.textContent = "You said convenience matters most, this is the only full basket that arrives before dinner without a trip out.";
+    }
+    if (deepView) {
+      document.body.classList.remove("ai-thinking");
+    } else {
+      runScan();
+    }
+    // the values answer just given on the list lands as a memory here,
+    // while Clove is checking the stores
+    if (shopValue && sessionStorage.getItem("shopValueFresh")) {
+      sessionStorage.removeItem("shopValueFresh");
+      var budget = sessionStorage.getItem("shopBudget");
+      setTimeout(function () {
+        if (budget) {
+          // two answers, ONE toast: "2 memories added" + short summaries
+          CloveMemory.toastMany([
+            { text: "Values " + shopValue.toLowerCase(), short: "Values " + shopValue.toLowerCase() },
+            { text: "Budget: $" + budget + " a week", short: "Budget $" + budget + " a week" },
+          ]);
+        } else {
+          CloveMemory.toast("Values " + shopValue.toLowerCase(), "Shopping · saved to Clove’s memory");
+        }
+      }, 700);
+    }
+
+    // the floating summary card swipes away like the nudges do
+    (function () {
+      var sc = document.querySelector(".summary-card");
+      if (!sc) return;
+      var sy = null, dy = 0;
+      sc.addEventListener("pointerdown", function (e) {
+        if (e.target.closest("button, a")) return;
+        sy = e.clientY; dy = 0;
+        sc.setPointerCapture && sc.setPointerCapture(e.pointerId);
+      });
+      sc.addEventListener("pointermove", function (e) {
+        if (sy === null) return;
+        dy = Math.max(0, e.clientY - sy);
+        sc.style.transition = "none";
+        sc.style.transform = "translateX(-50%) translateY(" + dy + "px)";
+        sc.style.opacity = String(Math.max(0.3, 1 - dy / 260));
+      });
+      function end() {
+        if (sy === null) return;
+        sy = null;
+        sc.style.transition = "";
+        if (dy > 90) {
+          sc.style.transform = "translateX(-50%) translateY(140px)";
+          sc.style.opacity = "0";
+          sc.style.pointerEvents = "none";
+        } else {
+          sc.style.transform = "";
+          sc.style.opacity = "";
+        }
+      }
+      sc.addEventListener("pointerup", end);
+      sc.addEventListener("pointercancel", end);
+    })();
+
+    // View switching
+    function show(id) {
+      document.querySelectorAll(".co-view").forEach(function (v) { v.classList.remove("active"); });
+      var v = document.getElementById(id);
+      v.classList.remove("active"); void v.offsetWidth; // restart animation
+      v.classList.add("active");
+      window.scrollTo(0, 0);
+      document.getElementById("coTabbar").style.display =
+        (id === "viewDetail" || id === "viewDone") ? "none" : "";
+    }
+    document.querySelectorAll("[data-goto]").forEach(function (b) {
+      b.addEventListener("click", function () { show(b.dataset.goto); });
+    });
+    document.getElementById("compareBtn").addEventListener("click", function () { show("viewCompare"); });
+    document.getElementById("pickCard").addEventListener("click", function () { show("viewDetail"); });
+    /* Woolworths delivery: ordering hands over to the store's own checkout */
+    var gauth = document.getElementById("gauth");
+    function openGauth() {
+      gauth.hidden = false;
+      void gauth.offsetWidth;
+      gauth.classList.add("show");
+    }
+    function closeGauth() {
+      gauth.classList.remove("show");
+      setTimeout(function () { gauth.hidden = true; }, 480);
+    }
+    document.getElementById("gauthClose").addEventListener("click", closeGauth);
+    document.getElementById("gauthScrim").addEventListener("click", closeGauth);
+    document.getElementById("placeOrder").addEventListener("click", function () {
+      var btn = this;
+      localStorage.setItem("cloveShopped", "1"); // the recipe's next take is the leftover one
+      if (btn.dataset.mode === "delivery" && /woolworths/i.test(btn.dataset.store || "")) {
+        openGauth();
+        return;
+      }
+      localStorage.setItem("cloveOrdered", "1");
+      show("viewDone");
+    });
+    // "Find in store": Clove remembers where you shop and re-sorts the
+    // grocery list by the aisles of that store.
+    document.getElementById("findInStore").addEventListener("click", function () {
+      var find = document.getElementById("findInStore");
+      var short = find.dataset.store || "Woolies";
+      localStorage.setItem("cloveStore", short);
+      localStorage.setItem("cloveStoreName", find.dataset.storeName || "Woolworths Surry Hills");
+      localStorage.setItem("cloveShopped", "1");
+      CloveMemory.replace("Shops at ", "🛒", "Shops at " + short, "Shopping · from finding items in store");
+      sessionStorage.setItem("storeMemFresh", "1"); // the list shows the toast on landing
+      localStorage.setItem("cloveStoreOn", "1");
+      setTimeout(function () { location.href = "groceries.html?view=store"; }, 260);
+    });
+    // "+ 30 more items": the rest of the order, built on first tap
+    var MORE_ITEMS = [
+      ["woolies/g-tomatoes.jpg", "4x Gourmet Tomatoes", "for Crispy Chicken Caesar Salad", "$2.16"],
+      ["woolies/g-greenbeans.jpg", "Round Beans 350g", "for Sunday Beef Stew", "$2.42"],
+      ["woolies/g-spinach.jpg", "2x Baby Leaf Spinach 120g", "for White Beans in Olive Oil", "$5.00"],
+      ["woolies/g-mushrooms.jpg", "Mushroom Cups 200g", "for Short Rib in Red Wine", "$4.00"],
+      ["woolies/g-redonions.jpg", "2x Red Onion", "for Lamb Skewers with Spinach", "$1.66"],
+      ["woolies/g-carrots.jpg", "3x Carrots", "for Lentil and Beef Ragu", "$1.08"],
+      ["woolies/g-potatoes.jpg", "4x Brushed Potatoes", "for Sunday Beef Stew", "$3.08"],
+      ["woolies/g-kale.jpg", "Kale Bunch", "for Crispy Chicken Caesar Salad", "$2.90"],
+      ["woolies/g-chickenbreast.jpg", "RSPCA Chicken Breast Fillet 1kg", "for Lamb Skewers with Spinach", "$10.90"],
+      ["woolies/g-porkbelly.jpg", "Pork Belly 300g", "for Short Rib in Red Wine swap", "$9.30"],
+      ["woolies/g-parmesan.jpg", "Perfect Italiano Parmesan Shaved 125g", "for Crispy Chicken Caesar Salad", "$5.50"],
+      ["\u{1F95A}", "Free Range Eggs 12 pack", "for Crispy Chicken Caesar Salad", "$6.20"],
+      ["\u{1F95B}", "Greek Yoghurt 1kg", "for Iron-Rich Breakfast Jars", "$6.00"],
+      ["\u{1F9C8}", "Unsalted Butter 250g", "for the pantry staples", "$5.20"],
+      ["\u{1F95B}", "Full Cream Milk 2L", "for Iron-Rich Breakfast Jars", "$3.10"],
+      ["\u{1F9C0}", "Tasty Cheese Block 500g", "for Lamb Skewers with Spinach", "$8.50"],
+      ["\u{1F35E}", "Sourdough Loaf", "for Crispy Chicken Caesar Salad", "$5.50"],
+      ["prod-beans.png", "Four Bean Mix 420g", "for White Beans in Olive Oil", "$1.70"],
+      ["prod-chickpeas.png", "2x Chickpeas 400g", "for Lentil and Beef Ragu", "$2.40"],
+      ["prod-pasta.png", "Penne Pasta 500g", "for Lentil and Beef Ragu", "$1.80"],
+      ["\u{1F35A}", "Basmati Rice 1kg", "for Short Rib in Red Wine", "$3.50"],
+      ["\u{1F963}", "Rolled Oats 900g", "for Iron-Rich Breakfast Jars", "$3.80"],
+      ["\u{1F331}", "Chia Seeds 250g", "for Iron-Rich Breakfast Jars", "$5.50"],
+      ["\u{1F36F}", "Honey 500g", "for Iron-Rich Breakfast Jars", "$6.50"],
+      ["\u{1FAD9}", "Soy Sauce 250ml", "for Sunday Beef Stew", "$2.80"],
+      ["\u{1F33D}", "Cornflour 300g", "for Sunday Beef Stew", "$1.60"],
+      ["\u{1F336}\uFE0F", "Black Pepper Grinder", "for the pantry staples", "$3.90"],
+      ["\u{1F7E1}", "Dijon Mustard 200g", "for Crispy Chicken Caesar Salad", "$3.20"],
+      ["\u{1F41F}", "Anchovy Fillets 45g", "for Crispy Chicken Caesar Salad", "$3.50"],
+      ["\u{1F35E}", "Panko Breadcrumbs 200g", "for Crispy Chicken Caesar Salad", "$2.80"],
+    ];
+    (function () {
+      var btn = document.getElementById("moreItems");
+      var list = document.getElementById("moreList");
+      var inner = list.firstElementChild;
+      var built = false, open = false;
+      btn.addEventListener("click", function () {
+        if (!built) {
+          built = true;
+          MORE_ITEMS.forEach(function (it) {
+            var hasImg = it[0].indexOf(".") > -1;
+            var d = document.createElement("div");
+            d.className = "line-item";
+            d.innerHTML =
+              (hasImg
+                ? '<span class="li-img"><img src="assets/img/' + it[0] + '" alt="" /></span>'
+                : '<span class="li-img li-img--emoji">' + it[0] + "</span>") +
+              '<div class="li-body"><p class="li-name">' + it[1] + '</p><p class="li-for">' + it[2] + "</p></div>" +
+              '<div class="li-price"><p class="p">' + it[3] + "</p></div>";
+            inner.appendChild(d);
+          });
+        }
+        open = !open;
+        list.classList.toggle("open", open);
+        btn.querySelector(".li-for").textContent = open ? "Show fewer items" : "+ 30 more items";
+        if (open) setTimeout(function () { list.scrollIntoView({ behavior: "smooth", block: "start" }); }, 80);
+      });
+    })();
+
+    // Retailer cards → detail, with the chosen store's identity carried over
+    // (line items stay Woolworths-priced in this prototype)
+    // stores with gaps: which of the visible line items they don't carry
+    var NOT_STOCKED = {
+      "ALDI Broadway": ["2x Macro Diced Italian Tomatoes", "Lamb Mince 500g"],
+      "IGA Surry Hills": ["2x Macro Diced Italian Tomatoes"],
+      "Maloneys Grocer Surry Hills": ["2x Macro Diced Italian Tomatoes", "2x White Wings Plain Flour 1kg"],
+    };
+    function setDetailStore(name, logoSrc, meta, total, mode) {
+      document.querySelector("#viewDetail .retailer-card__logo img").src = logoSrc;
+      document.querySelector("#viewDetail .compare-head h1").textContent = name;
+      document.querySelector("#viewDetail .compare-head .t p").textContent = meta;
+      // the CTA matches how you actually get the goods from this store
+      var SHORT = { "ALDI Broadway": "ALDI", "Coles Surry Hills": "Coles", "Woolworths Surry Hills": "Woolies", "Harris Farm Surry Hills": "Harris Farm", "IGA Surry Hills": "IGA", "Maloneys Grocer Surry Hills": "Maloneys" };
+      var short = SHORT[name] || name.split(" ")[0];
+      var inStore = /in store only/i.test(meta);
+      var delivery = mode === "delivery" || (!mode && /deliver/i.test(meta));
+      var pickup = !inStore && !delivery && /ready in|pickup/i.test(meta);
+      var PROVIDER = { "Uber Eats · IGA Surry Hills": "Uber Eats" };
+      var verb = delivery ? "Order from " + (PROVIDER[name] || name) : inStore ? "View at " + short : pickup ? "Reserve pickup" : "Place order";
+      var btn = document.getElementById("placeOrder");
+      btn.textContent = verb + (total ? " · " + total : "");
+      btn.dataset.mode = delivery ? "delivery" : inStore ? "instore" : pickup ? "pickup" : "order";
+      btn.dataset.store = name;
+      // delivery: ordering IS the primary action; nearby stores: finding it
+      // yourself is primary and the store's own fulfilment is secondary
+      var find = document.getElementById("findInStore");
+      find.dataset.store = short;
+      find.dataset.storeName = name;
+      find.hidden = delivery;
+      // the list becomes this store's list (products + aisles) to shop from
+      find.textContent = "Shop this list at " + short;
+      btn.className = delivery ? "btn-primary" : "btn-plain";
+      // swap-to-substitute lives on the Woolworths order only
+      document.body.classList.toggle("woolies", /woolworths/i.test(name));
+      document.getElementById("detailSpacer").style.height = delivery ? "110px" : "170px";
+      var eyebrow = document.querySelector("#doneCard .eyebrow");
+      var t1 = document.querySelector("#doneCard .t1");
+      if (inStore) {
+        eyebrow.lastChild.textContent = "List sent";
+        t1.textContent = "Your list is ready for " + name + ", " + meta.toLowerCase();
+      } else if (pickup) {
+        eyebrow.lastChild.textContent = "Pickup reserved";
+        t1.textContent = name + " is packing your pickup, " + meta.toLowerCase();
+      } else {
+        eyebrow.lastChild.textContent = "Order placed";
+        t1.textContent = name + " is packing your order, " + meta.toLowerCase();
+      }
+      var missing = NOT_STOCKED[name] || [];
+      document.querySelectorAll("#viewDetail .line-item").forEach(function (li) {
+        var n = li.querySelector(".li-name");
+        if (!n) return;
+        var isMissing = missing.indexOf(n.textContent) > -1;
+        li.classList.toggle("oos", isMissing);
+        var flag = li.querySelector(".oos-flag");
+        if (isMissing && !flag) {
+          var s = document.createElement("span");
+          s.className = "li-flag rtag rtag--bad oos-flag";
+          s.textContent = "Not stocked here";
+          n.parentElement.appendChild(s);
+        } else if (!isMissing && flag) {
+          flag.remove();
+        }
+      });
+    }
+    document.querySelectorAll(".retailer-card").forEach(function (c) {
+      c.addEventListener("click", function () {
+        setDetailStore(
+          c.querySelector(".retailer-card__name").textContent,
+          c.querySelector(".retailer-card__logo img").src,
+          c.querySelector(".retailer-card__meta").textContent,
+          c.querySelector(".retailer-card__total .p").textContent,
+          c.dataset.mode
+        );
+        show("viewDetail");
+      });
+    });
+    // Clove's pick card always means the recommended Woolworths delivery
+    document.getElementById("pickCard").addEventListener("click", function () {
+      setDetailStore("Woolworths", "assets/img/logo-woolworths.png", "Delivery today, 4–6pm", "$116.34", "delivery");
+    });
+    // default detail = the PICKUP Woolworths (also what ?view=detail lands on),
+    // per the script: arriving here from Nearby stores plays the swipe hint
+    setDetailStore("Woolworths Surry Hills", "assets/img/logo-woolworths.png", "1.8km away · ready in 2 hours", "$108.30", "pickup");
+
+    // Mode switch filters retailer cards
+    document.querySelectorAll("[data-modebtn]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        document.querySelectorAll("[data-modebtn]").forEach(function (x) { x.classList.remove("on"); });
+        b.classList.add("on");
+        var mode = b.dataset.modebtn;
+        document.querySelectorAll(".retailer-card").forEach(function (c, i) {
+          var showIt = c.dataset.mode === mode;
+          c.style.display = showIt ? "" : "none";
+          if (showIt) { c.style.animation = "none"; void c.offsetWidth; c.style.animation = ""; }
+        });
+      });
+    });
+    // initial filter
+    document.querySelectorAll('.retailer-card[data-mode="pickup"]').forEach(function (c) { c.style.display = "none"; });
+
+    /* ---- Nearby stores on a map (Leaflet, CARTO light tiles) ---- */
+    (function () {
+      if (!window.L) return; // offline: no map, the cards still work
+      var PINS = [
+        { name: "Coles Surry Hills", logo: "logo-coles.png", price: "$84.60", lat: -33.8862, lng: 151.2132, side: "right" },
+        { name: "ALDI Broadway", logo: "logo-aldi.png", price: "$92.40", lat: -33.8838, lng: 151.1947, side: "right" },
+        { name: "Woolworths Surry Hills", logo: "logo-woolworths.png", price: "$108.30", lat: -33.8912, lng: 151.2098, side: "left" },
+        { name: "Harris Farm Surry Hills", logo: "logo-harris.png", price: "$164.20", lat: -33.8822, lng: 151.2178, side: "left" },
+        // further out, still stocking the list (no detail card: informational pins)
+        { name: "Coles Broadway", logo: "logo-coles.png", price: "$86.10", lat: -33.8868, lng: 151.1952, side: "right", info: true },
+        { name: "Woolworths Metro Redfern", logo: "logo-woolworths.png", price: "$111.90", lat: -33.8955, lng: 151.2030, side: "right", info: true },
+        { name: "ALDI Waterloo", logo: "logo-aldi.png", price: "$93.80", lat: -33.8984, lng: 151.2092, side: "right", info: true },
+        { name: "Woolworths Metro Darlinghurst", logo: "logo-woolworths.png", price: "$112.40", lat: -33.8786, lng: 151.2204, side: "left", info: true },
+        { name: "Coles Town Hall", logo: "logo-coles.png", price: "$85.90", lat: -33.8728, lng: 151.2066, side: "right", info: true },
+        { name: "IGA Surry Hills", logo: "logo-iga.svg", price: "$118.90", lat: -33.8906, lng: 151.2198, side: "left" },
+        { name: "Maloneys Grocer Surry Hills", logo: "logo-maloneys.svg", price: "$171.40", lat: -33.8886, lng: 151.2130, side: "left" },
+      ];
+      var TILES = "https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}{r}.png";
+      var mini = document.getElementById("mapMini");
+      var sheet = document.getElementById("mapSheet");
+      var miniMap = null, bigMap = null;
+      function pinHTML(p, small) {
+        return '<span class="co-pin' + (p.pick ? " co-pin--pick" : "") + (small ? " co-pin--mini" : "") + (p.side === "left" ? " co-pin--left" : "") + '">' +
+          '<span class="co-pin__logo"><img src="assets/img/' + p.logo + '" alt="" /></span>' +
+          '<span class="co-pin__label"><span>' + p.price + "</span></span></span>"; // price only: names cluttered the map
+      }
+      function addPins(map, small) {
+        PINS.forEach(function (p) {
+          var m = L.marker([p.lat, p.lng], { icon: L.divIcon({ className: "co-pin-wrap", html: pinHTML(p, small), iconSize: [small ? 22 : 32, small ? 22 : 32], iconAnchor: [small ? 11 : 16, small ? 11 : 16] }), keyboard: false });
+          m.addTo(map);
+          if (!small) m.on("click", function () {
+            // the pin opens that store's prices (stores without a card just bob)
+            var card = document.querySelector('.retailer-card[data-retailer="' + p.name + '"]');
+            if (!card) {
+              var el = m.getElement && m.getElement();
+              if (el) el.firstElementChild.animate([{ transform: "translateY(0)" }, { transform: "translateY(-6px)" }, { transform: "translateY(0)" }], { duration: 360, easing: "ease-out" });
+              return;
+            }
+            closeMap();
+            setTimeout(function () { card.click(); }, 320);
+          });
+        });
+      }
+      function bounds() { return L.latLngBounds(PINS.map(function (p) { return [p.lat, p.lng]; })); }
+      function ensureMini() {
+        if (miniMap) return;
+        miniMap = L.map("mapMiniCanvas", { zoomControl: false, attributionControl: false, dragging: false, scrollWheelZoom: false, doubleClickZoom: false, touchZoom: false, boxZoom: false, keyboard: false, tap: false });
+        L.tileLayer(TILES, { style: "light_nolabels", subdomains: "abcd", maxZoom: 19 }).addTo(miniMap);
+        addPins(miniMap, true);
+        miniMap.fitBounds(bounds(), { padding: [12, 12] });
+      }
+      function showMini(on) {
+        if (on) {
+          mini.hidden = false;
+          ensureMini();
+          setTimeout(function () { miniMap.invalidateSize(); miniMap.fitBounds(bounds(), { padding: [12, 12] }); }, 30);
+          void mini.offsetWidth;
+          setTimeout(function () { mini.classList.add("in"); }, 120);
+        } else {
+          mini.classList.remove("in");
+          setTimeout(function () { if (!mini.classList.contains("in")) mini.hidden = true; }, 300);
+        }
+      }
+      var sheetEl = sheet.querySelector(".co-map__sheet");
+      // the sheet GROWS out of the little map (FLIP from the mini's rect) and
+      // shrinks back into it when dismissed
+      function growFromMini() {
+        var m = mini.getBoundingClientRect(), t = sheetEl.getBoundingClientRect();
+        sheetEl.style.transformOrigin = "0 0";
+        sheetEl.style.transition = "none";
+        var from = "translate(" + (m.left - t.left) + "px," + (m.top - t.top) + "px) scale(" + (m.width / t.width) + "," + (m.height / t.height) + ")";
+        return sheetEl.animate(
+          [{ transform: from, borderRadius: "16px", opacity: 0.6 }, { transform: "none", borderRadius: "32px", opacity: 1 }],
+          { duration: 560, easing: "cubic-bezier(0.2, 0.85, 0.25, 1)" }
+        );
+      }
+      function shrinkToMini(fromTransform) {
+        var m = mini.getBoundingClientRect(), t = sheetEl.getBoundingClientRect();
+        // measure against the untransformed sheet (rect is affected by any drag offset)
+        var dy = fromTransform ? parseFloat((fromTransform.match(/translateY\(([-\d.]+)px\)/) || [0, 0])[1]) : 0;
+        var to = "translate(" + (m.left - t.left) + "px," + (m.top - (t.top - dy)) + "px) scale(" + (m.width / t.width) + "," + (m.height / t.height) + ")";
+        sheetEl.style.transformOrigin = "0 0";
+        sheetEl.style.transition = "none";
+        return sheetEl.animate(
+          [{ transform: fromTransform || "none", borderRadius: "32px", opacity: 1 }, { transform: to, borderRadius: "16px", opacity: 0 }],
+          { duration: 420, easing: "cubic-bezier(0.4, 0, 0.6, 1)" }
+        );
+      }
+      function openMap() {
+        sheet.hidden = false;
+        void sheet.offsetWidth;
+        sheet.classList.add("show");
+        growFromMini();
+        if (!bigMap) {
+          bigMap = L.map("mapCanvas", { zoomControl: false, attributionControl: false });
+          L.tileLayer(TILES, { style: "light_all", subdomains: "abcd", maxZoom: 19 }).addTo(bigMap);
+          addPins(bigMap, false);
+          // keep the page's drag-to-scroll out of the map
+          ["pointerdown", "pointermove", "pointerup"].forEach(function (ev) {
+            document.getElementById("mapCanvas").addEventListener(ev, function (e) { e.stopPropagation(); });
+          });
+        }
+        setTimeout(function () { bigMap.invalidateSize(); bigMap.fitBounds(bounds(), { padding: [36, 36], maxZoom: 15 }); }, 560);
+      }
+      function closeMap(fromTransform) {
+        if (sheet.hidden) return;
+        if (typeof fromTransform !== "string") fromTransform = null; // a click event, not a transform
+        sheet.classList.add("closing");
+        shrinkToMini(fromTransform).onfinish = function () {
+          sheet.classList.remove("show", "closing");
+          sheet.hidden = true;
+          sheetEl.style.transform = "";
+          sheetEl.style.transition = "";
+        };
+        // the scrim lets go straight away
+        document.getElementById("mapScrim").style.opacity = "";
+      }
+      mini.addEventListener("click", openMap);
+      document.getElementById("mapScrim").addEventListener("click", closeMap);
+      // swipe the header down to dismiss: the sheet follows the finger, then
+      // either leaves or springs back (the map keeps its own drag for panning)
+      (function () {
+        var head = document.getElementById("mapHead");
+        var sy = 0, dy = 0, t0 = 0, dragging = false;
+        head.addEventListener("pointerdown", function (e) {
+          e.stopPropagation();
+          dragging = true; sy = e.clientY; dy = 0; t0 = e.timeStamp;
+          sheetEl.style.transition = "none";
+          try { head.setPointerCapture(e.pointerId); } catch (err) {}
+        });
+        head.addEventListener("pointermove", function (e) {
+          if (!dragging) return;
+          e.stopPropagation(); e.preventDefault();
+          dy = Math.max(0, e.clientY - sy);
+          sheetEl.style.transform = "translateY(" + dy + "px)";
+          document.getElementById("mapScrim").style.opacity = String(Math.max(0.2, 1 - dy / 420));
+        });
+        function end(e) {
+          if (!dragging) return;
+          dragging = false;
+          var fast = dy > 30 && (e.timeStamp - t0) < 260;
+          sheetEl.style.transition = "";
+          document.getElementById("mapScrim").style.opacity = "";
+          if (dy > 110 || fast) {
+            // shrinks back into the little map from where the finger left it
+            var cur = "translateY(" + dy + "px)";
+            sheetEl.style.transform = "";
+            closeMap(cur);
+          } else {
+            // springs back to the open position
+            var back = dy;
+            sheetEl.style.transform = "";
+            sheetEl.animate([{ transform: "translateY(" + back + "px)" }, { transform: "none" }], { duration: 420, easing: "cubic-bezier(0.22, 1.2, 0.36, 1)" });
+          }
+          dy = 0;
+        }
+        head.addEventListener("pointerup", end);
+        head.addEventListener("pointercancel", end);
+        head.addEventListener("touchmove", function (e) { if (dragging) e.preventDefault(); }, { passive: false });
+      })();
+      // the little map belongs to the Nearby stores tab of the compare view
+      function sync() {
+        var compare = document.getElementById("viewCompare").classList.contains("active");
+        var nearby = !!document.querySelector('[data-modebtn="pickup"].on');
+        showMini(compare && nearby);
+      }
+      document.querySelectorAll("[data-modebtn]").forEach(function (b) { b.addEventListener("click", function () { setTimeout(sync, 0); }); });
+      var obs = new MutationObserver(sync);
+      document.querySelectorAll(".co-view").forEach(function (v) { obs.observe(v, { attributes: true, attributeFilter: ["class"] }); });
+      sync();
+    })();
+
+    // ?tab=pickup lands on the Nearby stores tab (e.g. from the list's store pencil)
+    if (/[?&]tab=pickup/.test(location.search)) { var pb = document.querySelector('[data-modebtn="pickup"]'); if (pb) pb.click(); }
+    if (deepView === "compare") show("viewCompare");
+    else if (deepView === "detail") show("viewDetail");
+    else if (deepView === "done") { localStorage.setItem("cloveOrdered", "1"); show("viewDone"); }
+
+    // Swap: Clove thinks briefly, then confirms
+    document.querySelectorAll(".pr-act.swap").forEach(function (b) {
+      b.addEventListener("click", function () {
+        document.body.classList.add("ai-thinking");
+        setTimeout(function () {
+          document.body.classList.remove("ai-thinking");
+          toast("Swapped to the best-value option");
+        }, 1600);
+      });
+    });
+  })();
+</script>
+</body>
+</html>

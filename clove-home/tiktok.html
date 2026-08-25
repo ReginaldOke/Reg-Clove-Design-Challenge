@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clove - Save from TikTok</title>
+<link rel="stylesheet" href="base.css" />
+<script src="frame.js"></script>
+<link rel="stylesheet" href="memory.css" />
+<link rel="stylesheet" href="tiktok.css" />
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ============ TikTok player (kit: 28056:49274) ============ -->
+  <div class="tk">
+    <img class="tk__video" src="assets/img/recipe-video.jpg" alt="" />
+    <div class="tk__scrim"></div>
+
+    <div class="tk__status"><span class="tm">9:41</span><span class="ic">▪▪▪ ⌁ ▆</span></div>
+    <div class="tk__top"><span class="dim">Following</span><span class="bar"></span><span class="on">For You</span></div>
+
+    <div class="tk__rail">
+      <span class="tk__creator">
+        <img src="assets/img/avatar-creator.png" alt="" />
+        <img class="plus" src="assets/tk/plus-badge.svg" alt="" />
+      </span>
+      <button class="tk__act">
+        <img src="assets/tk/like.svg" alt="" style="width:33px" />
+        <span>32.3K</span>
+      </button>
+      <button class="tk__act">
+        <img src="assets/tk/comment.svg" alt="" style="width:33px" />
+        <span>258</span>
+      </button>
+      <button class="tk__act" id="tkShare">
+        <img src="assets/tk/arrow.svg" alt="" style="width:33px" />
+        <span>Share</span>
+      </button>
+      <span class="tk__record"><img src="assets/tk/record.png" alt="" /></span>
+    </div>
+
+    <div class="tk__caption">
+      <p class="who">@mealswithmaddie</p>
+      <p class="c">The most satisfying crispy chicken caesar salad 🥗🧀 <b>#fyp</b> <b>#caesarsalad</b> <b>#highprotein</b></p>
+      <p class="snd">♫ original sound - mealswithmaddie</p>
+    </div>
+
+    <img class="tk__nav" src="assets/tk/navbar.png" alt="" />
+  </div>
+
+  <!-- ============ scrims + sheets ============ -->
+  <div class="sheet-scrim" id="scrim"></div>
+
+  <!-- TikTok share sheet (kit: 28056:49161) -->
+  <div class="sheet tksheet" id="tkSheet">
+    <p class="tksheet__title">Share to</p>
+    <div class="tksheet__row rail">
+      <button class="tka"><img src="assets/tk/app1.png" alt="" /><span>WhatsApp</span></button>
+      <button class="tka"><img src="assets/tk/app3.png" alt="" /><span>Message</span></button>
+      <button class="tka"><img src="assets/tk/app4.png" alt="" /><span>SMS</span></button>
+      <button class="tka"><img src="assets/tk/app5.png" alt="" /><span>Messenger</span></button>
+      <button class="tka"><span class="tka__c"><img src="assets/tk/app6.png" alt="" /></span><span>Instagram</span></button>
+      <button class="tka" id="tkMore"><span class="more-c">•••</span><span>More</span></button>
+    </div>
+    <div class="tksheet__row rail">
+      <button class="tka"><img src="assets/tk/act1.png" alt="" /><span>Report</span></button>
+      <button class="tka"><img src="assets/tk/act2.png" alt="" /><span>Not interested</span></button>
+      <button class="tka"><img src="assets/tk/act3.png" alt="" /><span>Save video</span></button>
+      <button class="tka"><img src="assets/tk/act4.png" alt="" /><span>Duet</span></button>
+      <button class="tka"><img src="assets/tk/act5.png" alt="" /><span>React</span></button>
+      <button class="tka"><img src="assets/tk/act6.png" alt="" /><span>Add to Favorites</span></button>
+    </div>
+    <button class="tksheet__cancel" data-close>Cancel</button>
+    <div class="tksheet__home"></div>
+  </div>
+
+  <!-- iOS share sheet -->
+  <div class="sheet iosheet" id="iosSheet">
+    <div class="iosheet__card">
+      <div class="iosheet__site">
+        <span class="fav">🧭</span>
+        <span class="url">vt.tiktok.com</span>
+        <span class="shareplay">
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#fff"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg>
+          SharePlay
+        </span>
+      </div>
+      <!-- app icons per Figma 28060:50077, plus the Clove tile -->
+      <div class="iosheet__apps rail">
+        <button class="iapp"><span class="tile ios"><img class="bleed" src="assets/tk/ios-message.svg" alt="" /></span><span>Message</span></button>
+        <button class="iapp"><span class="tile ios"><img class="bleed" src="assets/tk/ios-mail.svg" alt="" /></span><span>Mail</span></button>
+        <button class="iapp"><span class="tile ios"><img src="assets/tk/ios-messenger.svg" alt="" /></span><span>Messenger</span></button>
+        <!-- Clove app icon (Figma 12918:47990 Logo/Light): kale tile, kale-100 flower -->
+        <button class="iapp" id="iosClove"><span class="tile clove">
+          <img src="assets/icons/clove-kale-100.svg" alt="" />
+        </span><span>Clove</span></button>
+      </div>
+      <div class="iosheet__acts rail">
+        <div class="iact"><span class="c">⧉</span><span>Copy</span></div>
+        <div class="iact"><span class="c">▤</span><span>Add to New Quick Note</span></div>
+        <div class="iact"><span class="c">≣</span><span>Save to Ideas</span></div>
+        <div class="iact"><span class="c">⌄</span><span>View More</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clove import sheet, same design language as the app -->
+  <div class="sheet clsheet" id="cloveSheet">
+    <div class="clsheet__grab"></div>
+    <div class="clsheet__head">
+      <span class="t">Import recipe</span>
+      <button class="ok" data-close><span class="ico ico-24"><img src="assets/icons/check.svg" alt="" style="width:14px;height:10px;filter:invert(1)" /></span></button>
+    </div>
+
+    <!-- save progress, fills while the recipe imports -->
+    <div class="clsheet__bar"><i id="clBar"></i></div>
+
+    <div class="clsheet__body">
+      <div class="clsheet__status">
+        <img src="assets/img/clove-logo.png" alt="" style="mix-blend-mode:multiply" />
+        <span id="clStatus">Saving recipe</span>
+      </div>
+
+      <!-- memories land here, one by one, while the recipe saves -->
+      <div class="clsheet__mems" id="clMems" hidden>
+        <p class="label">2 new memories</p>
+      </div>
+
+      <!-- anchored to the bottom of the region, just above the CTAs -->
+      <div class="clsheet__found" id="clFound">
+        <img src="assets/img/recipe-video.jpg" alt="" />
+        <div>
+          <p class="t1">Crispy Chicken Caesar Salad</p>
+          <p class="t2">@mealswithmaddie · 8 ingredients · 25 min</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ButtonStack · 28005:32566 -->
+    <div class="clsheet__cta">
+      <button class="btn-plain">Import another</button>
+      <button class="btn-primary" id="openInClove" style="width:100%;height:48px;border:none;border-radius:100px;background:var(--kale-500);color:var(--white);font-family:inherit;font-size:16px;font-weight:500;line-height:1.6;cursor:pointer">Open recipe in Clove</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script src="memory.js"></script>
+<script>
+  (function () {
+    var scrim = document.getElementById("scrim");
+    var sheets = {
+      tk: document.getElementById("tkSheet"),
+      ios: document.getElementById("iosSheet"),
+      clove: document.getElementById("cloveSheet"),
+    };
+
+    function open(name) {
+      Object.keys(sheets).forEach(function (k) { sheets[k].classList.toggle("on", k === name); });
+      scrim.classList.toggle("on", !!name);
+    }
+
+    document.getElementById("tkShare").addEventListener("click", function () { open("tk"); });
+    document.getElementById("tkMore").addEventListener("click", function () { open("ios"); });
+
+    // Swipe a sheet down to dismiss it; horizontal swipes stay with the rails.
+    Object.keys(sheets).forEach(function (k) {
+      var sh = sheets[k];
+      var sy = null, sx = null, dy = 0, grabbing = false;
+      sh.addEventListener("pointerdown", function (e) {
+        if (!sh.classList.contains("on")) return;
+        sy = e.clientY; sx = e.clientX; dy = 0; grabbing = false;
+      });
+      sh.addEventListener("pointermove", function (e) {
+        if (sy === null) return;
+        dy = e.clientY - sy;
+        var dx = e.clientX - sx;
+        if (!grabbing) {
+          if (Math.abs(dx) > Math.abs(dy) || dy < 10) return; // horizontal or tiny: not a sheet drag
+          grabbing = true;
+          sh.setPointerCapture && sh.setPointerCapture(e.pointerId);
+          sh.style.transition = "none";
+        }
+        sh.style.transform = "translateY(" + Math.max(0, dy) + "px)";
+      });
+      function endDrag() {
+        if (sy === null) return;
+        sy = null;
+        if (!grabbing) return;
+        grabbing = false;
+        sh.style.transition = "";
+        if (dy > 90) open(null); // past the commit point: let it go
+        // clear the inline offset next frame so it animates from where it was
+        requestAnimationFrame(function () { sh.style.transform = ""; });
+      }
+      sh.addEventListener("pointerup", endDrag);
+      sh.addEventListener("pointercancel", endDrag);
+    });
+    scrim.addEventListener("click", function () { open(null); });
+    document.querySelectorAll("[data-close]").forEach(function (b) {
+      b.addEventListener("click", function () { open(null); });
+    });
+
+    // Memories stack inside the sheet while the recipe saves,
+    // onboarding inferred from behaviour, done in idle time.
+    var MEMS = [
+      ["📱", "Finds recipes on TikTok", "Habit · noticed from this save"],
+      ["💪", "Quick, high-protein meals", "Goal · inferred while saving"],
+    ];
+
+    function landMemory(i) {
+      var m = MEMS[i];
+      CloveMemory.add(m[0], m[1], m[2]);
+      var wrap = document.getElementById("clMems");
+      wrap.hidden = false;
+      var d = document.createElement("div");
+      d.className = "memory-pill";
+      // same simple one-line format as the floating toast: light "Memory:"
+      // label, the fact itself bold
+      d.innerHTML =
+        '<span class="mem-toast__spark"><img src="assets/icons/clove-sparkle.svg" alt="" /></span>' +
+        '<span class="mem-toast__text"><b><span class="pfx">Memory: </span>' + m[1] + "</b></span>" +
+        '<a class="mem-toast__edit" href="profile.html">Edit</a>';
+      wrap.appendChild(d);
+      d.animate(
+        [{ opacity: 0, transform: "translateY(12px) scale(0.97)" }, { opacity: 1, transform: "none" }],
+        { duration: 420, easing: "cubic-bezier(0.22, 1.2, 0.36, 1)" }
+      );
+    }
+
+    function startImport() {
+      open("clove");
+      var status = document.getElementById("clStatus");
+      var bar = document.getElementById("clBar");
+      // the bar makes steady progress while memories land, then completes
+      bar.style.transition = "width 4300ms cubic-bezier(0.25, 0.6, 0.4, 0.9)";
+      void bar.offsetWidth; // commit the zero-width start before growing
+      bar.style.width = "86%";
+      // memories start landing almost as soon as the import begins
+      // a clear beat between them, so each one registers on its own
+      setTimeout(function () { landMemory(0); }, 600);
+      setTimeout(function () { landMemory(1); }, 2800);
+      setTimeout(function () {
+        status.textContent = "Recipe saved";
+        bar.style.transition = "width 320ms ease";
+        bar.style.width = "100%";
+        sheets.clove.classList.add("saved");
+        var f = document.getElementById("clFound");
+        f.classList.add("show");
+        f.animate(
+          [{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }],
+          { duration: 420, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+        );
+      }, 4700);
+    }
+    document.getElementById("iosClove").addEventListener("click", startImport);
+
+    document.getElementById("openInClove").addEventListener("click", function () {
+      location.href = "recipe.html?saved=1";
+    });
+
+    // presenting deep links (arrow-key flow navigation)
+    var step = (location.search.match(/step=(\w+)/) || [])[1];
+    if (step === "share") open("tk");
+    else if (step === "ios") open("ios");
+    else if (step === "import") startImport();
+  })();
+</script>
+</body>
+</html>

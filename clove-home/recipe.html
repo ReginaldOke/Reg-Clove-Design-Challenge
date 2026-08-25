@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clove - Recipe</title>
+<link rel="stylesheet" href="base.css" />
+<script src="frame.js"></script>
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="recipe.css" />
+<link rel="stylesheet" href="memory.css" />
+<link rel="stylesheet" href="picker.css" />
+<link rel="stylesheet" href="clove-ask.css" />
+<link rel="stylesheet" href="chat.css" />
+<link rel="stylesheet" href="voice.css" />
+<link rel="stylesheet" href="goals.css" />
+</head>
+<body>
+
+<div class="phone">
+  <!-- ============ Video hero ============ -->
+  <div class="video-hero">
+    <img class="poster" src="assets/img/recipe-video.jpg" alt="" />
+    <div class="video-hero__scrim-top"></div>
+    <button class="video-hero__play" aria-label="Play"></button>
+    <div class="video-hero__dots"><i class="on"></i><i></i><i></i></div>
+    <div class="float-nav">
+      <a class="float-btn" href="recipes.html" aria-label="Back">
+        <span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%) rotate(90deg)" /></span>
+      </a>
+      <div class="float-nav__group">
+        <button class="float-btn" aria-label="Save">
+          <span class="ico ico-24"><img src="assets/icons/bookmark-btn.svg" alt="" style="width:16px;height:20px" /></span>
+        </button>
+        <button class="float-btn" aria-label="More">
+          <span class="ico ico-24"><img src="assets/icons/more-h.svg" alt="" /></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Summary ============ -->
+  <section class="recipe-summary">
+    <div class="recipe-head">
+      <div class="user-chip">
+        <span class="src"><img src="assets/icons/tiktok.svg" alt="" /></span>
+        <p>Maddie</p>
+      </div>
+      <h1>Crispy Chicken Caesar Salad</h1>
+      <div class="recipe-meta">
+        <span><span class="v">10m</span><span class="k">Prep</span></span>
+        <span><span class="v">15m</span><span class="k">Cook</span></span>
+        <span><span class="v">25m</span><span class="k">Total</span></span>
+      </div>
+    </div>
+
+    <div class="recipe-actions">
+      <button class="pill-btn">
+        <span class="ico ico-24"><img src="assets/icons/basket-24.svg" alt="" /></span>
+        <span>Groceries</span>
+      </button>
+      <button class="pill-btn">
+        <span class="ico ico-24"><img src="assets/icons/folder-search.svg" alt="" /></span>
+        <span>Collection</span>
+      </button>
+    </div>
+
+    <!-- in-UI meal-plan entry under the actions (Figma 28063:51946);
+         starts hidden so it can never flash before syncPlanBanner() runs -->
+    <button class="ai-card" id="planBanner" hidden>
+      <span class="ai-card__clove"><span class="mark"><img class="logo" src="assets/icons/clove-white.svg" alt="" /><img class="spark" src="assets/icons/clove-sparkle.svg" alt="" /></span></span>
+      <span class="ai-card__text">
+        <span class="t">Plan meals to hit your iron goal</span>
+        <span class="s">Health goal: Iron</span>
+      </span>
+    </button>
+
+    <div class="nutrition">
+      <button aria-label="Calculate nutrition"><img src="assets/img/nutrition-block.png" alt="Calculate nutrition" /></button>
+    </div>
+
+    <p class="recipe-desc">This recipe features a crispy, pan-fried chicken cutlet topped with a fresh Caesar salad, offering a lighter yet satisfying twist on the classic chicken Caesar.</p>
+  </section>
+
+  <!-- ============ Twists ============ -->
+  <section class="recipe-section">
+    <div class="recipe-section__head">
+      <div class="ttl">
+        <span class="ico ico-24"><img src="assets/icons/sparkles.svg" alt="" /></span>
+        <span>Twists</span>
+      </div>
+    </div>
+    <div class="rail twists-rail" style="margin-top:12px">
+      <div class="rail__strip">
+<button class="twist twist--protein">
+  <span class="twist__icon twist__icon--protein">
+          <img class="base" src="assets/icons/twist-protein.svg" alt="" />
+          <span class="twist__ring">
+            <span class="arc arc--track"><img src="assets/icons/twist-protein-e330.svg" alt="" /></span>
+            <span class="arc arc--fill"><img src="assets/icons/twist-protein-e339.svg" alt="" /></span>
+            <img class="glyph" src="assets/icons/twist-biceps.svg" alt="" />
+          </span>
+        </span>
+  <p>Make this recipe higher protein</p>
+</button>
+<button class="twist twist--healthy">
+  <span class="twist__icon twist__icon--heart">
+          <img class="base" src="assets/icons/twist-healthy.svg" alt="" />
+          <img class="inner" src="assets/icons/twist-healthy-e2.svg" alt="" />
+          <span class="emoji">❤️</span>
+        </span>
+  <p>Make this recipe healthier</p>
+</button>
+      <button class="twist twist--salad">
+        <span class="twist__icon twist__icon--art"><img src="assets/icons/twist-salad.svg" alt="" /></span>
+        <p>Make this recipe with ingredients I have</p>
+      </button>
+      <button class="twist twist--simpler">
+        <span class="twist__icon twist__icon--art"><img src="assets/icons/twist-emulsification.svg" alt="" /></span>
+        <p>Make this recipe simpler</p>
+      </button>
+      <button class="twist twist--substitute">
+        <span class="twist__icon twist__icon--art"><img src="assets/icons/twist-refresh.svg" alt="" /></span>
+        <p>Substitute an ingredient I don’t have</p>
+      </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Ingredients ============ -->
+  <section class="recipe-section" id="ingSection">
+    <div class="recipe-section__head">
+      <div class="ttl"><span>Ingredients</span><span class="count">8</span><span class="ai-tag" id="ingAiTag" hidden>✦ Higher iron</span></div>
+      <button class="collapse" aria-label="Collapse">
+        <span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%)" /></span>
+      </button>
+    </div>
+
+    <div class="serves-row">
+      <div class="stepper">
+        <button aria-label="Fewer"><span class="ico ico-24"><img src="assets/icons/minus.svg" alt="" style="width:16px;height:2px" /></span></button>
+        <span class="val">6 serves</span>
+        <button aria-label="More"><span class="ico ico-24"><img src="assets/icons/add.svg" alt="" style="width:13.7px;height:13.7px" /></span></button>
+      </div>
+      <button class="convert-btn">
+        <span class="ico ico-24"><img src="assets/icons/scale.svg" alt="" style="width:22px;height:20px" /></span>
+        <span>Convert</span>
+      </button>
+    </div>
+
+<!-- pro banner removed -->
+
+    <div class="ing-list">
+<div class="ing-row" data-h-qty="2 cups " data-h-nm="baby spinach" data-h-note=" instead of cos lettuce">
+  <div class="ing-row__check"><button class="checkcircle" aria-label="Check"></button></div>
+  <p class="ing-row__text"><span class="qty">1 </span><span class="nm">cos lettuce</span><span class="note"> washed and torn</span></p>
+  <div class="ing-row__acts">
+      <button class="icon-button" aria-label="Swap"><span class="ico ico-24"><img src="assets/icons/shuffle.svg" alt="" style="width:22px;height:22px" /></span></button>
+            <button class="addcirc" aria-label="Add to groceries"><span class="c"><span class="ico ico-16"><img src="assets/icons/add-16-dark.svg" alt="" style="width:10.6px;height:10.6px" /></span></span></button>
+  </div>
+</div>
+<div class="ing-row">
+  <div class="ing-row__check"><button class="checkcircle" aria-label="Check"></button></div>
+  <p class="ing-row__text"><span class="qty">2 </span><span class="nm">chicken breasts</span><span class="note"> crumbed and pan-fried</span></p>
+  <div class="ing-row__acts">
+      <button class="icon-button" aria-label="Swap"><span class="ico ico-24"><img src="assets/icons/shuffle.svg" alt="" style="width:22px;height:22px" /></span></button>
+            <button class="addcirc" aria-label="Add to groceries"><span class="c"><span class="ico ico-16"><img src="assets/icons/add-16-dark.svg" alt="" style="width:10.6px;height:10.6px" /></span></span></button>
+  </div>
+</div>
+<div class="ing-row">
+  <div class="ing-row__check"><button class="checkcircle" aria-label="Check"></button></div>
+  <p class="ing-row__text"><span class="qty">1/2 cup </span><span class="nm">mayonnaise</span><span class="note"> for the dressing</span></p>
+  <div class="ing-row__acts">
+      <button class="icon-button" aria-label="Swap"><span class="ico ico-24"><img src="assets/icons/shuffle.svg" alt="" style="width:22px;height:22px" /></span></button>
+            <button class="addcirc" aria-label="Add to groceries"><span class="c"><span class="ico ico-16"><img src="assets/icons/add-16-dark.svg" alt="" style="width:10.6px;height:10.6px" /></span></span></button>
+  </div>
+</div>
+<div class="ing-row" data-h-qty="1/4 cup " data-h-nm="toasted pepitas" data-h-note=" instead of croutons">
+  <div class="ing-row__check"><button class="checkcircle" aria-label="Check"></button></div>
+  <p class="ing-row__text"><span class="qty">1 cup </span><span class="nm">croutons</span><span class="note"> torn sourdough</span></p>
+  <div class="ing-row__acts">
+      <button class="icon-button" aria-label="Swap"><span class="ico ico-24"><img src="assets/icons/shuffle.svg" alt="" style="width:22px;height:22px" /></span></button>
+            <button class="addcirc" aria-label="Add to groceries"><span class="c"><span class="ico ico-16"><img src="assets/icons/add-16-dark.svg" alt="" style="width:10.6px;height:10.6px" /></span></span></button>
+  </div>
+</div>
+<div class="ing-row">
+  <div class="ing-row__check"><button class="checkcircle" aria-label="Check"></button></div>
+  <p class="ing-row__text"><span class="qty">1/3 cup </span><span class="nm">parmesan</span><span class="note"> shaved</span></p>
+  <div class="ing-row__acts">
+            <button class="addcirc" aria-label="Add to groceries"><span class="c"><span class="ico ico-16"><img src="assets/icons/add-16-dark.svg" alt="" style="width:10.6px;height:10.6px" /></span></span></button>
+  </div>
+</div>
+<div class="ing-row">
+  <div class="ing-row__check"><button class="checkcircle" aria-label="Check"></button></div>
+  <p class="ing-row__text"><span class="qty">2 sticks </span><span class="nm">celery</span><span class="note"> finely sliced</span></p>
+  <div class="ing-row__acts">
+      <button class="icon-button" aria-label="Swap"><span class="ico ico-24"><img src="assets/icons/shuffle.svg" alt="" style="width:22px;height:22px" /></span></button>
+            <button class="addcirc" aria-label="Add to groceries"><span class="c"><span class="ico ico-16"><img src="assets/icons/add-16-dark.svg" alt="" style="width:10.6px;height:10.6px" /></span></span></button>
+  </div>
+</div>
+<div class="ing-row">
+  <div class="ing-row__check"><button class="checkcircle" aria-label="Check"></button></div>
+  <p class="ing-row__text"><span class="qty">2 </span><span class="nm">cloves garlic</span><span class="note"> crushed</span></p>
+  <div class="ing-row__acts">
+            <button class="addcirc added" aria-label="Added"><span class="c"><span class="ico ico-16"><img src="assets/icons/check-kale.svg" alt="" style="width:11px;height:8px" /></span></span></button>
+  </div>
+</div>
+<div class="ing-row">
+  <div class="ing-row__check"><button class="checkcircle" aria-label="Check"></button></div>
+  <p class="ing-row__text"><span class="qty">1 </span><span class="nm">lemon</span><span class="note"> juiced</span></p>
+  <div class="ing-row__acts">
+            <button class="addcirc" aria-label="Add to groceries"><span class="c"><span class="ico ico-16"><img src="assets/icons/add-16-dark.svg" alt="" style="width:10.6px;height:10.6px" /></span></span></button>
+  </div>
+</div>
+    </div>
+
+    <button class="btn-tonal add-all-btn">
+      <span class="ico ico-24"><img src="assets/icons/basket-24.svg" alt="" /></span>
+      <span>Add all to Groceries</span>
+    </button>
+  </section>
+
+  <!-- ============ Method ============ -->
+  <section class="recipe-section">
+    <div class="recipe-section__head">
+      <div class="ttl"><span>Method</span><span class="count">6</span></div>
+      <button class="collapse" aria-label="Collapse">
+        <span class="ico ico-24"><img src="assets/icons/chevron-rt.svg" alt="" style="transform:translate(-50%,-50%)" /></span>
+      </button>
+    </div>
+
+    <div class="sleep-row">
+      <button class="switch" role="switch" aria-checked="true" aria-label="Prevent screen from sleeping"></button>
+      <span>Prevent screen from sleeping</span>
+    </div>
+
+    <button class="start-btn"><span>Start cooking</span></button>
+
+    <div class="method-list">
+<div class="step step--done">
+  <div class="step__head"><span class="checkcircle--done"><span class="ico ico-16"><img src="assets/icons/check.svg" alt="" style="width:12.7px;height:9.3px" /></span></span><span>Step 1</span></div>
+  <p class="step__body">Preheat the oven to 180°C (350°F/Gas mark 4).</p>
+</div>
+      <p class="method-subhead">Rattatouille</p>
+<div class="step step--done">
+  <div class="step__head"><span class="checkcircle--done"><span class="ico ico-16"><img src="assets/icons/check.svg" alt="" style="width:12.7px;height:9.3px" /></span></span><span>Step 2</span></div>
+  <p class="step__body">If you’re using eggplants, cut them into 3-4 cm chunks, then place in a bowl and sprinkle with salt, using 1 teaspoon of salt per eggplant. Mix well and set aside. Thinly slice the capsicums and cut the zucchini into thin rounds.</p>
+</div>
+<div class="step">
+  <div class="step__head"><span class="checkcircle"></span><span>Step 3</span></div>
+  <p class="step__body">Tip the eggplant in a tea towel and give it a good scrunch to remove the salt and liquid, then combine with the vegetables in a large roasting tray.</p>
+</div>
+    </div>
+  </section>
+</div>
+
+<!-- just the clove AI button, no menu (Figma 28060:49452) -->
+<nav class="tabbar tabbar--solo">
+  <button class="chat-button" aria-label="Ask Clove">
+    <span class="mark">
+      <img class="logo" src="assets/icons/clove-white.svg" alt="" />
+      <img class="spark" src="assets/icons/clove-sparkle.svg" alt="" />
+    </span>
+  </button>
+</nav>
+
+<script src="app.js"></script>
+<script src="memory.js"></script>
+<script>
+  // Method steps and ingredients: untouched on a first visit; all ticked
+  // once the meal has been shopped for and cooked (the return visit)
+  document.addEventListener("DOMContentLoaded", function () {
+    var shopped = !!(localStorage.getItem("cloveOrdered") || localStorage.getItem("cloveShopped") || localStorage.getItem("cloveStoreName"));
+    document.querySelectorAll(".ing-row__check").forEach(function (c) {
+      var circle = c.firstElementChild;
+      if (!circle) return;
+      if (shopped) {
+        circle.className = "checkcircle--done";
+        circle.innerHTML = '<span class="ico ico-16"><img src="assets/icons/check.svg" alt="" style="width:12.7px;height:9.3px" /></span>';
+      } else {
+        circle.className = "checkcircle";
+        circle.innerHTML = "";
+      }
+    });
+    document.querySelectorAll(".step").forEach(function (st) {
+      var head = st.querySelector(".step__head");
+      var circle = head && head.firstElementChild;
+      if (!circle) return;
+      st.classList.toggle("step--done", shopped);
+      if (shopped) {
+        circle.className = "checkcircle--done";
+        circle.innerHTML = '<span class="ico ico-16"><img src="assets/icons/check.svg" alt="" style="width:12.7px;height:9.3px" /></span>';
+      } else {
+        circle.className = "checkcircle";
+        circle.innerHTML = "";
+      }
+    });
+  });
+</script>
+<script>
+  // Landing here "saved" from the import (or via the R hotkey) implies the
+  // TikTok save happened: make sure its two memories exist.
+  if (/[?&]saved=1/.test(location.search) && window.CloveMemory && !CloveMemory.all().length) {
+    CloveMemory.add("📱", "Finds recipes on TikTok", "Habit · noticed from this save");
+    CloveMemory.add("💪", "Quick, high-protein meals", "Goal · inferred while saving");
+  }
+</script>
+<script src="clove-ask.js"></script>
+<script src="chat.js"></script>
+<script src="goals.js"></script>
+<script>
+  (function () {
+    // Serving stepper is live: the ingredient quantities follow it, and the
+    // change becomes a "Cooks for N" memory
+    var val = document.querySelector(".stepper .val");
+    var serves = 6, BASE = 6;
+    var FR = [[0, ""], [0.25, "\u00bc"], [1 / 3, "\u2153"], [0.5, "\u00bd"], [2 / 3, "\u2154"], [0.75, "\u00be"], [1, ""]];
+    function frac(x, opts) { // nearest "nice" fraction for the part below 1
+      var whole = Math.floor(x + 1e-9), part = x - whole, best = FR[0];
+      FR.forEach(function (f) { if (Math.abs(f[0] - part) < Math.abs(best[0] - part)) best = f; });
+      if (best[0] === 1) { whole += 1; best = FR[0]; }
+      if (!whole && !best[0]) best = FR[1]; // never nothing: at least ¼
+      return { whole: whole, glyph: best[1] };
+    }
+    // q = {base, unit, kind}: kind whole | half | cup
+    function qtyText(q) {
+      var v = q.base * serves / BASE, out;
+      if (q.kind === "whole") {
+        var n = Math.max(q.min || 1, Math.round(v));
+        out = n + (q.unit ? " " + (n === 1 && q.one ? q.one : q.unit) : "");
+      } else if (q.kind === "half") {
+        var h = Math.max(0.5, Math.round(v * 2) / 2);
+        out = (Math.floor(h) || "") + (h % 1 ? "\u00bd" : "") + (q.unit ? " " + q.unit : "");
+      } else {
+        var f = frac(v);
+        var u = q.unit === "cup" ? ((f.whole + (f.glyph ? 0.1 : 0)) > 1 ? "cups" : "cup") : q.unit;
+        out = (f.whole || "") + f.glyph + (u ? " " + u : "");
+      }
+      return out + " ";
+    }
+    var rows = Array.prototype.slice.call(document.querySelectorAll("#ingSection .ing-row"));
+    var META = [
+      { base: 1, unit: "", kind: "whole" },            // cos lettuce
+      { base: 2, unit: "", kind: "half" },             // chicken breasts
+      { base: 0.5, unit: "cup", kind: "cup" },         // mayonnaise
+      { base: 1, unit: "cup", kind: "cup" },           // croutons
+      { base: 1 / 3, unit: "cup", kind: "cup" },       // parmesan
+      { base: 2, unit: "sticks", one: "stick", kind: "whole" }, // celery
+      { base: 2, unit: "", kind: "whole", min: 2 },    // garlic cloves (never fewer than 2)
+      { base: 1, unit: "", kind: "half" },             // lemon
+    ];
+    rows.forEach(function (r, i) { r._q = META[i]; r._qOrig = META[i]; });
+    function renderQty(r) {
+      var el = r.querySelector(".ing-row__text .qty");
+      if (!el || !r._q) return;
+      var next = qtyText(r._q);
+      if (el.textContent !== next) {
+        el.textContent = next;
+        el.animate([{ opacity: 0.35 }, { opacity: 1 }], { duration: 260, easing: "ease-out" });
+      }
+    }
+    function renderAll() { rows.forEach(renderQty); }
+    renderAll(); // same fraction glyphs from the first paint
+    // voice.js swaps/trims rows: it hands the new base quantity in here
+    window.cloveServes = {
+      get: function () { return serves; },
+      qtyText: qtyText,
+      setRowQty: function (r, q) { r._q = q; renderQty(r); },
+      resetRowQty: function (r) { r._q = r._qOrig; renderQty(r); },
+    };
+    document.querySelectorAll(".stepper button").forEach(function (b, i) {
+      b.addEventListener("click", function () {
+        serves = Math.max(1, Math.min(12, serves + (i === 0 ? -1 : 1)));
+        val.textContent = serves + " serves";
+        val.animate([{ transform: "scale(1.15)" }, { transform: "scale(1)" }], { duration: 220, easing: "ease-out" });
+        renderAll();
+        clearTimeout(val._memT);
+        val._memT = setTimeout(function () {
+          // one Cooks-for memory only, re-added so it lands newest
+          CloveMemory.replace("Cooks for ", "🍽️", "Cooks for " + serves, "Household · noticed from recipe scaling");
+          // double the usual life: leaves time to talk over it and hit Edit
+          CloveMemory.toast("Cooks for " + serves, "Household · saved to Clove’s memory", { duration: 11200 });
+          sessionStorage.setItem("servesChanged", "1");
+        }, 900);
+      });
+    });
+
+    // Meal-plan card taps through to the plan; once the recipe is already
+    // in this week's plan the card has done its job and stays away.
+    // Shown only once the iron health goal exists (after the voice flow), and
+    // not once the recipe is already in this week's plan.
+    var planBanner = document.getElementById("planBanner");
+    function syncPlanBanner() {
+      var hasIron = window.CloveGoals && CloveGoals.has("iron");
+      planBanner.hidden = !hasIron || !!localStorage.getItem("clovePlanned");
+    }
+    syncPlanBanner();
+    window.syncPlanBanner = syncPlanBanner;
+    planBanner.addEventListener("click", function () { location.href = "plan.html?ask=1"; });
+  })();
+</script>
+<!-- voice.js after the stepper module so swapped rows scale with serves -->
+<script src="voice.js"></script>
+</body>
+</html>

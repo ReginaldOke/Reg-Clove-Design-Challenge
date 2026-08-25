@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clove - Save from TikTok</title>
+<link rel="stylesheet" href="base.css" />
+<script src="frame.js"></script>
+<link rel="stylesheet" href="picker.css" />
+<link rel="stylesheet" href="memory.css" />
+<link rel="stylesheet" href="import.css" />
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- Short-video screen -->
+  <div class="tt" id="ttScreen">
+    <img class="tt__video" src="assets/img/recipe-video.jpg" alt="" />
+    <div class="tt__scrim-top"></div>
+    <div class="tt__scrim-bot"></div>
+
+    <div class="tt__top"><span>Following</span><span class="on">For You</span></div>
+
+    <div class="tt__rail">
+      <span class="tt__avatar"><img src="assets/img/avatar-creator.png" alt="" /></span>
+      <span class="tt__act"><span class="g">❤️</span><span>124.2K</span></span>
+      <span class="tt__act"><span class="g">💬</span><span>1,208</span></span>
+      <span class="tt__act"><span class="g">🔖</span><span>18.4K</span></span>
+      <span class="tt__act"><span class="g">↗️</span><span>9,540</span></span>
+    </div>
+
+    <div class="tt__caption">
+      <p class="h">@mealswithmaddie</p>
+      <p class="c">crispy chicken caesar salad 🥗🧀 the crunch on this one… recipe below!</p>
+      <p class="m">🎵 original sound, maddie</p>
+    </div>
+
+    <button class="tt__save" id="saveBtn">
+      <img src="assets/img/clove-logo.png" alt="" />
+      <span>Save recipe to Clove</span>
+    </button>
+  </div>
+
+  <!-- Saving screen -->
+  <div class="saving" id="savingScreen">
+    <img class="saving__logo" src="assets/img/clove-logo.png" alt="" />
+    <p class="saving__title" id="savingTitle">Saving your recipe…</p>
+    <p class="saving__sub" id="savingSub">Grabbing ingredients and steps from Maddie’s video</p>
+    <div class="saving__bar"><i id="savingBar"></i></div>
+    <div class="saved-check" id="savedCheck"><span class="ico ico-24"><img src="assets/icons/check.svg" alt="" style="width:16px;height:12px" /></span></div>
+
+    <p class="saving__eyebrow" id="qEyebrow">While that saves, quick one</p>
+
+    <!-- question card (InputWidget pattern) -->
+    <div class="iw" id="qCard" style="width:370px">
+      <div class="iw__content">
+        <div class="iw__header">
+          <div class="hgroup"><p class="iw__q" id="qText"></p></div>
+        </div>
+        <div class="iw__body" style="padding-bottom:16px">
+          <div class="iw-options" id="qOptions"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script src="memory.js"></script>
+<script>
+  (function () {
+    var QUESTIONS = [
+      {
+        q: "How much heat do you like? 🌶️",
+        icon: "🌶️",
+        kind: "Taste",
+        options: [
+          ["Keep it mild", "Gentle on the spice"],
+          ["Medium heat", "A little kick is welcome"],
+          ["Bring the fire", "The hotter the better"],
+        ],
+        memory: function (o) { return o[0] === "Bring the fire" ? "Loves spicy food" : o[0]; },
+      },
+      {
+        q: "What’s the goal right now? 🎯",
+        icon: "🎯",
+        kind: "Goal",
+        options: [
+          ["Eat healthier", "More greens, less takeaway"],
+          ["High protein", "Fuel for training"],
+          ["Quick weeknights", "Dinner in under 30"],
+        ],
+        memory: function (o) { return o[0]; },
+      },
+    ];
+
+    var step = 0;
+    var bar = document.getElementById("savingBar");
+    var card = document.getElementById("qCard");
+    var eyebrow = document.getElementById("qEyebrow");
+
+    function showQuestion(i) {
+      var q = QUESTIONS[i];
+      document.getElementById("qText").textContent = q.q;
+      var wrap = document.getElementById("qOptions");
+      wrap.innerHTML = q.options
+        .map(function (o, j) {
+          return '<button class="iw-option" data-j="' + j + '"><span class="t">' + o[0] + '</span><span class="s">' + o[1] + "</span></button>";
+        })
+        .join("");
+      wrap.querySelectorAll(".iw-option").forEach(function (b) {
+        b.addEventListener("click", function () {
+          b.classList.add("on");
+          var o = q.options[Number(b.dataset.j)];
+          CloveMemory.add(q.icon, q.memory(o), q.kind + " · you told Clove while saving");
+          CloveMemory.toast(q.memory(o), q.kind + " · saved to Clove’s memory");
+          card.classList.remove("show");
+          setTimeout(function () {
+            step++;
+            if (step < QUESTIONS.length) {
+              showQuestion(step);
+              card.classList.add("show");
+            } else {
+              finishSave();
+            }
+          }, 420);
+        });
+      });
+    }
+
+    function finishSave() {
+      eyebrow.classList.remove("show");
+      bar.style.width = "100%";
+      setTimeout(function () {
+        document.getElementById("savingTitle").textContent = "Recipe saved";
+        document.getElementById("savingSub").textContent = "Crispy Chicken Caesar Salad is in your library";
+        document.getElementById("savedCheck").classList.add("show");
+        setTimeout(function () { location.href = "recipe.html?saved=1"; }, 1300);
+      }, 700);
+    }
+
+    document.getElementById("saveBtn").addEventListener("click", function () {
+      document.getElementById("savingScreen").classList.add("show");
+      setTimeout(function () { bar.style.width = "34%"; }, 150);
+      setTimeout(function () { bar.style.width = "62%"; }, 1400);
+      setTimeout(function () {
+        eyebrow.classList.add("show");
+        showQuestion(0);
+        card.classList.add("show");
+      }, 900);
+    });
+  })();
+</script>
+</body>
+</html>

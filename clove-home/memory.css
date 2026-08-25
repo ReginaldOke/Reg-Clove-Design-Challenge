@@ -1,0 +1,480 @@
+/* ============================================================
+   Clove — memory moments
+   The gradient "saved to memory" pill + inline nudges that thread
+   the first-mile flow together.
+   ============================================================ */
+
+:root {
+  --pro-gradient: linear-gradient(-90deg, #e1c3ff 0%, #bd53ea 26.9%, #bd53ea 49%, #e9f7c8 100%);
+  /* darker stops for gradient TEXT on light backgrounds */
+  --pro-gradient-text: linear-gradient(-90deg, #8f3ecb 0%, #9b2fd0 26.9%, #9b2fd0 49%, #66832f 100%);
+  /* card-title headers (Figma 28042:23390) */
+  --pro-gradient-title: linear-gradient(-90deg, #e1c3ff 0%, #bd53ea 26.9%, #bd53ea 49%, #d5ff73 100%);
+}
+
+/* ============================================================
+   AI activity glow (Figma 28050:46117) — a pink inset halo with
+   soft blooms swirling the screen edge while AI works a page.
+   Always faded out (AIGlow.stop) the moment the task completes.
+   ============================================================ */
+.ai-glow {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  bottom: 0;
+  width: 402px;
+  pointer-events: none;
+  z-index: 95;
+  opacity: 0;
+  transition: opacity 700ms ease;
+  overflow: hidden;
+}
+
+/* behind mode: the swirl sits under the page content (z46) but above the
+   checkout ai-frame plate (z45), so opaque cards mask it */
+.ai-glow.behind { z-index: 45; }
+
+.ai-glow.on { opacity: 1; }
+
+/* a square-cornered base layer runs right into the screen corners (inset
+   shadows deepen naturally where two edges meet), so the rounded halo above
+   reads rounded on the inside while the glow itself fills every corner */
+.ai-glow {
+  box-shadow:
+    inset 0 0 46px rgba(189, 83, 234, 0.5),
+    inset 0 0 16px rgba(189, 83, 234, 0.4);
+}
+
+/* base halo: rounded so the glow turns the corners softly, no sharp elbows */
+.ai-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 48px;
+  box-shadow:
+    inset 0 0 16px var(--eggplant-300),
+    inset 0 0 60px var(--eggplant-100);
+}
+
+/* slow breath layered on top of the base halo */
+.ai-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 48px;
+  box-shadow:
+    inset 0 0 28px rgba(189, 83, 234, 0.55),
+    inset 0 0 90px rgba(225, 195, 255, 0.8);
+  animation: ai-glow-breathe 3.6s ease-in-out infinite;
+}
+
+@keyframes ai-glow-breathe {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* blobs orbit OUTSIDE the frame; only their fringe bleeds in, so the
+   swirl lives on the border and the middle stays clean */
+.ai-glow i {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(36px);
+  transform: translate(-50%, -50%);
+}
+
+.ai-glow .a {
+  width: 260px;
+  height: 200px;
+  background: radial-gradient(closest-side, rgba(189, 83, 234, 0.65), rgba(189, 83, 234, 0));
+  animation: ai-orbit 7.5s linear infinite;
+}
+
+.ai-glow .b {
+  width: 320px;
+  height: 240px;
+  background: radial-gradient(closest-side, rgba(225, 195, 255, 0.9), rgba(225, 195, 255, 0));
+  animation: ai-orbit 10.5s linear infinite reverse;
+}
+
+.ai-glow .c {
+  width: 200px;
+  height: 160px;
+  background: radial-gradient(closest-side, rgba(233, 180, 255, 0.75), rgba(233, 180, 255, 0));
+  animation: ai-orbit 5.8s linear infinite;
+  animation-delay: -2.6s;
+}
+
+/* perimeter path: centers stay ~50px beyond the edge the whole lap */
+@keyframes ai-orbit {
+  0%    { left: 50%;               top: -50px; }
+  12.5% { left: calc(100% + 50px); top: -50px; }
+  25%   { left: calc(100% + 50px); top: 50%; }
+  37.5% { left: calc(100% + 50px); top: calc(100% + 50px); }
+  50%   { left: 50%;               top: calc(100% + 50px); }
+  62.5% { left: -50px;             top: calc(100% + 50px); }
+  75%   { left: -50px;             top: 50%; }
+  87.5% { left: -50px;             top: -50px; }
+  100%  { left: 50%;               top: -50px; }
+}
+
+/* element-scoped swirl: a rounded pink frame hugging one section */
+.ai-glow-local {
+  position: absolute;
+  inset: 12px 6px 0 6px;
+  border-radius: 24px;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 700ms ease;
+  z-index: 0;
+}
+.ai-glow-local.on { opacity: 1; }
+.ai-glow-local::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 14px var(--eggplant-300),
+    inset 0 0 48px var(--eggplant-100);
+}
+.ai-glow-local::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 24px rgba(189, 83, 234, 0.55),
+    inset 0 0 70px rgba(225, 195, 255, 0.8);
+  animation: ai-glow-breathe 3.2s ease-in-out infinite;
+}
+.ai-glow-local i {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(28px);
+  transform: translate(-50%, -50%);
+}
+.ai-glow-local .a { width: 170px; height: 130px; background: radial-gradient(closest-side, rgba(189, 83, 234, 0.65), rgba(189, 83, 234, 0)); animation: ai-orbit 6.5s linear infinite; }
+.ai-glow-local .b { width: 210px; height: 160px; background: radial-gradient(closest-side, rgba(225, 195, 255, 0.9), rgba(225, 195, 255, 0)); animation: ai-orbit 9s linear infinite reverse; }
+.ai-glow-local .c { width: 140px; height: 110px; background: radial-gradient(closest-side, rgba(233, 180, 255, 0.75), rgba(233, 180, 255, 0)); animation: ai-orbit 5s linear infinite; animation-delay: -2.2s; }
+/* content stays above the local glow */
+.ai-host > *:not(.ai-glow-local) { position: relative; z-index: 1; }
+
+/* Floating memory toast */
+/* Docked to the top like a system notification, so it can never sit
+   on top of a bottom CTA, sheet, or the tab bar. */
+.mem-toast {
+  position: fixed;
+  left: 50%;
+  top: 54px;
+  transform: translateX(-50%) translateY(-24px) scale(0.92);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 370px;
+  padding: 10px 12px 10px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  -webkit-backdrop-filter: blur(18px) saturate(1.7);
+  backdrop-filter: blur(18px) saturate(1.7);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+    0 12px 32px rgba(15, 18, 21, 0.22);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 96; /* above the full-page AI glow (95): a notification stays crisp over the swirl */
+  transition: opacity 240ms ease,
+    transform 380ms cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+
+.mem-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.mem-toast__spark {
+  width: 30px;
+  height: 30px;
+  border-radius: 100px;
+  background: var(--pro-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.mem-toast__spark img { width: 12px; height: 12px; }
+
+.mem-toast.show .mem-toast__spark {
+  animation: mem-spark 700ms cubic-bezier(0.2, 1.4, 0.35, 1) both;
+}
+
+@keyframes mem-spark {
+  0% { transform: scale(0.4) rotate(-40deg); }
+  70% { transform: scale(1.15) rotate(6deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+.mem-toast__text {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--black-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mem-toast__text b { font-weight: 500; }
+
+.mem-toast__text .k {
+  display: block;
+  font-size: 11.5px;
+  line-height: 15px;
+  color: var(--black-400);
+}
+/* single memories are one plain line ("Memory: Cooks for 2"): no sub line,
+   the label light, the fact itself medium */
+.mem-toast__text .k:empty { display: none; }
+.mem-toast__text b .pfx { font-weight: 400; color: var(--black-400); }
+
+.mem-toast__edit {
+  margin-left: 2px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 100px;
+  background: var(--black-100);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--black-500);
+  cursor: pointer;
+  flex: none;
+}
+
+/* Inline Clove nudge — a suggestion row that leads to the next step */
+/* same language as the pink .ai-card (recipe/plan/groceries), with a
+   small clove disc instead of a line icon */
+.clove-nudge {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 20px 8px 16px;
+  border-radius: 100px; /* fully rounded pill */
+  background: var(--eggplant-100);
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  font-family: inherit;
+  text-align: left;
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.clove-nudge:active { transform: scale(0.985); }
+
+.clove-nudge[hidden] { display: none; }
+
+/* the pink Clove AI mark, shared by every contextual nudge so they all
+   read as one voice: a flat eggplant disc, no gradient */
+.clove-nudge__logo,
+.ai-card__clove {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border-radius: 100px;
+  background: var(--eggplant-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.clove-nudge__logo img { width: 13.3px; height: 15px; }
+
+/* the chat button's mark (Figma 28108:97436), scaled to the 30px disc:
+   flower at half the disc height, sparkle riding the top right */
+.clove-nudge__logo .mark,
+.ai-card__clove .mark { position: relative; width: 17px; height: 17px; }
+.clove-nudge__logo .mark .logo,
+.ai-card__clove .mark .logo { position: absolute; left: 0.5px; top: 1.6px; width: 13.3px; height: 15px; }
+.clove-nudge__logo .mark .spark,
+.ai-card__clove .mark .spark { position: absolute; right: 0; top: 0; width: 4.4px; height: 4.4px; }
+
+.clove-nudge__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 0 0;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #5b0a60;
+}
+
+.clove-nudge__text .t { font-weight: 600; }
+.clove-nudge__text .s { font-weight: 300; }
+
+.clove-nudge__arrow { display: none; }
+
+.clove-nudge.rise-late {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: rise-in 480ms cubic-bezier(0.22, 1, 0.36, 1) 600ms both;
+}
+
+/* flow-nudge pill (shared with checkout's entry fab) */
+.checkout-fab {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 96px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 100px;
+  background: var(--kale-500);
+  color: var(--white);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 12px 24px rgba(3, 51, 27, 0.3);
+  cursor: pointer;
+  white-space: nowrap;
+  z-index: 41;
+}
+
+/* freshly captured memory — pink dot until the user looks at it */
+.memory-row.is-new .memory-edit { position: relative; }
+
+.memory-row.is-new .memory-edit::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 100px;
+  background: var(--eggplant-300);
+  border: 2px solid var(--white);
+  animation: dot-pop 500ms cubic-bezier(0.2, 1.4, 0.35, 1) both;
+}
+
+@keyframes dot-pop {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* ------------------------------------------------------------
+   In-UI AI nudge card (pink). Replaces the floating pill nudges.
+   Figma 28063:51946 (recipe) · 28063:53251 (plan) · 28074:91864 (groceries)
+   ------------------------------------------------------------ */
+.ai-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 8px 20px 8px 16px;
+  border: none;
+  border-radius: 100px; /* fully rounded pill */
+  background: var(--eggplant-100);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1), background 160ms ease, border-radius 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ai-card:active { transform: scale(0.985); }
+
+/* shared magical entrance for the pink nudges (same on every page):
+   a quiet spring up, the clove popping in, one soft sheen across */
+.ai-card--wait { opacity: 0; }
+.ai-card--reveal {
+  position: relative;
+  overflow: hidden;
+  animation: ai-card-in 640ms cubic-bezier(0.22, 1.2, 0.36, 1) both;
+}
+.ai-card--reveal > .ai-card__clove,
+.ai-card--reveal .ai-card__main > .ai-card__clove {
+  animation: ai-clove-in 620ms cubic-bezier(0.34, 1.56, 0.64, 1) 200ms both;
+}
+.ai-card--reveal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 32%, rgba(255, 255, 255, 0.5) 50%, transparent 64%);
+  transform: translateX(-130%);
+  animation: ai-sheen 1000ms cubic-bezier(0.4, 0, 0.2, 1) 460ms forwards;
+  pointer-events: none;
+}
+@keyframes ai-card-in { from { opacity: 0; transform: translateY(18px) scale(0.96); } }
+@keyframes ai-clove-in { from { opacity: 0; transform: scale(0.4) rotate(-30deg); } }
+@keyframes ai-sheen { to { transform: translateX(130%); } }
+/* the expanded memories list needs real corners to read well */
+.ai-card.open { border-radius: 28px; }
+.ai-card[hidden] { display: none; }
+
+.ai-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 0 0;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #5b0a60; /* eggplant-500 */
+}
+.ai-card__text .t { font-weight: 600; }
+.ai-card__text .s { font-weight: 300; }
+
+/* stacked variant: a main row plus an expandable "memories used" list */
+.ai-card--stack { flex-direction: column; align-items: stretch; gap: 0; }
+.ai-card__main { display: flex; align-items: center; gap: 16px; }
+.ai-card__chev {
+  width: 32px;
+  height: 32px;
+  margin-right: -8px;
+  border: none;
+  border-radius: 100px;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: none;
+}
+.ai-card__chev[hidden] { display: none; }
+.ai-card__chev:focus, .ai-card__chev:focus-visible { outline: none; }
+.ai-card__chev, .ai-card { -webkit-tap-highlight-color: transparent; }
+.ai-card__chev .ico img { transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1); }
+.ai-card.open .ai-card__chev .ico img { transform: translate(-50%, -50%) rotate(180deg) !important; }
+.ai-card__more {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ai-card.open .ai-card__more { grid-template-rows: 1fr; }
+.ai-card__mems { overflow: hidden; min-height: 0; }
+.ai-card__mems > .ai-mem:first-child { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(91, 10, 96, 0.12); }
+.ai-mem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #5b0a60;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 260ms ease, transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ai-card.open .ai-mem { opacity: 1; transform: none; }
+.ai-card.open .ai-mem:nth-child(2) { transition-delay: 60ms; }
+.ai-card.open .ai-mem:nth-child(3) { transition-delay: 120ms; }
+.ai-card.open .ai-mem:nth-child(4) { transition-delay: 180ms; }
+.ai-mem .e { width: 24px; text-align: center; font-size: 14px; flex: none; }
+.ai-mem .x { font-weight: 500; }
+
