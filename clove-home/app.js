@@ -225,7 +225,7 @@ document.addEventListener("keydown", function (e) {
     { k: "K", name: "Health tracker", go: "goals.html", pts: [
       "Click Edit on the health goal",
       "The tracker opens",
-      "Click the pink nudge to plan meals"] },
+      "Scroll down and click the pink nudge to plan meals"] },
     { k: "P", name: "Plan the week", go: "plan.html?ask=1", pts: [
       "Answer the two questions",
       "Clove fills the week with dinners"] },
@@ -263,13 +263,8 @@ document.addEventListener("keydown", function (e) {
       }, pts: [
       "Change serving size, a memory appears",
       "Click Edit on the memory to open it"] },
-    { key: "R", match: function (p, q) { return p === "profile.html"; }, cur: function () {
-        if (document.querySelector(".picker-overlay:not([aria-hidden])")) { this._opened = 1; return 1; }
-        return this._opened ? 2 : 0;
-      }, pts: [
-      "Every memory Clove has saved so far",
-      "Adjust any of them with its pencil",
-      "Then go back to the recipe"] },
+    { key: "R", match: function (p, q) { return p === "profile.html"; }, pts: [
+      "Edit a memory, then go back to the recipe"] },
     { key: "V", match: function (p, q) { return p === "recipe.html" && /leftover=1/.test(q); }, cur: function () {
         if (btnWith("Update meal plan")) return 2;
         if (btnWith("Update recipe")) return 1;
@@ -283,14 +278,14 @@ document.addEventListener("keydown", function (e) {
         if (document.querySelector(".voice-wrap:not([hidden])")) return 1;
         return 0;
       }, pts: [
-      "Press V to ask for more iron",
+      "Press the V key to add more iron to the recipe",
       "Clove swaps two ingredients, then adds a health goal",
-      "Click Edit on the goal to see the tracker"] },
+      "Click Edit on the health goal to see the tracker"] },
     { key: "K", match: function (p, q) { return p === "goals.html"; }, cur: function () {
         return document.querySelector(".ai-card--reveal") ? 1 : 0;
       }, pts: [
       "Track your iron across the week",
-      "Click the pink nudge to plan meals"] },
+      "Scroll down and click the pink nudge to plan meals"] },
     { key: "P", match: function (p, q) { return p === "plan.html" && /ask=1/.test(q); }, cur: function () {
         if (document.querySelector(".meal-row")) return 2;
         if (document.querySelector(".cask .skip")) return 1;
@@ -343,14 +338,17 @@ document.addEventListener("keydown", function (e) {
       "Click the health tracker card"] },
   ];
 
-  var page = location.pathname.split("/").pop() || "index.html";
-  var query = location.search;
-  // once the memory card has been seen, coming back to the saved recipe means
-  // the take moves on: the panel highlights the voice note step instead
-  if (page === "profile.html") { try { sessionStorage.setItem("cloveSawMemories", "1"); } catch (e) {} }
   var cur = null;
-  for (var i = 0; i < SCREENS.length; i++) {
-    if (SCREENS[i].match(page, query)) { cur = SCREENS[i]; break; }
+  function pickCur() {
+    var page = location.pathname.split("/").pop() || "index.html";
+    var query = location.search;
+    // once the memory card has been seen, coming back to the saved recipe means
+    // the take moves on: the panel highlights the voice note step instead
+    if (page === "profile.html") { try { sessionStorage.setItem("cloveSawMemories", "1"); } catch (e) {} }
+    cur = null;
+    for (var i = 0; i < SCREENS.length; i++) {
+      if (SCREENS[i].match(page, query)) { cur = SCREENS[i]; break; }
+    }
   }
 
   function pts(list) {
@@ -363,30 +361,36 @@ document.addEventListener("keydown", function (e) {
     '<div class="cpanel__head"><span>Prototype controls</span><button class="cpanel__min">Hide</button></div>' +
     '<label class="cpanel__round"><input type="checkbox" /><span class="cb"></span>Rounded corners</label>' +
     '<p class="cpanel__sec">Jump to a section</p>' +
-    '<div class="cpanel__keys">' +
-    KEYS.map(function (k) {
+    '<div class="cpanel__keys"></div>';
+  document.body.appendChild(panel);
+
+  // only the step the presenter is on glows pink; the rest wait in grey.
+  // cur is a live probe so the highlight follows clicks, not just page loads
+  var curLis = [];
+  function syncPts() {
+    if (!cur || !curLis.length) return;
+    var idx = 0;
+    try { idx = typeof cur.cur === "function" ? cur.cur.call(cur) : (cur.cur || 0); } catch (e) {}
+    for (var i = 0; i < curLis.length; i++) curLis[i].classList.toggle("on", i === idx);
+  }
+  function renderKeys() {
+    pickCur();
+    panel.querySelector(".cpanel__keys").innerHTML = KEYS.map(function (k) {
       var isCur = cur && cur.key === k.k;
       var caps = k.k.split("|").map(function (x) { return '<span class="key">' + x + "</span>"; }).join("");
       return '<div class="ckey' + (k.go ? " go" : "") + (isCur ? " cur" : "") + '"' + (k.go ? ' data-go="' + k.go + '"' : "") + ">" +
         '<div class="ckey__row">' + caps + '<span class="name">' + k.name + "</span></div>" +
         pts(isCur ? cur.pts : k.pts) +
         "</div>";
-    }).join("") +
-    "</div>";
-  document.body.appendChild(panel);
-
-  // only the step the presenter is on glows pink; the rest wait in grey.
-  // cur is a live probe so the highlight follows clicks, not just page loads
-  var curLis = panel.querySelectorAll(".ckey.cur .cpts li");
-  if (cur && curLis.length) {
-    var syncPts = function () {
-      var idx = 0;
-      try { idx = typeof cur.cur === "function" ? cur.cur.call(cur) : (cur.cur || 0); } catch (e) {}
-      for (var i = 0; i < curLis.length; i++) curLis[i].classList.toggle("on", i === idx);
-    };
+    }).join("");
+    curLis = panel.querySelectorAll(".ckey.cur .cpts li");
     syncPts();
-    setInterval(syncPts, 600);
   }
+  renderKeys();
+  setInterval(syncPts, 600);
+  // back/forward can restore the page from the bfcache without re-running
+  // scripts: re-pick the current section so the guide keeps moving
+  window.addEventListener("pageshow", function (e) { if (e.persisted) renderKeys(); });
 
   var pill = document.createElement("button");
   pill.className = "cpanel-pill";
@@ -439,13 +443,14 @@ document.addEventListener("keydown", function (e) {
   round.addEventListener("change", function () { setRound(round.checked); });
   setRound(localStorage.getItem("clovePanelRound") === "1");
 
-  // a key block is also a shortcut you can click
-  panel.querySelectorAll(".ckey.go").forEach(function (b) {
-    b.addEventListener("click", function () {
-      var go = b.dataset.go;
-      if (go.indexOf("reset:") === 0) { cloveResetState(); go = go.slice(6); }
-      location.href = go;
-    });
+  // a key block is also a shortcut you can click (delegated: the blocks
+  // re-render on bfcache restores, so bindings must not live on them)
+  panel.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest(".ckey.go") : null;
+    if (!b) return;
+    var go = b.dataset.go;
+    if (go.indexOf("reset:") === 0) { cloveResetState(); go = go.slice(6); }
+    location.href = go;
   });
 })();
 

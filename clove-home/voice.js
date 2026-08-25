@@ -458,7 +458,7 @@
     localStorage.setItem("cloveIronSwap", "1"); // the recipe stays higher in iron
     if (window.CloveGoals) CloveGoals.add("iron");
     // pinned: stays up until tapped, so there is no rush to hit Edit on camera
-    CloveMemory.toast("Health goal: More iron", "Clove will cook toward it · tap Edit to track", { goal: true, pinned: true, href: "profile.html#goals" });
+    CloveMemory.toast("Health goal: More iron", "Clove will cook toward it · tap Edit to track", { goal: true, pinned: true, href: "goals.html" });
     // the meal-plan card earns its place now that there is a goal to plan for
     if (window.syncPlanBanner) {
       var pb = document.getElementById("planBanner");
