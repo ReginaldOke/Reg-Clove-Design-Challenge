@@ -165,6 +165,16 @@ document.addEventListener("keydown", function (e) {
   location.href = "groceries.html";
 });
 
+// Recording helpers: S = compare stores, L = the in-store list, C = the cook take.
+document.addEventListener("keydown", function (e) {
+  var k = e.key.toLowerCase();
+  if (k !== "s" && k !== "l" && k !== "c") return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  var t = e.target;
+  if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+  location.href = k === "s" ? "checkout.html?view=compare" : k === "l" ? "groceries.html?view=store" : "recipe.html?leftover=1";
+});
+
 // Recording helper: pressing "K" opens the health tracker (goals page).
 document.addEventListener("keydown", function (e) {
   if (e.key !== "k" && e.key !== "K") return;
@@ -232,6 +242,17 @@ document.addEventListener("keydown", function (e) {
     { k: "G", name: "Groceries", go: "groceries.html", pts: [
       "Click Start shopping",
       "Answer the questions, then compare stores"] },
+    { k: "S", name: "Shop", go: "checkout.html?view=compare", pts: [
+      "Click the Nearby stores tab",
+      "Choose a store to browse products and prices",
+      "Click Shop this list at Woolies"] },
+    { k: "L", name: "List", go: "groceries.html?view=store", pts: [
+      "Check off a grocery item",
+      "Then click the pink nudge at the bottom of the page"] },
+    { k: "C", name: "Cook", go: "recipe.html?leftover=1", pts: [
+      "Tap the clove AI icon",
+      "Update the recipe",
+      "Update the meal plan"] },
     { k: "H", name: "Home", go: "index.html", pts: [
       "Click the health tracker card"] },
     { k: "←|→", name: "Step the flow", go: null, pts: [
@@ -265,14 +286,17 @@ document.addEventListener("keydown", function (e) {
       "Click Edit on the memory to open it"] },
     { key: "R", match: function (p, q) { return p === "profile.html"; }, pts: [
       "Edit a memory, then go back to the recipe"] },
-    { key: "V", match: function (p, q) { return p === "recipe.html" && /leftover=1/.test(q); }, cur: function () {
+    { key: "C", match: function (p, q) {
+        if (p !== "recipe.html") return false;
+        return /leftover=1/.test(q) || !!(localStorage.getItem("cloveOrdered") || localStorage.getItem("cloveShopped") || localStorage.getItem("cloveStoreName"));
+      }, cur: function () {
         if (btnWith("Update meal plan")) return 2;
         if (btnWith("Update recipe")) return 1;
         return 0;
       }, pts: [
-      "Click the purple clove button",
-      "Click Update recipe",
-      "Then click Update meal plan"] },
+      "Tap the clove AI icon",
+      "Update the recipe",
+      "Update the meal plan"] },
     { key: "V", match: function (p, q) { return p === "recipe.html"; }, cur: function () {
         if (document.querySelector(".mem-toast--goal")) return 2;
         if (document.querySelector(".voice-wrap:not([hidden])")) return 1;
@@ -287,13 +311,16 @@ document.addEventListener("keydown", function (e) {
       "Track your iron across the week",
       "Scroll down and click the pink nudge to plan meals"] },
     { key: "P", match: function (p, q) { return p === "plan.html" && /ask=1/.test(q); }, cur: function () {
-        if (document.querySelector(".meal-row")) return 2;
+        var rows = document.querySelectorAll(".meal-row"), built = false;
+        for (var i = 0; i < rows.length; i++) { if (rows[i].offsetParent) { built = true; break; } }
+        if (built) return document.querySelector(".ai-glow") ? 2 : 3;
         if (document.querySelector(".cask .skip")) return 1;
         return 0;
       }, pts: [
       "Pick days, then click the arrow",
-      "Set targets, then click the arrow",
-      "Clove fills the week with iron-rich dinners"] },
+      "Set health targets, then click the arrow",
+      "Clove fills the week with iron-rich dinners",
+      "Click Grocery List"] },
     { key: "P", match: function (p, q) { return p === "plan.html" && /leftover=spinach/.test(q); }, cur: function () {
         var chat = document.querySelector(".plan-chat");
         if (chat && chat.textContent.replace(/\s+/g, " ").length > 100) return 2;
@@ -308,31 +335,30 @@ document.addEventListener("keydown", function (e) {
       }, pts: [
       "Click Grocery List to shop the plan",
       "⋮ on a meal shows its options"] },
-    { key: "G", match: function (p, q) { return p === "groceries.html" && /view=(store|aisle)/.test(q); }, cur: function () {
-        return document.querySelector("#cookNudge") ? 2 : 1;
+    { key: "L", match: function (p, q) { return p === "groceries.html" && /view=(store|aisle)/.test(q); }, cur: function () {
+        return document.querySelector("#cookNudge") ? 1 : 0;
       }, pts: [
-      "Aisles and product shots for your store",
-      "Tick one item, the rest follow",
-      "The cook tonight nudge appears"] },
+      "Check off a grocery item",
+      "Then click the pink nudge at the bottom of the page"] },
     { key: "G", match: function (p, q) { return p === "groceries.html"; }, cur: function () {
         return document.querySelector(".cask") ? 1 : 0;
       }, pts: [
       "Click Start shopping",
       "Pick a value, then set a budget"] },
-    { key: "G", match: function (p, q) { return p === "checkout.html" && /detail/.test(q); }, cur: 1, pts: [
+    { key: "S", match: function (p, q) { return p === "checkout.html" && /detail/.test(q); }, cur: 1, pts: [
       "The swipe hint plays on the first card",
       "Swipe a card, tap for substitutes",
       "Click Shop this list at Woolies"] },
-    { key: "G", match: function (p, q) { return p === "checkout.html" && /tab=pickup/.test(q); }, cur: function () {
+    { key: "S", match: function (p, q) { return p === "checkout.html" && /tab=pickup/.test(q); }, cur: function () {
         return document.querySelector("#mapSheet.show") ? 2 : 1;
       }, pts: [
       "Stores near you, prices and stock",
       "Click the small map to expand it",
       "Then click Woolworths Surry Hills"] },
-    { key: "G", match: function (p, q) { return p === "checkout.html" && /compare/.test(q); }, cur: 1, pts: [
+    { key: "S", match: function (p, q) { return p === "checkout.html" && /compare/.test(q); }, cur: 1, pts: [
       "Delivery services and prices",
-      "Click Nearby stores to shop in person"] },
-    { key: "G", match: function (p, q) { return p === "checkout.html"; }, pts: [
+      "Click the Nearby stores tab"] },
+    { key: "S", match: function (p, q) { return p === "checkout.html"; }, pts: [
       "Clove scans every store and delivery service nearby"] },
     { key: "H", match: function (p, q) { return p === "index.html" || p === ""; }, pts: [
       "Click the health tracker card"] },
