@@ -238,58 +238,103 @@ document.addEventListener("keydown", function (e) {
       "Move through every screen in order"] },
   ];
 
+  // finds a visible button whose label matches exactly
+  function btnWith(label) {
+    var bs = document.querySelectorAll("button");
+    for (var i = 0; i < bs.length; i++) {
+      if (bs[i].textContent.trim() === label && bs[i].offsetParent) return bs[i];
+    }
+    return null;
+  }
+
   // which key block the current screen belongs to, and the exact
-  // instructions to show there (plain click-by-click language)
+  // instructions to show there (plain click-by-click language).
+  // cur = which point is the CURRENT step right now (index or a live probe)
   var SCREENS = [
-    { key: "T", match: function (p, q) { return p === "tiktok.html"; }, pts: [
+    { key: "T", match: function (p, q) { return p === "tiktok.html"; }, cur: function () {
+        if (!/step=import/.test(location.search)) return 0;
+        return document.querySelector(".saved") ? 2 : 1;
+      }, pts: [
       "Click Share, then More, then Clove",
       "Two memories appear while it saves",
       "Click Open recipe in Clove"] },
-    { key: "R", match: function (p, q) { return p === "recipe.html" && /saved=1/.test(q) && !sessionStorage.getItem("cloveSawMemories"); }, pts: [
+    { key: "R", match: function (p, q) { return p === "recipe.html" && /saved=1/.test(q) && !sessionStorage.getItem("cloveSawMemories"); }, cur: function () {
+        return document.querySelector(".mem-toast") ? 1 : 0;
+      }, pts: [
       "Change serving size, a memory appears",
       "Click Edit on the memory to open it"] },
-    { key: "R", match: function (p, q) { return p === "profile.html"; }, pts: [
+    { key: "R", match: function (p, q) { return p === "profile.html"; }, cur: function () {
+        if (document.querySelector(".picker-overlay:not([aria-hidden])")) { this._opened = 1; return 1; }
+        return this._opened ? 2 : 0;
+      }, pts: [
       "Every memory Clove has saved so far",
       "Adjust any of them with its pencil",
       "Then go back to the recipe"] },
-    { key: "V", match: function (p, q) { return p === "recipe.html" && /leftover=1/.test(q); }, pts: [
+    { key: "V", match: function (p, q) { return p === "recipe.html" && /leftover=1/.test(q); }, cur: function () {
+        if (btnWith("Update meal plan")) return 2;
+        if (btnWith("Update recipe")) return 1;
+        return 0;
+      }, pts: [
       "Click the purple clove button",
       "Click Update recipe",
       "Then click Update meal plan"] },
-    { key: "V", match: function (p, q) { return p === "recipe.html"; }, pts: [
+    { key: "V", match: function (p, q) { return p === "recipe.html"; }, cur: function () {
+        if (document.querySelector(".mem-toast--goal")) return 2;
+        if (document.querySelector(".voice-wrap:not([hidden])")) return 1;
+        return 0;
+      }, pts: [
       "Press V to ask for more iron",
       "Clove swaps two ingredients, then adds a health goal",
       "Click Edit on the goal to see the tracker"] },
-    { key: "K", match: function (p, q) { return p === "goals.html"; }, pts: [
+    { key: "K", match: function (p, q) { return p === "goals.html"; }, cur: function () {
+        return document.querySelector(".ai-card--reveal") ? 1 : 0;
+      }, pts: [
       "Track your iron across the week",
       "Click the pink nudge to plan meals"] },
-    { key: "P", match: function (p, q) { return p === "plan.html" && /ask=1/.test(q); }, pts: [
+    { key: "P", match: function (p, q) { return p === "plan.html" && /ask=1/.test(q); }, cur: function () {
+        if (document.querySelector(".meal-row")) return 2;
+        if (document.querySelector(".cask .skip")) return 1;
+        return 0;
+      }, pts: [
       "Pick days, then click the arrow",
       "Set targets, then click the arrow",
       "Clove fills the week with iron-rich dinners"] },
-    { key: "P", match: function (p, q) { return p === "plan.html" && /leftover=spinach/.test(q); }, pts: [
+    { key: "P", match: function (p, q) { return p === "plan.html" && /leftover=spinach/.test(q); }, cur: function () {
+        var chat = document.querySelector(".plan-chat");
+        if (chat && chat.textContent.replace(/\s+/g, " ").length > 100) return 2;
+        if (document.body.textContent.indexOf("Ricotta") > -1) return 1;
+        return 0;
+      }, pts: [
       "Clove adds a spinach pasta dinner",
       "The chat confirms it, ready for the next loop",
       "Press the right arrow to land back on Home"] },
-    { key: "P", match: function (p, q) { return p === "plan.html"; }, pts: [
+    { key: "P", match: function (p, q) { return p === "plan.html"; }, cur: function () {
+        return document.querySelector("#mealSheet.open") ? 1 : 0;
+      }, pts: [
       "Click Grocery List to shop the plan",
       "⋮ on a meal shows its options"] },
-    { key: "G", match: function (p, q) { return p === "groceries.html" && /view=(store|aisle)/.test(q); }, pts: [
+    { key: "G", match: function (p, q) { return p === "groceries.html" && /view=(store|aisle)/.test(q); }, cur: function () {
+        return document.querySelector("#cookNudge") ? 2 : 1;
+      }, pts: [
       "Aisles and product shots for your store",
       "Tick one item, the rest follow",
       "The cook tonight nudge appears"] },
-    { key: "G", match: function (p, q) { return p === "groceries.html"; }, pts: [
+    { key: "G", match: function (p, q) { return p === "groceries.html"; }, cur: function () {
+        return document.querySelector(".cask") ? 1 : 0;
+      }, pts: [
       "Click Start shopping",
       "Pick a value, then set a budget"] },
-    { key: "G", match: function (p, q) { return p === "checkout.html" && /detail/.test(q); }, pts: [
+    { key: "G", match: function (p, q) { return p === "checkout.html" && /detail/.test(q); }, cur: 1, pts: [
       "The swipe hint plays on the first card",
       "Swipe a card, tap for substitutes",
       "Click Shop this list at Woolies"] },
-    { key: "G", match: function (p, q) { return p === "checkout.html" && /tab=pickup/.test(q); }, pts: [
+    { key: "G", match: function (p, q) { return p === "checkout.html" && /tab=pickup/.test(q); }, cur: function () {
+        return document.querySelector("#mapSheet.show") ? 2 : 1;
+      }, pts: [
       "Stores near you, prices and stock",
       "Click the small map to expand it",
       "Then click Woolworths Surry Hills"] },
-    { key: "G", match: function (p, q) { return p === "checkout.html" && /compare/.test(q); }, pts: [
+    { key: "G", match: function (p, q) { return p === "checkout.html" && /compare/.test(q); }, cur: 1, pts: [
       "Delivery services and prices",
       "Click Nearby stores to shop in person"] },
     { key: "G", match: function (p, q) { return p === "checkout.html"; }, pts: [
@@ -329,6 +374,19 @@ document.addEventListener("keydown", function (e) {
     }).join("") +
     "</div>";
   document.body.appendChild(panel);
+
+  // only the step the presenter is on glows pink; the rest wait in grey.
+  // cur is a live probe so the highlight follows clicks, not just page loads
+  var curLis = panel.querySelectorAll(".ckey.cur .cpts li");
+  if (cur && curLis.length) {
+    var syncPts = function () {
+      var idx = 0;
+      try { idx = typeof cur.cur === "function" ? cur.cur.call(cur) : (cur.cur || 0); } catch (e) {}
+      for (var i = 0; i < curLis.length; i++) curLis[i].classList.toggle("on", i === idx);
+    };
+    syncPts();
+    setInterval(syncPts, 600);
+  }
 
   var pill = document.createElement("button");
   pill.className = "cpanel-pill";

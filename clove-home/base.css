@@ -591,8 +591,10 @@ body.cpanel-open .cpanel { opacity: 1; transform: none; pointer-events: auto; }
 .ckey:not(.cur) .ckey__row { margin-bottom: 0; }
 .ckey.cur { background: rgba(189, 83, 234, 0.13); }
 .ckey.cur .name { color: #fff; }
-.ckey.cur .cpts li { color: rgba(255, 255, 255, 0.8); }
-.ckey.cur .cpts li::before { background: var(--eggplant-300); box-shadow: 0 0 6px rgba(189, 83, 234, 0.7); }
+.ckey.cur .cpts li { color: rgba(255, 255, 255, 0.42); transition: color 240ms ease; }
+.ckey.cur .cpts li::before { background: rgba(255, 255, 255, 0.25); box-shadow: none; transition: background 240ms ease, box-shadow 240ms ease; }
+.ckey.cur .cpts li.on { color: rgba(255, 255, 255, 0.92); }
+.ckey.cur .cpts li.on::before { background: var(--eggplant-300); box-shadow: 0 0 6px rgba(189, 83, 234, 0.7); }
 
 .cpanel-pill {
   position: fixed;
