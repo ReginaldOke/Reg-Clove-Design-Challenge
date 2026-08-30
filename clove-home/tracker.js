@@ -440,7 +440,7 @@
     var down = null, moved = false;
     car.addEventListener("pointerdown", function (e) {
       if (e.button) return;
-      down = { x: e.clientX, sl: car.scrollLeft, lastX: e.clientX, lastT: e.timeStamp, vx: 0 };
+      down = { x: e.clientX, sl: car.scrollLeft, lastX: e.clientX, lastT: e.timeStamp, vx: 0, si: Math.round(car.scrollLeft / pitch) };
       moved = false;
       car.classList.add("dragging");
       car.scrollTo({ left: car.scrollLeft }); /* halt any smooth glide */
@@ -455,10 +455,12 @@
     });
     function release(e) {
       if (!down) return;
-      var v = down.vx, was = moved;
+      var v = down.vx, was = moved, si = down.si;
       down = null; moved = false;
       if (!was) { car.classList.remove("dragging"); return; }
       var i = Math.max(0, Math.min(count() - 1, Math.round((car.scrollLeft - v * 180) / pitch)));
+      /* one plate per swipe: a hard flick still lands on the neighbour */
+      i = Math.max(si - 1, Math.min(si + 1, i));
       car.scrollTo({ left: i * pitch, behavior: "smooth" });
       setTimeout(function () { car.classList.remove("dragging"); }, 480);
       car._swiped = true;
