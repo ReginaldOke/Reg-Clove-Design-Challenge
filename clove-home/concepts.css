@@ -1,0 +1,465 @@
+/* ============================================================
+   Shared styling for the standalone health-tracker concepts.
+   Loads after goals.css / goals2.css / goals3.css.
+   ============================================================ */
+
+/* no back chevron in the standalone concepts, keep the breathing room */
+.gl-nav { min-height: 44px; }
+
+/* "Health goals  3 ›" — the tracked-goal count sits beside the title */
+.goals2 .gl-title-row { justify-content: flex-start; align-items: baseline; gap: 8px; }
+.gl-count {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.32px;
+  color: var(--black-300);
+}
+/* nav row per Figma 28299-56299: back chevron left, dots menu right */
+.gl-nav__back img { width: 14px; height: 8px; transform: rotate(90deg); }
+.gl-nav__dots {
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  border-radius: 100px;
+}
+.gl-nav__dots i { width: 4px; height: 4px; border-radius: 50%; background: var(--black-500); }
+/* the green health-goal mark anchors every concept's header */
+.gl-heart {
+  margin-left: auto;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(-90deg, #c9e08f 0%, #1aab56 26.9%, #1aab56 49%, #d5ff73 100%);
+  box-shadow: 0 6px 14px rgba(26, 171, 86, 0.3);
+  cursor: pointer;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.gl-heart:active { transform: scale(0.9); }
+.gl-heart img { width: 17px; height: 17px; }
+
+/* the plate + its lip ring share one coordinate frame, so they are
+   always exactly concentric */
+.plate-chart {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 164px;
+  height: 164px;
+  transform: translate(-50%, -50%);
+}
+.plate-chart > img, .plate-chart .lip-ring { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* concept A: the plate you are on grows to own the centre, its
+   neighbours tuck in smaller */
+body.c1 .plate-chart {
+  transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translate(-50%, -50%) scale(0.8);
+}
+body.c1 .g2-slide.on .plate-chart { transform: translate(-50%, -50%) scale(1.14); }
+/* a pulse variant that keeps the plate centred */
+.plate-chart.celebrate { animation-name: c-pulse-center; }
+@keyframes c-pulse-center {
+  0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  30% { transform: translate(-50%, -50%) scale(1.05) rotate(-2deg); }
+  60% { transform: translate(-50%, -50%) scale(1.02) rotate(2deg); }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+}
+body.c1 .g2-slide.on .plate-chart.celebrate { animation-name: c-pulse-center-big; }
+@keyframes c-pulse-center-big {
+  0% { transform: translate(-50%, -50%) scale(1.14) rotate(0deg); }
+  30% { transform: translate(-50%, -50%) scale(1.2) rotate(-2deg); }
+  60% { transform: translate(-50%, -50%) scale(1.16) rotate(2deg); }
+  100% { transform: translate(-50%, -50%) scale(1.14) rotate(0deg); }
+}
+
+/* the goal label gets its own band above the plates, so swiping plates
+   never slides under the text */
+body.c1 .g2-hero, .g3 .g2-hero {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 12px;
+}
+body.c1 .g2-hero__meta, .g3 .g2-hero__meta {
+  position: static;
+  order: -1;
+  padding: 14px 16px 0;
+}
+body.c1 .g2-carousel { height: 248px; margin: -28px 0; }
+.g3 .g2-carousel { height: 238px; margin: -28px 0; }
+body.c1 .g2-dots, .g3 .g2-dots { position: static; margin-top: 2px; }
+
+/* draggable carousel: snap pauses while the pointer holds the plates */
+.g2-carousel { cursor: grab; }
+.g2-carousel.dragging { scroll-snap-type: none; cursor: grabbing; }
+.g2-carousel.dragging .g2-slide { pointer-events: none; }
+
+/* portions pop in one by one, spring + settle */
+.plate-art .pp {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 380ms ease, transform 560ms cubic-bezier(0.22, 1.4, 0.36, 1);
+}
+.plate-art .pp.off { opacity: 0; transform: scale(0.35) rotate(-16deg); }
+
+/* the pink plan nudge stays pinned above the Ask Clove bar, the same
+   way the groceries CTA floats above the tab bar in the full app */
+.gl-plan {
+  position: fixed;
+  left: 50%;
+  bottom: 76px;
+  transform: translateX(-50%);
+  width: 370px;
+  z-index: 40;
+}
+.goals2 .gl-body { padding-bottom: 197px; }
+
+/* the Ask Clove bar (the app's voice pill), docked at the very bottom */
+.ask-bar {
+  position: fixed;
+  left: calc(50% - 185px);
+  bottom: 14px;
+  width: 370px;
+  z-index: 41;
+  animation: rise-in 480ms cubic-bezier(0.22, 1, 0.36, 1) 200ms both;
+}
+.ask-bar__pill {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  height: 48px;
+  padding: 0 7px 0 16px;
+  border: none;
+  border-radius: 999px;
+  background: var(--white);
+  box-shadow: 0 2px 6px rgba(15, 18, 21, 0.06), 0 14px 34px rgba(15, 18, 21, 0.16);
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ask-bar__pill:active { transform: scale(0.98); }
+.ask-bar__clove { width: 17px; height: 19px; flex: none; }
+.ask-bar__ph { flex: 1 0 0; min-width: 0; font-size: 15px; font-weight: 300; color: var(--black-300); }
+.ask-bar__ph.on { color: var(--black-500); font-weight: 400; }
+.ask-bar__mic.listening { animation: mic-pulse 700ms ease infinite; }
+@keyframes mic-pulse {
+  50% { transform: scale(1.1); box-shadow: 0 0 0 7px rgba(3, 51, 27, 0.12); }
+}
+.ask-bar__mic {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: var(--kale-500);
+}
+
+/* ticking a meal off: the active plate grows and glows the goal colour.
+   Keyframes always carry the centring translate so the plate never
+   drifts, with a variant for concept A's enlarged active plate. */
+.plate-chart.tickp { animation: tickp-center 850ms cubic-bezier(0.22, 1, 0.36, 1) 1; }
+body.c1 .g2-slide.on .plate-chart.tickp { animation-name: tickp-center-big; }
+@keyframes tickp-center {
+  0% { transform: translate(-50%, -50%) scale(1); filter: none; }
+  35% { transform: translate(-50%, -50%) scale(1.08); filter: drop-shadow(0 0 14px var(--glow, #bd53ea)); }
+  70% { transform: translate(-50%, -50%) scale(1.02); filter: drop-shadow(0 0 6px var(--glow, #bd53ea)); }
+  100% { transform: translate(-50%, -50%) scale(1); filter: none; }
+}
+@keyframes tickp-center-big {
+  0% { transform: translate(-50%, -50%) scale(1.14); filter: none; }
+  35% { transform: translate(-50%, -50%) scale(1.23); filter: drop-shadow(0 0 14px var(--glow, #bd53ea)); }
+  70% { transform: translate(-50%, -50%) scale(1.16); filter: drop-shadow(0 0 6px var(--glow, #bd53ea)); }
+  100% { transform: translate(-50%, -50%) scale(1.14); filter: none; }
+}
+
+/* a finished week: the plate takes a little bow */
+@keyframes c-pulse {
+  0% { transform: scale(1) rotate(0deg); }
+  30% { transform: scale(1.05) rotate(-2deg); }
+  60% { transform: scale(1.02) rotate(2deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+.celebrate { animation: c-pulse 760ms cubic-bezier(0.22, 1, 0.36, 1) 1; }
+
+/* ============================================================
+   Concept 1 (body.c1) — dressed plates
+   ============================================================ */
+body.c1 .gl-body { gap: 18px; }
+body.c1 .g2-goal { margin: 16px 0 14px; }
+body.c1 .gl-week { margin: 14px 0; }
+/* a planned dinner wears a little calendar until it is cooked */
+.g2-meal__badge.cal { background: var(--white) !important; box-shadow: 0 2px 8px rgba(15, 18, 21, 0.2); }
+.g2-meal__badge.cal img { width: 12px; height: 12px; }
+.g2-meal--planned .g2-meal__badge { opacity: 1; transform: scale(1); }
+
+/* ============================================================
+   Concept 2 (body.g3) — the clean plate
+   ============================================================ */
+/* type hierarchy: quiet caps for the hero label, a proper section title
+   for the week, both styles already used across the app */
+.g3 .g2-hero__lbl {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--kale-500);
+}
+.g3-week-lbl { font-size: 20px; font-weight: 600; letter-spacing: -0.2px; color: var(--black-500); }
+.g3-week-tot { font-size: 14px; font-weight: 300; letter-spacing: -0.14px; color: var(--black-300); }
+.g3-week-tot b { font-weight: 300; color: var(--black-500); }
+
+/* the % sits in the plate's well */
+.g3 .g3-pct {
+  position: absolute;
+  left: 50%;
+  top: 46.4%;
+  transform: translate(-50%, -50%);
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.55px;
+  line-height: 1;
+  color: var(--black-500);
+}
+
+/* content breathes to fill the phone */
+.g3 .gl-body { gap: 20px; }
+.g3 .gl-week svg { height: 104px; }
+
+.g3 .g3-cutlery { top: 80px; z-index: 1; }
+.g3 .g2-carousel { position: relative; z-index: 2; }
+/* landing on a plate: the cutlery glows the ring's colour and leans in,
+   the way a knife and fork move toward a meal */
+.g3 .g3-cutlery { transform-origin: 50% 100%; }
+.g3-cutlery.cue { animation: cue-fork 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1; }
+.g3-cutlery--knife.cue { animation-name: cue-knife; }
+@keyframes cue-fork {
+  0% { transform: none; filter: none; }
+  32% { transform: rotate(8deg) translateX(2px); filter: drop-shadow(0 0 7px var(--cue, #bd53ea)); }
+  64% { transform: rotate(3deg); filter: drop-shadow(0 0 3px var(--cue, #bd53ea)); }
+  100% { transform: none; filter: none; }
+}
+@keyframes cue-knife {
+  0% { transform: none; filter: none; }
+  32% { transform: rotate(-8deg) translateX(-2px); filter: drop-shadow(0 0 7px var(--cue, #bd53ea)); }
+  64% { transform: rotate(-3deg); filter: drop-shadow(0 0 3px var(--cue, #bd53ea)); }
+  100% { transform: none; filter: none; }
+}
+
+/* meal cards wrap onto the next row instead of scrolling away */
+.g3-cards { flex-wrap: wrap; overflow: visible; }
+
+/* ============================================================
+   Concept 3 (body.b3) — Day by day
+   The Apple Health week chart, in Clove clothing: light, warm,
+   a dinner photo under every bar.
+   ============================================================ */
+body.b3 .gl-body { gap: 20px; }
+
+/* goal switcher: emoji + name, a paired stepper on the right */
+.b3-switch { display: flex; align-items: center; justify-content: flex-start; gap: 10px; margin-top: 2px; }
+.b3-switch h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 150px;
+  text-align: left;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  color: var(--black-500);
+  order: -1;
+}
+.b3-switch h2 .e { font-size: 21px; line-height: 1; }
+.b3-steps { margin-left: auto; display: flex; gap: 8px; }
+/* the same grey disc buttons used across the app (nav back, pencil disc) */
+.b3-chev {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 999px;
+  background: var(--black-100);
+  cursor: pointer;
+  transition: background 160ms ease, transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.b3-chev:active { background: var(--black-200); transform: scale(0.92); }
+.b3-chev img { width: 11px; height: 7px; opacity: 0.75; }
+
+/* everything under the switcher swaps with the goal */
+.b3-body { display: flex; flex-direction: column; gap: 20px; transition: opacity 150ms ease; }
+.b3-body--fade { opacity: 0; }
+
+/* the headline stat, Apple's hierarchy in Clove type */
+.b3-stat { margin-top: 2px; }
+.b3-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; color: var(--kale-500); }
+.b3-num { margin-top: 6px; display: flex; align-items: baseline; gap: 7px; }
+.b3-num b { font-size: 40px; font-weight: 600; letter-spacing: -0.8px; line-height: 1; color: var(--black-500); }
+.b3-num span { font-size: 16px; font-weight: 400; color: var(--black-400); }
+.b3-range { margin-top: 6px; font-size: 13px; color: var(--black-400); }
+.b3-range b { font-weight: 600; color: var(--kale-500); }
+
+/* ---- the week chart ---- */
+.b3-chart { position: relative; padding-right: 46px; margin-top: 2px; }
+.b3-lines { position: absolute; left: 0; right: 46px; top: 0; height: 190px; pointer-events: none; }
+.b3-line { position: absolute; left: 0; right: 0; border-top: 1.5px dashed #e6e2d6; }
+.b3-line--base { border-top: 1.5px solid var(--black-200); }
+.b3-line__lbl { position: absolute; right: -46px; top: -7px; width: 40px; text-align: left; padding-left: 8px; font-size: 11px; line-height: 1; color: var(--black-300); }
+/* the goal, a dotted line in the goal's colour */
+.b3-goal { position: absolute; left: 0; right: 0; border-top: 2px dotted currentColor; }
+.b3-goal__lbl {
+  position: absolute;
+  right: 0;
+  top: -19px;
+  z-index: 2;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  line-height: 1;
+  color: currentColor;
+}
+.b3-cols { position: relative; display: grid; grid-template-columns: repeat(7, 1fr); }
+.b3-cell { display: flex; flex-direction: column; align-items: center; }
+.b3-barwrap { height: 190px; display: flex; align-items: flex-end; }
+.b3-bar {
+  width: 26px;
+  border-radius: 9px 9px 3px 3px;
+  background: var(--black-100);
+  transform-origin: bottom;
+  animation: b3-grow 800ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+.b3-bar--rich { background: var(--tone-soft); border: 2px solid var(--tone); border-bottom-width: 0; }
+/* a two-meal day: one bar, segmented; each segment wears its meal's shade */
+.b3-bar--stack { display: flex; flex-direction: column; gap: 3px; background: none; }
+.b3-seg { display: block; flex: 1; min-height: 9px; border-radius: 4px; transition: opacity 280ms cubic-bezier(0.22, 1, 0.36, 1); }
+.b3-seg.dim { opacity: 0.2; }
+.b3-thumb--pick { cursor: pointer; transition: opacity 280ms cubic-bezier(0.22, 1, 0.36, 1), transform 280ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 280ms ease; }
+.b3-seg:first-child { border-radius: 9px 9px 4px 4px; }
+.b3-seg--rich { border: 2px solid; }
+.b3-seg--rich:last-child { border-bottom-width: 0; }
+@keyframes b3-grow { from { transform: scaleY(0); } }
+/* thumbnails hang in a fixed-height column so the day letters stay level;
+   a second meal tucks under the first as a vertical stack */
+.b3-thumbs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 54px;
+  margin-top: 10px;
+}
+.b3-thumb {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 2px solid var(--black-200);
+  background: var(--white);
+  overflow: hidden;
+  opacity: 0;
+  animation: rise-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+.b3-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.b3-thumb--rich { border-color: var(--tone); border-width: 3px; }
+.b3-thumb--under { margin-top: -7px; z-index: 0; }
+.b3-thumb--empty { border-style: dashed; background: #fcfbfb; opacity: 1; animation: none; }
+/* spotlight states: the first tap retires the entrance animation (awake)
+   so opacity belongs to dim/sel from then on */
+.b3-thumb.b3-thumb--awake { animation: none; opacity: 1; }
+.b3-thumb--pick.dim { opacity: 0.3; }
+.b3-thumb--pick.sel { transform: scale(1.12); z-index: 2; box-shadow: 0 4px 12px rgba(15, 18, 21, 0.2); }
+.b3-day { margin-top: 7px; font-size: 11px; color: var(--black-300); }
+.b3-thumbs + .b3-day { margin-top: 0; }
+/* the five goal meals wear the same border as their bars in the chart */
+body.b3 .g2-meal:not(.g2-meal--empty) { box-shadow: 0 0 0 3px var(--tone, var(--eggplant-300)); }
+.b3-day.today { color: var(--black-500); font-weight: 600; }
+
+/* ============================================================
+   Meal actions sheet — same bones as plan.html's meal sheet
+   ============================================================ */
+.meal-sheet {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  bottom: 0;
+  width: 402px;
+  z-index: 92;
+  display: none;
+}
+.meal-sheet.open { display: block; }
+.meal-sheet__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 18, 21, 0.4);
+  opacity: 0;
+  transition: opacity 340ms ease;
+}
+.meal-sheet.in .meal-sheet__scrim { opacity: 1; }
+.meal-sheet__card {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--white);
+  border-radius: 28px 28px 0 0;
+  padding: 10px 24px 30px;
+  transform: translateY(104%);
+  transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
+  touch-action: none;
+}
+.meal-sheet.in .meal-sheet__card { transform: none; }
+.meal-sheet__grab {
+  display: block;
+  width: 48px;
+  height: 5px;
+  border-radius: 100px;
+  background: var(--black-200);
+  margin: 0 auto 18px;
+}
+.meal-sheet__head { display: flex; align-items: center; gap: 20px; padding: 4px 2px 20px; }
+.meal-sheet__img { width: 84px; height: 84px; border-radius: 16px; overflow: hidden; flex: none; }
+.meal-sheet__img img { width: 100%; height: 100%; object-fit: cover; }
+.meal-sheet__name { font-size: 20px; font-weight: 600; line-height: 1.25; color: var(--black-500); }
+.ms-sub { margin-top: 4px; font-size: 13px; line-height: 1.4; color: var(--black-400); }
+.meal-sheet__list { display: flex; flex-direction: column; padding-bottom: 4px; }
+.meal-sheet__row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 54px;
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 16.5px;
+  font-weight: 400;
+  color: var(--black-500);
+  text-align: left;
+  cursor: pointer;
+}
+.meal-sheet__row:active { background: var(--black-100); }
+.meal-sheet__row .ico { flex: none; }

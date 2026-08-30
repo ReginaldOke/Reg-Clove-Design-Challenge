@@ -311,7 +311,7 @@ document.addEventListener("keydown", function (e) {
     { key: "K", match: function (p, q) { return p === "goals.html"; }, cur: function () {
         return document.querySelector(".ai-card--reveal") ? 1 : 0;
       }, pts: [
-      "Track your iron across the week",
+      "Swipe the plates, tick dinners off as you cook",
       "Scroll down and tap the pink nudge to plan meals"] },
     { key: "P", match: function (p, q) { return p === "plan.html" && /ask=1/.test(q); }, cur: function () {
         var rows = document.querySelectorAll(".meal-row"), built = false;
