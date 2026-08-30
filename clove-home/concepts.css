@@ -117,11 +117,12 @@ body.c1 .g2-dots, .g3 .g2-dots { position: static; margin-top: 2px; }
 .gl-plan {
   position: fixed;
   left: 50%;
-  bottom: 76px;
+  bottom: 88px;
   transform: translateX(-50%);
   width: 370px;
   z-index: 40;
 }
+html.frame-rounded .gl-plan { bottom: 104px; }
 .goals2 .gl-body { padding-bottom: 197px; }
 
 /* the Ask Clove bar (the app's voice pill), docked at the very bottom */
