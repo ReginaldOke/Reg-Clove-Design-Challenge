@@ -177,6 +177,15 @@ document.addEventListener("keydown", function (e) {
   location.href = k === "s" ? "checkout.html?view=compare" : k === "l" ? "groceries.html?view=store" : "recipe.html?leftover=1";
 });
 
+// Recording helper: pressing "M" opens My Kitchen (the profile, with the memory card).
+document.addEventListener("keydown", function (e) {
+  if (e.key !== "m" && e.key !== "M") return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  var t = e.target;
+  if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+  location.href = "profile.html";
+});
+
 // Recording helper: pressing "K" opens the health tracker (goals page).
 document.addEventListener("keydown", function (e) {
   if (e.key !== "k" && e.key !== "K") return;
